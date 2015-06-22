@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ﻿# fwod
+=======
+# fwod
+>>>>>>> origin/master
 ## Four Walls of Death
 
 Hello! This is a little something I'd like to show you, it's simply a console-based game using the Mono runtime.
@@ -12,6 +16,7 @@ Here is what I use:
 The project is Visual Studio compatible (.NET 4.5)
 
 You can always send me an [email](devddstuff@gmail.com).
+<<<<<<< HEAD
 
 ### TODO
 - Make a dedicated buffer (to remember character positions and stuff)
@@ -21,3 +26,5 @@ You can always send me an [email](devddstuff@gmail.com).
 
 ### Issues
 - MonoDevelop (Linux) can't seem to open the CS files.
+=======
+>>>>>>> origin/master
