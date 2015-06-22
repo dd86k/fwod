@@ -1,0 +1,2 @@
+C:\Users\DD\Documents\Projects\Play\Play\bin\Debug (Linux)\fwod-linux.exe
+C:\Users\DD\Documents\Projects\Play\Play\obj\Debug (Linux)\fwod-linux.exe

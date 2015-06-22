@@ -1,0 +1,3 @@
+C:\Users\DD\Documents\Projects\Play\Play\obj\Debug (Linux)\Play.csprojResolveAssemblyReference.cache
+C:\Users\DD\Documents\Projects\Play\Play\bin\Debug (Linux)\Play-linux.exe
+C:\Users\DD\Documents\Projects\Play\Play\obj\Debug (Linux)\Play-linux.exe

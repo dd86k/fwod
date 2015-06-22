@@ -1,0 +1,3 @@
+C:\Users\DD\Documents\Projects\Play\Play\obj\Debug (Linux)\.NETFramework,Version=v4.5.AssemblyAttribute.cs
+C:\Users\DD\Documents\Projects\Play\Play\bin\Debug (Linux)\Play.exe
+C:\Users\DD\Documents\Projects\Play\Play\obj\Debug (Linux)\Play.exe

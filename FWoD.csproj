@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug (Windows)</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7352A229-6235-49F2-9358-E621633D6233}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>FWoD</RootNamespace>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <StartupObject>Play.MainClass</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug (Windows)|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug (Windows)</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <DefineConstants>WINDOWS</DefineConstants>
+    <Externalconsole>true</Externalconsole>
+    <AssemblyName>fwod-win32</AssemblyName>
+    <LangVersion>5</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug (Linux)|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug (Linux)</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <DefineConstants>LINUX</DefineConstants>
+    <AssemblyName>fwod-linux</AssemblyName>
+    <Externalconsole>true</Externalconsole>
+    <LangVersion>5</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release (Windows)|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release (Windows)</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <DefineConstants>WINDOWS</DefineConstants>
+    <AssemblyName>Play-win32</AssemblyName>
+    <Externalconsole>true</Externalconsole>
+    <LangVersion>5</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release (Linux)|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release (Linux)</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <DefineConstants>LINUX</DefineConstants>
+    <AssemblyName>Play-linux</AssemblyName>
+    <Externalconsole>true</Externalconsole>
+    <LangVersion>5</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Player.cs" />
+    <Compile Include="Game.cs" />
+    <Compile Include="ConsoleTools.cs" />
+    <Compile Include="Enemy.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>

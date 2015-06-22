@@ -1,0 +1,5 @@
+C:\Users\DD\Documents\Projects\Play\Play\bin\Debug\Play.exe
+C:\Users\DD\Documents\Projects\Play\Play\bin\Debug\Play.pdb
+C:\Users\DD\Documents\Projects\Play\Play\obj\x86\Debug\Play.exe
+C:\Users\DD\Documents\Projects\Play\Play\obj\x86\Debug\Play.pdb
+C:\Users\DD\Documents\Projects\Play\Play\obj\x86\Debug\Play.csprojResolveAssemblyReference.cache
