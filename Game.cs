@@ -30,11 +30,7 @@ namespace Play
             Console.Write(Graphics.Walls.Thick[2]);
 
             int lenW = Console.BufferWidth - 4;
-            for (int i = 0; i < lenW; i++)
-            {
-                Console.Write(Graphics.Walls.Thick[1]);
-            }
-
+            ConsoleTools.GenerateHorizontalLine(Graphics.Walls.Thick[1], lenW);
             Console.Write(Graphics.Walls.Thick[3]);
 
             // Side walls
@@ -42,17 +38,12 @@ namespace Play
             Console.SetCursorPosition(1, 2);
 
             int lenH = Console.BufferHeight - 2;
-            for (int i = 2; i < lenH; i++)
-            {
-                Console.SetCursorPosition(1, i);
-                Console.Write(Graphics.Walls.Thick[0]);
-            }
+            Console.SetCursorPosition(1, 2);
+            ConsoleTools.GenerateVerticalLine(Graphics.Walls.Thick[0], lenH);
+
             lenW += 2;
-            for (int i = 2; i < lenH; i++)
-            {
-                Console.SetCursorPosition(lenW, i);
-                Console.Write(Graphics.Walls.Thick[0]);
-            }
+            Console.SetCursorPosition(lenW, 2);
+            ConsoleTools.GenerateVerticalLine(Graphics.Walls.Thick[0], lenH);
 
             // Bottom wall
 
@@ -61,10 +52,7 @@ namespace Play
 
             lenW -= 2;
             Console.SetCursorPosition(2, lenH);
-            for (int i = 0; i < lenW; i++)
-            {
-                Console.Write(Graphics.Walls.Thick[1]);
-            }
+            ConsoleTools.GenerateHorizontalLine(Graphics.Walls.Thick[1], lenW);
 
             Console.Write(Graphics.Walls.Thick[4]);
         }

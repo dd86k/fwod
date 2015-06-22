@@ -8,14 +8,14 @@
     <RootNamespace>FWoD</RootNamespace>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <StartupObject>Play.MainClass</StartupObject>
-    <ReleaseVersion>0.2.5</ReleaseVersion>
+    <ReleaseVersion>1.0</ReleaseVersion>
     <Description>REEEEEEEEEEEEEEE</Description>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug (Windows)|AnyCPU' ">
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug (Windows)</OutputPath>
     <WarningLevel>4</WarningLevel>
-    <DefineConstants>WINDOWS</DefineConstants>
+    <DefineConstants>WINDOWS, DEBUG</DefineConstants>
     <Externalconsole>true</Externalconsole>
     <AssemblyName>fwod-win32</AssemblyName>
     <LangVersion>5</LangVersion>
@@ -24,7 +24,7 @@
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug (Linux)</OutputPath>
     <WarningLevel>4</WarningLevel>
-    <DefineConstants>LINUX</DefineConstants>
+    <DefineConstants>LINUX, DEBUG</DefineConstants>
     <AssemblyName>fwod-linux</AssemblyName>
     <Externalconsole>true</Externalconsole>
     <LangVersion>5</LangVersion>
@@ -59,4 +59,9 @@
     <Compile Include="Enemy.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <None Include="CHANGELOG.txt" />
+    <None Include="README.md" />
+    <None Include="LICENSE" />
+  </ItemGroup>
 </Project>

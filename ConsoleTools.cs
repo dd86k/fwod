@@ -49,10 +49,16 @@ namespace Play
             {
                 Console.Write(pChar);
                 Console.SetCursorPosition(pPosX, pPosY++);
+                /* -- REASONS WHY I DO IT THIS WAY --
+                 * NEWLINE FUCKS UP (Also safer)
+                 * ADDING SPACE (for padding) OVERWRITES BUFFER (Also waste of "cpu cycles")
+                */
             }
         }
 
         // Generate string
+        // Same at the GenerateHorizontalLine but returns a string instead
+        // GenerateHorizontalLine is prefered for "cpu cycles" (gosh can people stop on that)
         static internal string RepeatChar(char pChar, int pLenght)
         {
             string Out = string.Empty;

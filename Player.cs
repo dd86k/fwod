@@ -1,5 +1,7 @@
 ﻿using System;
 
+//TODO: MAKE MORE OBJECTS (Bubblechat, etc.)
+
 namespace Play
 {
     internal class Player
@@ -60,6 +62,9 @@ namespace Play
             set
             {
                 _characterName = value;
+                // Clear name and redraw it (in case of shorter name)
+                Console.SetCursorPosition(1, 0);
+                Console.Write(ConsoleTools.RepeatChar(' ', Console.BufferWidth / 2));
                 Console.SetCursorPosition(1, 0);
                 Console.Write(_characterName);
             }
@@ -89,48 +94,56 @@ namespace Play
         }
 
         /// <summary>
-        /// Make the player talk!
+        /// Generates the bubble and readys the cursor
         /// </summary>
-        /// <param name="pText">Text.</param>
-        internal void PlayerSays(string pText)
-        {
-            // -- Make bubble --
-            // determine the starting position of the bubble
-            int StartX = (pText.Length > 2 ?
-                (this.PosX - (pText.Length / 2)) - 2:
-                (this.PosX - (pText.Length / 2)) - 1);
-            int StartY = this.PosY - 4;
+        /// <param name="pText">P text.</param>
+        /// <param name="pPosX">P position x.</param>
+        /// <param name="pPosY">P position y.</param>
+        void GenerateBubble(string pText, int pPosX, int pPosY)
+        { // pText is to determine the size of the bubble!
 
             //TODO: Multiline chat bubble
             // If lenght is higher than 34, split it 
             //
 
             // top
-            Console.SetCursorPosition(StartX, StartY);
+            Console.SetCursorPosition(pPosX, pPosY);
             Console.Write(Game.Graphics.Walls.Thin[2]);
             ConsoleTools.GenerateHorizontalLine(Game.Graphics.Walls.Thin[1], pText.Length + 2);
             Console.Write(Game.Graphics.Walls.Thin[3]);
 
             // left
-            Console.SetCursorPosition(StartX, StartY + 1);
+            Console.SetCursorPosition(pPosX, pPosY + 1);
             Console.Write(Game.Graphics.Walls.Thin[0]);
 
             // right
-            Console.SetCursorPosition(StartX + pText.Length + 3, StartY + 1);
+            Console.SetCursorPosition(pPosX + pText.Length + 3, pPosY + 1);
             Console.Write(Game.Graphics.Walls.Thin[0]);
 
             // bottom
-            Console.SetCursorPosition(StartX, StartY + 2);
+            Console.SetCursorPosition(pPosX, pPosY + 2);
             Console.Write(Game.Graphics.Walls.Thin[5]);
             ConsoleTools.GenerateHorizontalLine(Game.Graphics.Walls.Thin[1], pText.Length + 2);
             Console.Write(Game.Graphics.Walls.Thin[4]);
 
-            // bubble chat "connector"
-            Console.SetCursorPosition(this.PosX, StartY + 2);
+            // bubble chat "connector" (Over player)
+            Console.SetCursorPosition(this.PosX, pPosY + 2);
             Console.Write(Game.Graphics.Walls.Thin[8]);
 
+            Console.SetCursorPosition(pPosX + 2, pPosY + 1);
+        }
+
+        internal void PlayerSays(string pText)
+        {
+            // determine the starting position of the bubble
+            int StartX = (pText.Length > 2 ?
+                (this.PosX - (pText.Length / 2)) - 2:
+                (this.PosX - (pText.Length / 2)) - 1);
+            int StartY = this.PosY - 4;
+
+            GenerateBubble(pText, StartX, StartY);
+
             // -- Insert Text --
-            Console.SetCursorPosition(StartX + 2, StartY + 1);
             Console.Write(pText);
 
             // Waiting for keypress
@@ -146,7 +159,34 @@ namespace Play
                 ConsoleTools.GenerateHorizontalLine(' ', len);
                 Console.SetCursorPosition(StartX, i);
             }
-            Console.SetCursorPosition(0, 0);
+        }
+
+        internal string PlayerAnswer()
+        {
+            string tmp = ConsoleTools.RepeatChar(' ', 20);
+
+            // determine the starting position of the bubble
+            // lol copy paste 
+            int StartX = (tmp.Length > 2 ?
+                (this.PosX - (tmp.Length / 2)) - 2:
+                (this.PosX - (tmp.Length / 2)) - 1);
+            int StartY = this.PosY - 4;
+
+            GenerateBubble(tmp, StartX, StartY);
+
+            string Out = Console.ReadLine();
+
+            // Clear bubble
+            //TODO: Put older chars back
+            Console.SetCursorPosition(StartX, StartY);
+            int len = tmp.Length + 4;
+            for (int i = StartY; i < this.PosY; i++)
+            {
+                ConsoleTools.GenerateHorizontalLine(' ', len);
+                Console.SetCursorPosition(StartX, i);
+            }
+
+            return Out;
         }
 
         /// <summary>

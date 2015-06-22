@@ -1,18 +1,34 @@
 ﻿using System;
+using System.Reflection;
 
 //TODO: Collision mechanics
 //TODO: Enemy mechanics
 //TODO: Attack mechanics
 //TODO: Buffer
 
+// -- Not to forget section --
+/*
+- Clean code
+- Check versionning
+- keep story.txt out of git's range
+*/
+
+[assembly: AssemblyVersion("0.3.0.0")]
+
 namespace Play
 {
     class MainClass
     {
-        const string ProjectVersion = "0.2.5";
         const string ProjectName = "Four Walls of Death"; // Four walls of death
 
         static readonly string nl = System.Environment.NewLine;
+        static string ProjectVersion
+        {
+            get
+            {
+                return Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            }
+        }
 
         static Player GamePlayer = new Player();
         static Enemy GameBoss = new Enemy();
@@ -58,10 +74,9 @@ namespace Play
                 Console.SetBufferSize(80, 25);
                 Console.SetWindowSize(80, 25); // Window's default
             #elif LINUX
-            //TODO: [LINUX] Find a way to set the Window or buffersize
+            //TODO: [LINUX] Find a way to set the Window or buffersize (no libs pls)
 
             #endif
-
 
             // == Before the game ==
 
@@ -72,16 +87,23 @@ namespace Play
             ConsoleTools.WriteLineAndCenter(BannerText);
             ConsoleTools.WriteLineAndCenter(BannerOutline);
             Console.WriteLine();
+            /* Some kind of lore/context/pre-story is going to be here. */
+            /*
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            */
 
-            // Player information gathering
-            if (!SkipIntro)
-            {
-                Console.Write("Character's name (default=Player): ");
-                Pname = Console.ReadLine();
-                Pname = (Pname.Length > 0 ? Pname : "Player");
-                Pname = (Pname.Length > 25 ? Pname.Substring(0, 25) : Pname);
-            }
+            #if DEBUG
+                Console.WriteLine("Please remember that this is still in development, so expect bugs!");
+            #endif
 
+            Console.WriteLine();
+            Console.Write("Press a key to start!");
+
+            Console.ReadKey(true);
             Console.Clear();
 
             // == Game starts here ==
@@ -92,18 +114,26 @@ namespace Play
             GameBoss.Initialize();
 
             if (!SkipIntro)
-            {
-                if (bosstext.Length > 0)
-                {
-                    bosstext = bosstext.Replace("#P", Pname);
-                    GameBoss.EnemySays(bosstext); // Extra player defined text
-                }
-                else
-                    GameBoss.EnemySays("Die, " + Pname + "!");
+            { //TODO: Come on I can do something better..
+                GamePlayer.PlayerSays("Arrgh! Where am I?");
 
-                GamePlayer.PlayerSays("We'll see about that!");
+                GameBoss.EnemySays("Oh, you're awake...");
+                GameBoss.EnemySays("What is your name?");
+
+                GamePlayer.CharacterName = GamePlayer.PlayerAnswer();
+                GamePlayer.PlayerSays("It's " + GamePlayer.CharacterName);
+
+                GameBoss.EnemySays("Well, it's your unlucky day.");
+
+                GamePlayer.PlayerSays("Why?");
+
+                GameBoss.EnemySays("Because I will kill you.");
+
+                GamePlayer.PlayerSays("WHAT!?!?!");
+
+                GameBoss.EnemySays("Die, " + GamePlayer.CharacterName + "!");
             }
-            
+
             bool plays = true;
             do
             {
@@ -155,9 +185,9 @@ namespace Play
         {
             string Out = nl + "Usage:" + nl +
                 #if WINDOWS
-                " fwod-win32 [options]" + nl + nl +
+                    " fwod-win32 [options]" + nl + nl +
                 #elif LINUX
-                " fwod-linux [options]" + nl + nl +
+                    " fwod-linux [options]" + nl + nl +
                 #endif
                 " -bosssays, -B     Custom text from the Boss" + nl +
                 "                   #P=Player name" + nl +
