@@ -11,7 +11,7 @@ namespace Play
             set
             {
                 Console.SetCursorPosition(this._posx, this.PosY);
-                Console.Write(" ");
+                Console.Write(" "); //TODO: Put old char back/remember char
                 _posx = value;
                 Console.SetCursorPosition(this._posx, this.PosY);
                 Console.Write(this.CharacterChar);
@@ -35,6 +35,10 @@ namespace Play
         string _characterName;
 
         int _hp;
+        /// <summary>
+        /// Gets or sets the HP.
+        /// </summary>
+        /// <value>The HP.</value>
         int HP
         {
             get { return _hp; }
@@ -45,6 +49,11 @@ namespace Play
                 Console.Write("HP: " + _hp);
             }
         }
+
+        /// <summary>
+        /// Gets or sets the name of the character.
+        /// </summary>
+        /// <value>The name of the character.</value>
         internal string CharacterName
         {
             get { return _characterName; }
@@ -56,6 +65,9 @@ namespace Play
             }
         }
 
+        /// <summary>
+        /// The character's char.
+        /// </summary>
         internal char CharacterChar;
         internal Player()
         { // Defaults
@@ -76,6 +88,10 @@ namespace Play
             Game.GenerateMasterRoom();
         }
 
+        /// <summary>
+        /// Make the player talk!
+        /// </summary>
+        /// <param name="pText">Text.</param>
         internal void PlayerSays(string pText)
         {
             // -- Make bubble --
@@ -133,21 +149,33 @@ namespace Play
             Console.SetCursorPosition(0, 0);
         }
 
+        /// <summary>
+        /// Makes the enemy move up one square
+        /// </summary>
         internal void MoveUp()
         {
             this.PosY--;
         }
 
+        /// <summary>
+        /// Makes the enemy move down one square
+        /// </summary>
         internal void MoveDown()
         {
             this.PosY++;
         }
 
+        /// <summary>
+        /// Makes the enemy move left one square
+        /// </summary>
         internal void MoveLeft()
         {
             this.PosX--;
         }
 
+        /// <summary>
+        /// Makes the enemy move right one square
+        /// </summary>
         internal void MoveRight()
         {
             this.PosX++;

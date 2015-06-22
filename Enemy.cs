@@ -35,6 +35,10 @@ namespace Play
         string _characterName;
 
         int _hp;
+        /// <summary>
+        /// Gets or sets the HP.
+        /// </summary>
+        /// <value>The HP.</value>
         int HP
         {
             get { return _hp; }
@@ -43,6 +47,11 @@ namespace Play
                 _hp = value;
             }
         }
+
+        /// <summary>
+        /// Gets or sets the name of the enemy.
+        /// </summary>
+        /// <value>The name of the character.</value>
         internal string CharacterName
         {
             get { return _characterName; }
@@ -52,7 +61,11 @@ namespace Play
             }
         }
 
+        /// <summary>
+        /// The enemy's character
+        /// </summary>
         internal char EnemyChar;
+
         internal Enemy()
         { // Defaults
             this.EnemyChar = '#';
@@ -72,6 +85,10 @@ namespace Play
             Console.Write(this.EnemyChar);
         }
 
+        /// <summary>
+        /// Make the enemy say something.
+        /// </summary>
+        /// <param name="pText">Text.</param>
         internal void EnemySays(string pText)
         {
             // -- Make bubble --
@@ -80,10 +97,6 @@ namespace Play
                 (this.PosX - (pText.Length / 2)) - 2:
                 (this.PosX - (pText.Length / 2)) - 1);
             int StartY = this.PosY - 4;
-
-            //TODO: Multiline chat bubble
-            // If lenght is higher than 34, split it 
-            //
 
             // top
             Console.SetCursorPosition(StartX, StartY);
@@ -118,7 +131,6 @@ namespace Play
             Console.ReadKey(true);
 
             // Clear bubble
-            //TODO: Put older chars back
             Console.SetCursorPosition(StartX, StartY);
             int len = pText.Length + 4;
             for (int i = StartY; i < this.PosY; i++)
@@ -129,21 +141,33 @@ namespace Play
             Console.SetCursorPosition(0, 0);
         }
 
+        /// <summary>
+        /// Makes the enemy move up one square
+        /// </summary>
         internal void MoveUp()
         {
             this.PosY--;
         }
 
+        /// <summary>
+        /// Makes the enemy move down one square
+        /// </summary>
         internal void MoveDown()
         {
             this.PosY++;
         }
 
+        /// <summary>
+        /// Makes the enemy move left one square
+        /// </summary>
         internal void MoveLeft()
         {
             this.PosX--;
         }
 
+        /// <summary>
+        /// Makes the enemy move right one square
+        /// </summary>
         internal void MoveRight()
         {
             this.PosX++;

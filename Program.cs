@@ -1,6 +1,6 @@
 ﻿using System;
 
-//TODO: Wall collision mechanics
+//TODO: Collision mechanics
 //TODO: Enemy mechanics
 //TODO: Attack mechanics
 
@@ -8,8 +8,8 @@ namespace Play
 {
     class MainClass
     {
-        const string Version = "0.2.3";
-        const string Name = "Four Walls of Death"; // Four walls of death
+        const string ProjectVersion = "0.2.4";
+        const string ProjectName = "Four Walls of Death"; // Four walls of death
 
         static readonly string nl = System.Environment.NewLine;
 
@@ -17,8 +17,12 @@ namespace Play
         static Enemy GameBoss = new Enemy();
         internal static int Main(string[] args)
         {
+            // Default values
             string bosstext = string.Empty;
             char Pchar = '@';
+            string Pname = "Player";
+            bool SkipIntro = false;
+
             for (int i = 0; i < args.Length; i++)
             {
                 switch (args[i])
@@ -26,27 +30,28 @@ namespace Play
                     case "/?":
                     case "--help":
                         ShowHelp();
-                        //System.Environment.Exit(0);
-                        //break;
                         return 0;
                     case "--version":
                         ShowVersion();
-                        //System.Environment.Exit(0);
-                        //break;
                         return 0;
-                    case "--bosssays":
+                    case "-bosssays":
+                    case "-B":
                         if (args[i + 1] != null)
                             bosstext = args[i + 1];
                         break;
-                    case "--playerchar":
+                    case "-playerchar":
+                    case "-C":
                         if (args[i + 1] != null)
                             Pchar = args[i + 1][0];
+                        break;
+                    case "--skipintro":
+                        SkipIntro = true;
                         break;
                 }
             }
 
             Console.Clear();
-            Console.Title = Name + " " + Version;
+            Console.Title = ProjectName + " " + ProjectVersion;
             
             #if WINDOWS // Otherwise the scrollbar is still there
                 Console.SetBufferSize(80, 25);
@@ -55,16 +60,22 @@ namespace Play
 
             // == Before the game ==
 
-            ConsoleTools.WriteLineAndCenter("**********************************"); // temporary
-            ConsoleTools.WriteLineAndCenter("* Welcome to " + Name + " *");
-            ConsoleTools.WriteLineAndCenter("**********************************");
+            string BannerText = "* Welcome to " + ProjectName + " *";
+            string BannerOutline = ConsoleTools.RepeatChar('*', BannerText.Length);
+
+            ConsoleTools.WriteLineAndCenter(BannerOutline);
+            ConsoleTools.WriteLineAndCenter(BannerText);
+            ConsoleTools.WriteLineAndCenter(BannerOutline);
             Console.WriteLine();
 
             // Player information gathering
-            Console.Write("Character's name (default=Player): ");
-            string Pname = Console.ReadLine();
-            Pname = (Pname.Length > 0 ? Pname : "Player");
-            Pname = (Pname.Length > 25 ? Pname.Substring(0, 25) : Pname);
+            if (!SkipIntro)
+            {
+                Console.Write("Character's name (default=Player): ");
+                Pname = Console.ReadLine();
+                Pname = (Pname.Length > 0 ? Pname : "Player");
+                Pname = (Pname.Length > 25 ? Pname.Substring(0, 25) : Pname);
+            }
 
             Console.Clear();
 
@@ -75,16 +86,18 @@ namespace Play
             GamePlayer.Initialize();
             GameBoss.Initialize();
 
-
-            if (bosstext.Length > 0)
+            if (!SkipIntro)
             {
-                bosstext = bosstext.Replace("#P", Pname);
-                GameBoss.EnemySays(bosstext); // Extra player defined text
-            }
-            else
-                GameBoss.EnemySays("Die, " + Pname + "!");
+                if (bosstext.Length > 0)
+                {
+                    bosstext = bosstext.Replace("#P", Pname);
+                    GameBoss.EnemySays(bosstext); // Extra player defined text
+                }
+                else
+                    GameBoss.EnemySays("Die, " + Pname + "!");
 
-            GamePlayer.PlayerSays("We'll see about that!");
+                GamePlayer.PlayerSays("We'll see about that!");
+            }
             
             bool plays = true;
             do
@@ -141,9 +154,10 @@ namespace Play
                 #elif LINUX
                 " fwod-linux [options]" + nl + nl +
                 #endif
-                " --bosssays     Custom text from the Boss" + nl +
-                "                #P=Player name" + nl +
-                " --playerchar   Sets the player's character" + nl +
+                " -bosssays, -B     Custom text from the Boss" + nl +
+                "                   #P=Player name" + nl +
+                " -playerchar, -C   Sets the player's character" + nl +
+                " --skipintro       Skip intro and use defaults" + nl +
                 nl +
                 "  --help, /?    Shows this screen" + nl +
                 "  --version     Shows version" + nl + nl +
@@ -153,7 +167,7 @@ namespace Play
 
         static void ShowVersion()
         {
-            Console.Write("Made by DD~!, version " + Version);
+            Console.Write("Made by DD~!, version " + ProjectVersion);
         }
     }
 }
