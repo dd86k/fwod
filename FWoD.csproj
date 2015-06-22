@@ -8,6 +8,8 @@
     <RootNamespace>FWoD</RootNamespace>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <StartupObject>Play.MainClass</StartupObject>
+    <ReleaseVersion>0.2.5</ReleaseVersion>
+    <Description>REEEEEEEEEEEEEEE</Description>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug (Windows)|AnyCPU' ">
     <Optimize>false</Optimize>

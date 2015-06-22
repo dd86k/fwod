@@ -6,7 +6,11 @@ namespace Play
     {
         internal struct Graphics
         {
-            internal static char[] tiles = new char[] {'░', '▒', '▓', '█', '▄', '▌', '▐', '▀'};
+            internal struct Tiles
+            {
+                internal static char[] Grades = new char[] {'░', '▒', '▓', '█'};
+                internal static char[] Half = new char[] {'▄', '▌', '▐', '▀'};
+            }
             internal struct Walls
             {
                 internal static char[] Thin = {'│', '─', '┌', '┐', '┘', '└', '┤', '┴', '┬', '├', '┼'};

@@ -3,12 +3,13 @@
 //TODO: Collision mechanics
 //TODO: Enemy mechanics
 //TODO: Attack mechanics
+//TODO: Buffer
 
 namespace Play
 {
     class MainClass
     {
-        const string ProjectVersion = "0.2.4";
+        const string ProjectVersion = "0.2.5";
         const string ProjectName = "Four Walls of Death"; // Four walls of death
 
         static readonly string nl = System.Environment.NewLine;
@@ -56,7 +57,11 @@ namespace Play
             #if WINDOWS // Otherwise the scrollbar is still there
                 Console.SetBufferSize(80, 25);
                 Console.SetWindowSize(80, 25); // Window's default
+            #elif LINUX
+            //TODO: [LINUX] Find a way to set the Window or buffersize
+
             #endif
+
 
             // == Before the game ==
 
