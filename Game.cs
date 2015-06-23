@@ -4,6 +4,8 @@ namespace Play
 {
     internal class Game
     {
+        const string SaveFilename = "fwod.sg";
+
         internal struct Graphics
         {
             internal struct Tiles
@@ -55,6 +57,11 @@ namespace Play
             ConsoleTools.GenerateHorizontalLine(Graphics.Walls.Thick[1], lenW);
 
             Console.Write(Graphics.Walls.Thick[4]);
+        }
+
+        static internal void SaveProgress()
+        { //TODO: Find a way to convert to binary blob and encode it (basE91?)
+
         }
     }
 }

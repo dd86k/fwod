@@ -163,7 +163,7 @@ namespace Play
 
         internal string PlayerAnswer()
         {
-            string tmp = ConsoleTools.RepeatChar(' ', 20);
+            string tmp = ConsoleTools.RepeatChar(' ', 25);
 
             // determine the starting position of the bubble
             // lol copy paste 

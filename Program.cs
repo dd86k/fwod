@@ -13,7 +13,11 @@ using System.Reflection;
 - keep story.txt out of git's range
 */
 
-[assembly: AssemblyVersion("0.3.0.0")]
+#if DEBUG
+[assembly: AssemblyVersion("0.3.1.*")]
+#else
+[assembly: AssemblyVersion("0.3.1.0")]
+#endif
 
 namespace Play
 {
@@ -120,7 +124,21 @@ namespace Play
                 GameBoss.EnemySays("Oh, you're awake...");
                 GameBoss.EnemySays("What is your name?");
 
-                GamePlayer.CharacterName = GamePlayer.PlayerAnswer();
+                bool gotname = false;
+                string tmp_name = string.Empty;
+                do
+                {
+                    tmp_name = GamePlayer.PlayerAnswer();
+                    // If the player entered at least something and not too long
+                    if (tmp_name.Length == 0)
+                        GameBoss.EnemySays("Say something!");
+                    else if (tmp_name.Length > 25)
+                        GameBoss.EnemySays("Dude, that is way too long.");
+                    else
+                        gotname = true;
+                } while (!gotname);
+
+                GamePlayer.CharacterName = tmp_name;
                 GamePlayer.PlayerSays("It's " + GamePlayer.CharacterName);
 
                 GameBoss.EnemySays("Well, it's your unlucky day.");
