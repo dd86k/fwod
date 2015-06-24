@@ -1,33 +1,45 @@
 ﻿using System;
 
-namespace Play
+/*
+    This class is about anything related to the enemies.
+*/
+
+namespace FWoD
 {
     public class Enemy
     {
         int _posx;
+        /// <summary>
+        /// X position (lower is higher).
+        /// </summary>
+        /// <value>Left position</value>
         int PosX
         {
             get { return _posx; }
             set
             {
-                Console.SetCursorPosition(this._posx, this.PosY);
+                Console.SetCursorPosition(this._posx, this._posy);
                 Console.Write(" ");
-                _posx = value;
-                Console.SetCursorPosition(this._posx, this.PosY);
+                this._posx = value;
+                Console.SetCursorPosition(this._posx, this._posy);
                 Console.Write(this.EnemyChar);
             }
         }
 
         int _posy;
+        /// <summary>
+        /// Y position (lower is closer to the left).
+        /// </summary>
+        /// <value>Top position</value>
         int PosY
         {
             get { return _posy; }
             set
             {
-                Console.SetCursorPosition(this.PosX, _posy);
+                Console.SetCursorPosition(this._posx, this._posy);
                 Console.Write(" ");
-                _posy = value;
-                Console.SetCursorPosition(this.PosX, _posy);
+                this._posy = value;
+                Console.SetCursorPosition(this._posx, this._posy);
                 Console.Write(this.EnemyChar);
             }
         }
@@ -77,9 +89,9 @@ namespace Play
         /// </summary>
         internal void Initialize()
         {
+            //TODO: Should be random (Except for bosses)
             this.PosX = (Console.BufferWidth / 2) - (Console.BufferWidth / 4);
             this.PosY = Console.BufferHeight / 2;
-            this.HP = 9999;
 
             Console.SetCursorPosition(this.PosX, this.PosY);
             Console.Write(this.EnemyChar);
@@ -98,29 +110,11 @@ namespace Play
                 (this.PosX - (pText.Length / 2)) - 1);
             int StartY = this.PosY - 4;
 
-            // top
-            Console.SetCursorPosition(StartX, StartY);
-            Console.Write(Game.Graphics.Walls.Thin[2]);
-            ConsoleTools.GenerateHorizontalLine(Game.Graphics.Walls.Thin[1], pText.Length + 2);
-            Console.Write(Game.Graphics.Walls.Thin[3]);
+            Game.GenerateBox(Game.TypeOfLine.Single, StartX, StartY, pText.Length + 4, 3);
 
-            // left
-            Console.SetCursorPosition(StartX, StartY + 1);
-            Console.Write(Game.Graphics.Walls.Thin[0]);
-
-            // right
-            Console.SetCursorPosition(StartX + pText.Length + 3, StartY + 1);
-            Console.Write(Game.Graphics.Walls.Thin[0]);
-
-            // bottom
-            Console.SetCursorPosition(StartX, StartY + 2);
-            Console.Write(Game.Graphics.Walls.Thin[5]);
-            ConsoleTools.GenerateHorizontalLine(Game.Graphics.Walls.Thin[1], pText.Length + 2);
-            Console.Write(Game.Graphics.Walls.Thin[4]);
-
-            // bubble chat "connector"
-            Console.SetCursorPosition(this.PosX, StartY + 2);
-            Console.Write(Game.Graphics.Walls.Thin[8]);
+            // bubble chat "connector" (Over player)
+            Console.SetCursorPosition(this.PosX, this.PosY - 2);
+            Console.Write(Game.Graphics.Lines.SingleConnector[2]);
 
             // -- Insert Text --
             Console.SetCursorPosition(StartX + 2, StartY + 1);

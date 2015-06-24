@@ -1,6 +1,10 @@
 ﻿using System;
 
-namespace Play
+/*
+    Various tools for the command prompt and terminal.
+*/
+
+namespace FWoD
 {
     internal class ConsoleTools
     {
@@ -51,8 +55,8 @@ namespace Play
                 Console.SetCursorPosition(pPosX, pPosY++);
                 /* -- REASONS WHY I DO IT THIS WAY --
                  * NEWLINE FUCKS UP (Also safer)
-                 * ADDING SPACE (for padding) OVERWRITES BUFFER (Also waste of "cpu cycles")
-                */
+                 * ADDING SPACE (for padding) OVERWRITES [anything in between] BUFFER (Also waste of "cpu cycles")
+                 */
             }
         }
 

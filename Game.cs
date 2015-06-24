@@ -1,6 +1,10 @@
 ﻿using System;
 
-namespace Play
+/*
+    General game mechanics.
+*/
+
+namespace FWoD
 {
     internal class Game
     {
@@ -13,55 +17,105 @@ namespace Play
                 internal static char[] Grades = new char[] {'░', '▒', '▓', '█'};
                 internal static char[] Half = new char[] {'▄', '▌', '▐', '▀'};
             }
-            internal struct Walls
+            internal struct Lines
             {
-                internal static char[] Thin = {'│', '─', '┌', '┐', '┘', '└', '┤', '┴', '┬', '├', '┼'};
-                internal static char[] Thick = {'║', '═', '╔', '╗', '╝', '╚', '╣', '╩', '╦', '╠', '╬'};
-                internal static char[] InnerThin = {'╢', '╟', '╖', '╜', '╧', '╤', '╙', '╒', '╫'};
-                internal static char[] InnerThick = {'╡', '╞', '╕', '╛', '╨', '╥', '╘', '╓', '╪'};
+                internal static char[] Single = {'│', '─'};
+                internal static char[] SingleCorner = {'┌', '┐', '┘', '└'};
+                internal static char[] SingleConnector = {'┤', '┴', '┬', '├', '┼'};
+
+                internal static char[] Double = {'║', '═'};
+                internal static char[] DoubleCorner = {'╔', '╗', '╝', '╚'};
+                internal static char[] DoubleConnector = {'╣', '╩', '╦', '╠', '╬'};
+
+
+                internal static char[] InnerSingleCorner = {'╒', '╖', '╜', '╙'};
+                internal static char[] InnerSingleConnector = {'╢', '╧', '╤', '╟', '╫'};
+
+                internal static char[] InnerDoubleCorner = {'╕', '╛', '╘', '╓'};
+                internal static char[] InnerDoubleConnector = {'╡', '╨', '╥', '╞', '╪'};
             }
         }
 
-        /// <summary>
-        /// Generates the master room (outer walls).
-        /// </summary>
-        static internal void GenerateMasterRoom()
+        //TODO: Find a better solution than this
+        internal enum TypeOfLine
         {
-            // Top wall
-            Console.SetCursorPosition(1, 1);
-            Console.Write(Graphics.Walls.Thick[2]);
+            Single, Double
+        }
 
-            int lenW = Console.BufferWidth - 4;
-            ConsoleTools.GenerateHorizontalLine(Graphics.Walls.Thick[1], lenW);
-            Console.Write(Graphics.Walls.Thick[3]);
+        /// <summary>
+        /// Generates a box.
+        /// </summary>
+        /// <param name="pType">Type of line.</param>
+        /// <param name="pPosX">Top position.</param>
+        /// <param name="pPosY">Left position.</param>
+        /// <param name="pWidth">Width.</param>
+        /// <param name="pHeight">Height.</param>
+        static internal void GenerateBox(TypeOfLine pType, int pPosX, int pPosY, int pWidth, int pHeight)
+        { //TODO: Enum for opening (like if we want to open the box).
+          // ! Maybe I should move this to ConsoleTools !
+          // Thinking about making those actual objects (for later manipulation instead of recalling this)
+
+            int Width = pWidth > 1 ? pWidth - 2 : 2; // Minimum: 2
+            int Height = pHeight > 1 ? pHeight - 2 : 2;
+
+            // Default is single lines
+            char CornerTLChar = Graphics.Lines.SingleCorner[0]; // Top Left
+            char CornerTRChar = Graphics.Lines.SingleCorner[1]; // Top Right
+            char CornerBLChar = Graphics.Lines.SingleCorner[3]; // Bottom Left
+            char CornerBRChar = Graphics.Lines.SingleCorner[2]; // Bottom Right
+            char HorizontalChar = Graphics.Lines.Single[1]; // Horizontal
+            char VerticalChar = Graphics.Lines.Single[0]; // Vertical
+
+            switch (pType)
+            { // By default TypeOfLine.Single is already defined as above.
+                case TypeOfLine.Double:
+                    CornerTLChar = Graphics.Lines.DoubleCorner[0];
+                    CornerTRChar = Graphics.Lines.DoubleCorner[1];
+                    CornerBLChar = Graphics.Lines.DoubleCorner[3];
+                    CornerBRChar = Graphics.Lines.DoubleCorner[2];
+                    HorizontalChar = Graphics.Lines.Double[1];
+                    VerticalChar = Graphics.Lines.Double[0];
+                    break;
+            }
+
+            // Top wall
+            Console.SetCursorPosition(pPosX, pPosY);
+            Console.Write(CornerTLChar);
+            ConsoleTools.GenerateHorizontalLine(HorizontalChar, Width);
+            Console.Write(CornerTRChar);
 
             // Side walls
+            Console.SetCursorPosition(pPosX, pPosY + 1);
+            ConsoleTools.GenerateVerticalLine(VerticalChar, Height);
 
-            Console.SetCursorPosition(1, 2);
-
-            int lenH = Console.BufferHeight - 2;
-            Console.SetCursorPosition(1, 2);
-            ConsoleTools.GenerateVerticalLine(Graphics.Walls.Thick[0], lenH);
-
-            lenW += 2;
-            Console.SetCursorPosition(lenW, 2);
-            ConsoleTools.GenerateVerticalLine(Graphics.Walls.Thick[0], lenH);
+            Console.SetCursorPosition(pPosX + Width + 1, pPosY + 1);
+            ConsoleTools.GenerateVerticalLine(VerticalChar, Height);
 
             // Bottom wall
-
-            Console.SetCursorPosition(1, lenH);
-            Console.Write(Graphics.Walls.Thick[5]);
-
-            lenW -= 2;
-            Console.SetCursorPosition(2, lenH);
-            ConsoleTools.GenerateHorizontalLine(Graphics.Walls.Thick[1], lenW);
-
-            Console.Write(Graphics.Walls.Thick[4]);
+            Console.SetCursorPosition(pPosX, pPosY + Height);
+            Console.Write(CornerBLChar);
+            ConsoleTools.GenerateHorizontalLine(HorizontalChar, Width);
+            Console.Write(CornerBRChar);
         }
 
-        static internal void SaveProgress()
+        /* "UI" For save/load game
+                [ Save/Load game ]         <- Center text
+        +--------------------------------+
+        | <SavegameFile1> - <PlayerName> | <- other colors when selected
+        +--------------------------------+
+        | <SavegameFile2> - <PlayerName> |
+        +--------------------------------+
+        | [...] 5 Items in total         |
+        */
+
+        /*static internal bool SaveProgress() // Return true is saved properly
         { //TODO: Find a way to convert to binary blob and encode it (basE91?)
+            using (TextWriter tw = 
+        }*/
 
-        }
+        /*static internal <StructOfGameData> LoadProgress()
+        {
+
+        }*/
     }
 }

@@ -1,25 +1,57 @@
 ﻿using System;
 using System.Reflection;
 
+/*
+    This is the entry point of the program.
+*/
+
+/*
+    -- Notice --
+- Code cleanups are made from time to time
+- Code reorganization are made from time to time
+- this is where most of my ideas are
+- rawr
+*/
+
 //TODO: Collision mechanics
 //TODO: Enemy mechanics
 //TODO: Attack mechanics
-//TODO: Buffer
 
-// -- Not to forget section --
-/*
-- Clean code
-- Check versionning
-- keep story.txt out of git's range
+//TODO: Do menu (Options, Savegames, Quit, etc.) - Needs Buffer first!
+
+//TODO: F12 for screenshot (Dump display buffer to file)
+
+//TODO: Buffer
+/* Idea(s) for buffer
+ * (Because you can't fetch a char in Mono from the display buffer)
+
+- "history"-based
+-- 2D char array or 2D enum array (with all types of stuff)
+-- Only print what's necessary (most recent)
+-- easy fetch at a coord (with method)
+-- based on BufferWidth and BufferHeight
+--+ Fastest
+--- Implementing might be tricky (es. with 2D enum array)
+
+- "dumb"-based
+-- 2D char array
+-- Reprint entire buffer everytime
+-- easy fetch at a coord (with method)
+-- based on BufferWidth and BufferHeight
+--+ Simplest
+--- CPU heavy
+
+- chunk-based
+-- forget that
 */
 
 #if DEBUG
-[assembly: AssemblyVersion("0.3.1.*")]
+[assembly: AssemblyVersion("0.3.2.*")]
 #else
-[assembly: AssemblyVersion("0.3.1.0")]
+[assembly: AssemblyVersion("0.3.2.0")]
 #endif
 
-namespace Play
+namespace FWoD
 {
     class MainClass
     {
@@ -35,7 +67,7 @@ namespace Play
         }
 
         static Player GamePlayer = new Player();
-        static Enemy GameBoss = new Enemy();
+        static Enemy GameBoss = new Enemy(); //TODO: 1D Array for enemies [in Game]? (!!!)
         internal static int Main(string[] args)
         {
             // Default values
@@ -56,7 +88,7 @@ namespace Play
                         ShowVersion();
                         return 0;
                     case "-bosssays":
-                    case "-B":
+                    case "-B": //TODO: Find spot for custom text
                         if (args[i + 1] != null)
                             bosstext = args[i + 1];
                         break;
@@ -68,6 +100,13 @@ namespace Play
                     case "--skipintro":
                         SkipIntro = true;
                         break;
+                    case "--showmemes":
+                        //Misc.ShowMemes();
+                        break;
+                    case "--debug":
+                        int returnint = 0;
+                        Debug.StartTests(out returnint);
+                        return returnint;
                 }
             }
 
@@ -79,6 +118,7 @@ namespace Play
                 Console.SetWindowSize(80, 25); // Window's default
             #elif LINUX
             //TODO: [LINUX] Find a way to set the Window or buffersize (no libs pls)
+            //"dude terminal doesn't have a 'buffer' its a real terminal rofl!!11"
 
             #endif
 
@@ -101,7 +141,7 @@ namespace Play
             */
 
             #if DEBUG
-                Console.WriteLine("Please remember that this is still in development, so expect bugs!");
+                Console.WriteLine("This is a debugging build, so expect bugs!");
             #endif
 
             Console.WriteLine();
@@ -112,19 +152,20 @@ namespace Play
 
             // == Game starts here ==
 
+            Game.GenerateBox(Game.TypeOfLine.Double, 1, 1, Console.BufferWidth - 2, Console.BufferHeight - 2);
+
             GamePlayer.CharacterName = Pname;
             GamePlayer.CharacterChar = Pchar;
             GamePlayer.Initialize();
             GameBoss.Initialize();
 
             if (!SkipIntro)
-            { //TODO: Come on I can do something better..
+            {
                 GamePlayer.PlayerSays("Arrgh! Where am I?");
 
                 GameBoss.EnemySays("Oh, you're awake...");
                 GameBoss.EnemySays("What is your name?");
 
-                bool gotname = false;
                 string tmp_name = string.Empty;
                 do
                 {
@@ -133,10 +174,8 @@ namespace Play
                     if (tmp_name.Length == 0)
                         GameBoss.EnemySays("Say something!");
                     else if (tmp_name.Length > 25)
-                        GameBoss.EnemySays("Dude, that is way too long.");
-                    else
-                        gotname = true;
-                } while (!gotname);
+                        GameBoss.EnemySays("Hey, that's way too long.");
+                } while (tmp_name.Length == 0 || tmp_name.Length > 25);
 
                 GamePlayer.CharacterName = tmp_name;
                 GamePlayer.PlayerSays("It's " + GamePlayer.CharacterName);
@@ -149,7 +188,7 @@ namespace Play
 
                 GamePlayer.PlayerSays("WHAT!?!?!");
 
-                GameBoss.EnemySays("Die, " + GamePlayer.CharacterName + "!");
+                GameBoss.EnemySays("I'll be back for you, " + GamePlayer.CharacterName + "!");
             }
 
             bool plays = true;
@@ -166,7 +205,7 @@ namespace Play
         }
 
         static internal bool Entry()
-        {
+        { // Make a bool like isInMenu
             ConsoleKeyInfo key = Console.ReadKey(true);
 
             switch (key.Key)
@@ -220,7 +259,13 @@ namespace Play
 
         static void ShowVersion()
         {
-            Console.Write("Made by DD~!, version " + ProjectVersion);
+            // Should the credits be here or somewhere else?
+            string Out = nl + "Version " + ProjectVersion + nl + nl +
+                " -- Credits --" + nl +
+                "DD~! (guitarxhero) - Original author" + nl + nl +
+                "I'd like to thank the authors of Rogue, NetHack, and Pixel Dungeon for their awesome game and the many hours of fun I had in them." + nl;
+            
+            Console.Write(Out);
         }
     }
 }

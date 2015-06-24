@@ -1,11 +1,14 @@
 ﻿using System;
 
-//TODO: MAKE MORE OBJECTS (Bubblechat, etc.)
+/*
+    This class is about the Player.
+*/
 
-namespace Play
+namespace FWoD
 {
     internal class Player
     {
+        #region Properties
         int _posx;
         int PosX
         {
@@ -26,10 +29,10 @@ namespace Play
             get { return _posy; }
             set
             {
-                Console.SetCursorPosition(this.PosX, _posy);
+                Console.SetCursorPosition(this._posx, this._posy);
                 Console.Write(" ");
                 _posy = value;
-                Console.SetCursorPosition(this.PosX, _posy);
+                Console.SetCursorPosition(this._posx, this._posy);
                 Console.Write(this.CharacterChar);
             }
         }
@@ -74,11 +77,19 @@ namespace Play
         /// The character's char.
         /// </summary>
         internal char CharacterChar;
+        #endregion
+
+        #region Construction
+        /// <summary>
+        /// Creates a few player. Only one can be made!
+        /// </summary>
         internal Player()
         { // Defaults
             this.CharacterChar = '@';
         }
+        #endregion
 
+        #region Methods
         /// <summary>
         /// Places the Player.
         /// </summary>
@@ -90,7 +101,6 @@ namespace Play
 
             Console.SetCursorPosition(this.PosX, this.PosY);
             Console.Write(this.CharacterChar);
-            Game.GenerateMasterRoom();
         }
 
         /// <summary>
@@ -102,35 +112,18 @@ namespace Play
         void GenerateBubble(string pText, int pPosX, int pPosY)
         { // pText is to determine the size of the bubble!
 
-            //TODO: Multiline chat bubble
-            // If lenght is higher than 34, split it 
-            //
+            //TODO: NOW Multiline chat bubble DO IT DO IT DO IT DO IT DO IT 
+            // If lenght is higher than 25, split it 
 
-            // top
-            Console.SetCursorPosition(pPosX, pPosY);
-            Console.Write(Game.Graphics.Walls.Thin[2]);
-            ConsoleTools.GenerateHorizontalLine(Game.Graphics.Walls.Thin[1], pText.Length + 2);
-            Console.Write(Game.Graphics.Walls.Thin[3]);
+            //TODO: GenerateBubble -> Game class with (Player pPlayer, bool Yelling, [...])
 
-            // left
-            Console.SetCursorPosition(pPosX, pPosY + 1);
-            Console.Write(Game.Graphics.Walls.Thin[0]);
-
-            // right
-            Console.SetCursorPosition(pPosX + pText.Length + 3, pPosY + 1);
-            Console.Write(Game.Graphics.Walls.Thin[0]);
-
-            // bottom
-            Console.SetCursorPosition(pPosX, pPosY + 2);
-            Console.Write(Game.Graphics.Walls.Thin[5]);
-            ConsoleTools.GenerateHorizontalLine(Game.Graphics.Walls.Thin[1], pText.Length + 2);
-            Console.Write(Game.Graphics.Walls.Thin[4]);
+            Game.GenerateBox(Game.TypeOfLine.Single, pPosX, pPosY, pText.Length + 4, 3);
 
             // bubble chat "connector" (Over player)
             Console.SetCursorPosition(this.PosX, pPosY + 2);
-            Console.Write(Game.Graphics.Walls.Thin[8]);
+            Console.Write(Game.Graphics.Lines.SingleConnector[2]);
 
-            Console.SetCursorPosition(pPosX + 2, pPosY + 1);
+            Console.SetCursorPosition(pPosX + 2, pPosY + 1); // Prepare to insert text
         }
 
         internal void PlayerSays(string pText)
@@ -220,5 +213,6 @@ namespace Play
         {
             this.PosX++;
         }
+        #endregion
     }
 }

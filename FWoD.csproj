@@ -7,7 +7,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>FWoD</RootNamespace>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <StartupObject>Play.MainClass</StartupObject>
+    <StartupObject>FWoD.MainClass</StartupObject>
     <ReleaseVersion>1.0</ReleaseVersion>
     <Description>REEEEEEEEEEEEEEE</Description>
   </PropertyGroup>
@@ -16,9 +16,10 @@
     <OutputPath>bin\Debug (Windows)</OutputPath>
     <WarningLevel>4</WarningLevel>
     <DefineConstants>WINDOWS, DEBUG</DefineConstants>
-    <Externalconsole>true</Externalconsole>
     <AssemblyName>fwod-win32</AssemblyName>
     <LangVersion>5</LangVersion>
+    <ConsolePause>false</ConsolePause>
+    <Externalconsole>true</Externalconsole>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug (Linux)|AnyCPU' ">
     <Optimize>false</Optimize>
@@ -34,7 +35,7 @@
     <OutputPath>bin\Release (Windows)</OutputPath>
     <WarningLevel>4</WarningLevel>
     <DefineConstants>WINDOWS</DefineConstants>
-    <AssemblyName>Play-win32</AssemblyName>
+    <AssemblyName>fwod-win32</AssemblyName>
     <Externalconsole>true</Externalconsole>
     <LangVersion>5</LangVersion>
   </PropertyGroup>
@@ -43,7 +44,7 @@
     <OutputPath>bin\Release (Linux)</OutputPath>
     <WarningLevel>4</WarningLevel>
     <DefineConstants>LINUX</DefineConstants>
-    <AssemblyName>Play-linux</AssemblyName>
+    <AssemblyName>fwod-linux</AssemblyName>
     <Externalconsole>true</Externalconsole>
     <LangVersion>5</LangVersion>
   </PropertyGroup>
@@ -57,11 +58,12 @@
     <Compile Include="Game.cs" />
     <Compile Include="ConsoleTools.cs" />
     <Compile Include="Enemy.cs" />
+    <Compile Include="Misc.cs" />
+    <Compile Include="Debug.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="README.md" />
     <None Include="LICENSE" />
-    <None Include="CHANGELOG" />
   </ItemGroup>
 </Project>
