@@ -1,4 +1,3 @@
-C:\Users\DD\Documents\Projects\Play\Play\bin\Debug (Linux)\fwod-linux.exe
-C:\Users\DD\Documents\Projects\Play\Play\obj\Debug (Linux)\fwod-linux.exe
 C:\Users\DD\Documents\Projects\Play\fwod\bin\Debug (Linux)\fwod-linux.exe
+C:\Users\DD\Documents\Projects\Play\fwod\obj\Debug (Linux)\FWoD.csprojResolveAssemblyReference.cache
 C:\Users\DD\Documents\Projects\Play\fwod\obj\Debug (Linux)\fwod-linux.exe

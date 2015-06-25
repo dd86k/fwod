@@ -105,19 +105,17 @@ namespace FWoD
         {
             // -- Make bubble --
             // determine the starting position of the bubble
-            int StartX = (pText.Length > 2 ?
-                (this.PosX - (pText.Length / 2)) - 2:
-                (this.PosX - (pText.Length / 2)) - 1);
+            int StartX = this.PosX - (pText.Length / 2) - 1;
             int StartY = this.PosY - 4;
 
-            Game.GenerateBox(Game.TypeOfLine.Single, StartX, StartY, pText.Length + 4, 3);
+            Game.GenerateBox(Game.TypeOfLine.Single, StartX, StartY, pText.Length + 2, 3);
 
             // bubble chat "connector" (Over player)
             Console.SetCursorPosition(this.PosX, this.PosY - 2);
             Console.Write(Game.Graphics.Lines.SingleConnector[2]);
 
             // -- Insert Text --
-            Console.SetCursorPosition(StartX + 2, StartY + 1);
+            Console.SetCursorPosition(StartX + 1, StartY + 1);
             Console.Write(pText);
 
             // Waiting for keypress
@@ -126,7 +124,7 @@ namespace FWoD
 
             // Clear bubble
             Console.SetCursorPosition(StartX, StartY);
-            int len = pText.Length + 4;
+            int len = pText.Length + 2;
             for (int i = StartY; i < this.PosY; i++)
             {
                 ConsoleTools.GenerateHorizontalLine(' ', len);

@@ -6,10 +6,25 @@
     <ProjectGuid>{7352A229-6235-49F2-9358-E621633D6233}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>FWoD</RootNamespace>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <StartupObject>FWoD.MainClass</StartupObject>
     <ReleaseVersion>1.0</ReleaseVersion>
     <Description>REEEEEEEEEEEEEEE</Description>
+    <PublishUrl>publier\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug (Windows)|AnyCPU' ">
     <Optimize>false</Optimize>
@@ -34,7 +49,7 @@
     <Optimize>true</Optimize>
     <OutputPath>bin\Release (Windows)</OutputPath>
     <WarningLevel>4</WarningLevel>
-    <DefineConstants>WINDOWS</DefineConstants>
+    <DefineConstants>WINDOWS, RELEASE</DefineConstants>
     <AssemblyName>fwod-win32</AssemblyName>
     <Externalconsole>true</Externalconsole>
     <LangVersion>5</LangVersion>
@@ -43,9 +58,26 @@
     <Optimize>true</Optimize>
     <OutputPath>bin\Release (Linux)</OutputPath>
     <WarningLevel>4</WarningLevel>
-    <DefineConstants>LINUX</DefineConstants>
+    <DefineConstants>LINUX, RELEASE</DefineConstants>
     <AssemblyName>fwod-linux</AssemblyName>
     <Externalconsole>true</Externalconsole>
+    <LangVersion>5</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug (Windows 10)|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug (Windows 10)</OutputPath>
+    <DefineConstants>WINDOWS10, DEBUG</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <AssemblyName>fwod-winnt10</AssemblyName>
+    <LangVersion>5</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release (Windows 10)|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release (Windows 10)</OutputPath>
+    <DefineConstants>WINDOWS10, RELEASE</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release (Windows 10)\fwod-winnt10.xml</DocumentationFile>
+    <AssemblyName>fwod-winnt10</AssemblyName>
     <LangVersion>5</LangVersion>
   </PropertyGroup>
   <ItemGroup>
@@ -65,5 +97,22 @@
   <ItemGroup>
     <None Include="README.md" />
     <None Include="LICENSE" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 et x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
 </Project>

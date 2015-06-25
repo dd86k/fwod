@@ -6,20 +6,26 @@ Hello! This is a little something I'd like to show you, it's simply a console-ba
 Yes, it is kind of like the original Rogue and NetHack.
 (Also because Rogue started in 1980 (!!!))
 
-There isn't going to be much though, since my programming skills are not that great.
+There isn't going to be much though, since my programming skills are not very advanced.
 
 Here is what I use:
 - Xamarin Studio 5.9.4 (With Mono 4.5)
 - Windows 8.1 Pro
 
-The project is Visual Studio compatible (.NET 4.5)
+_Note_ : If you want to use this in Visual Studio, just go in the project settings and rename the assembly name.
 
 You can always send me an [email](mailto:devddstuff@gmail.com).
 
-### TODO
-- Every TODO are indicated with //TODO:
+### Notes
+- Code reorganization/restructures/cleanups are made from time to time
 
-Most of them are written in Program.cs
+### Builds
+Some builds will be available on my [website](http://didi.wilomgfx.net) (once I make the page!).
+
+### TODO
+- Every TODO are indicated with "//TODO:"
+
+Most of them are written in Program.cs (ideas too).
 
 ### Issues (Code specific unrelated)
 - MonoDevelop can't seem to open the CS files.

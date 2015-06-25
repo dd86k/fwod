@@ -1,2 +1,0 @@
-C:\Users\DD\Documents\Projects\Play\Play\bin\Debug (Windows)\Play-win32.exe
-C:\Users\DD\Documents\Projects\Play\Play\obj\Debug (Windows)\Play-win32.exe

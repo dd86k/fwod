@@ -1,4 +1,3 @@
-C:\Users\DD\Documents\Projects\Play\Play\bin\Debug (Windows)\fwod-win32.exe
-C:\Users\DD\Documents\Projects\Play\Play\obj\Debug (Windows)\fwod-win32.exe
-C:\Users\DD\Documents\Projects\Play\fwod\obj\Debug (Windows)\fwod-win32.exe
+C:\Users\DD\Documents\Projects\Play\fwod\obj\Debug (Windows)\FWoD.csprojResolveAssemblyReference.cache
 C:\Users\DD\Documents\Projects\Play\fwod\bin\Debug (Windows)\fwod-win32.exe
+C:\Users\DD\Documents\Projects\Play\fwod\obj\Debug (Windows)\fwod-win32.exe

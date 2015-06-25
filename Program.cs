@@ -5,14 +5,6 @@ using System.Reflection;
     This is the entry point of the program.
 */
 
-/*
-    -- Notice --
-- Code cleanups are made from time to time
-- Code reorganization are made from time to time
-- this is where most of my ideas are
-- rawr
-*/
-
 //TODO: Collision mechanics
 //TODO: Enemy mechanics
 //TODO: Attack mechanics
@@ -21,7 +13,7 @@ using System.Reflection;
 
 //TODO: F12 for screenshot (Dump display buffer to file)
 
-//TODO: Buffer
+//TODO: Buffer (Or just limit myself to 80x25?)
 /* Idea(s) for buffer
  * (Because you can't fetch a char in Mono from the display buffer)
 
@@ -46,16 +38,16 @@ using System.Reflection;
 */
 
 #if DEBUG
-[assembly: AssemblyVersion("0.3.2.*")]
+[assembly: AssemblyVersion("0.3.3.*")]
 #else
-[assembly: AssemblyVersion("0.3.2.0")]
+[assembly: AssemblyVersion("0.3.3.0")]
 #endif
 
 namespace FWoD
 {
     class MainClass
     {
-        const string ProjectName = "Four Walls of Death"; // Four walls of death
+        const string ProjectName = "Four Walls of Death";
 
         static readonly string nl = System.Environment.NewLine;
         static string ProjectVersion
@@ -100,12 +92,12 @@ namespace FWoD
                     case "--skipintro":
                         SkipIntro = true;
                         break;
-                    case "--showmemes":
-                        //Misc.ShowMemes();
-                        break;
+                    case "--showmeme":
+                        Misc.ShowMeme(); // *shrugs*
+                        return 0;
                     case "--debug":
                         int returnint = 0;
-                        Debug.StartTests(out returnint);
+                        Debug.StartTests(ref returnint);
                         return returnint;
                 }
             }
@@ -113,14 +105,19 @@ namespace FWoD
             Console.Clear();
             Console.Title = ProjectName + " " + ProjectVersion;
             
-            #if WINDOWS // Otherwise the scrollbar is still there
+            #if WINDOWS
                 Console.SetBufferSize(80, 25);
                 Console.SetWindowSize(80, 25); // Window's default
+            #elif WINDOWS10
+                // Crashes on SetBufferSize (because it's lower)
+                
             #elif LINUX
             //TODO: [LINUX] Find a way to set the Window or buffersize (no libs pls)
             //"dude terminal doesn't have a 'buffer' its a real terminal rofl!!11"
 
             #endif
+
+            GamePlayer = new Player((Console.BufferWidth / 4) + (Console.BufferWidth / 2), Console.BufferHeight / 2);
 
             // == Before the game ==
 
@@ -131,7 +128,7 @@ namespace FWoD
             ConsoleTools.WriteLineAndCenter(BannerText);
             ConsoleTools.WriteLineAndCenter(BannerOutline);
             Console.WriteLine();
-            /* Some kind of lore/context/pre-story is going to be here. */
+            /* Some kind of lore/context/pre-story going on or something. */
             /*
             Console.WriteLine("");
             Console.WriteLine("");
@@ -141,7 +138,7 @@ namespace FWoD
             */
 
             #if DEBUG
-                Console.WriteLine("This is a debugging build, so expect bugs!");
+                Console.WriteLine("This is a development build, so expect bugs!");
             #endif
 
             Console.WriteLine();
@@ -254,6 +251,7 @@ namespace FWoD
                 "  --help, /?    Shows this screen" + nl +
                 "  --version     Shows version" + nl + nl +
                 "Have fun!" + nl;
+            
             Console.Write(Out);
         }
 

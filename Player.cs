@@ -86,6 +86,18 @@ namespace FWoD
         internal Player()
         { // Defaults
             this.CharacterChar = '@';
+            this._posx = Console.BufferWidth / 2;
+            this._posy = Console.BufferHeight / 2;
+            this._hp = 10;
+        }
+
+
+        internal Player(int X, int Y)
+        { // Defaults
+            this.CharacterChar = '@';
+            this._posx = X;
+            this._posy = Y;
+            this._hp = 10;
         }
         #endregion
 
@@ -95,49 +107,68 @@ namespace FWoD
         /// </summary>
         internal void Initialize()
         {
-            this.PosX = (Console.BufferWidth / 4) + (Console.BufferWidth / 2);
-            this.PosY = Console.BufferHeight / 2;
-            this.HP = 10;
-
-            Console.SetCursorPosition(this.PosX, this.PosY);
-            Console.Write(this.CharacterChar);
+            this.PosX = this._posx;
+            this.PosY = this._posy;
         }
 
         /// <summary>
         /// Generates the bubble and readys the cursor
         /// </summary>
-        /// <param name="pText">P text.</param>
-        /// <param name="pPosX">P position x.</param>
-        /// <param name="pPosY">P position y.</param>
-        void GenerateBubble(string pText, int pPosX, int pPosY)
-        { // pText is to determine the size of the bubble!
-
-            //TODO: NOW Multiline chat bubble DO IT DO IT DO IT DO IT DO IT 
-            // If lenght is higher than 25, split it 
-
+        /// <param name="pText">Text</param>
+        /// <param name="pPosX">Left position</param>
+        /// <param name="pPosY">Top position</param>
+        void GenerateBubble(int pTextLength, int pLines, int pPosX, int pPosY)
+        {
             //TODO: GenerateBubble -> Game class with (Player pPlayer, bool Yelling, [...])
 
-            Game.GenerateBox(Game.TypeOfLine.Single, pPosX, pPosY, pText.Length + 4, 3);
+            Game.GenerateBox(Game.TypeOfLine.Single, pPosX, pPosY, pTextLength + 2, /*(pTextLength / 26)*/pLines + 2);
 
             // bubble chat "connector" (Over player)
-            Console.SetCursorPosition(this.PosX, pPosY + 2);
+            Console.SetCursorPosition(this.PosX, this.PosY - 2);
             Console.Write(Game.Graphics.Lines.SingleConnector[2]);
 
-            Console.SetCursorPosition(pPosX + 2, pPosY + 1); // Prepare to insert text
+            Console.SetCursorPosition(pPosX + 1, pPosY + 1); // Prepare to insert text
         }
 
         internal void PlayerSays(string pText)
         {
             // determine the starting position of the bubble
-            int StartX = (pText.Length > 2 ?
-                (this.PosX - (pText.Length / 2)) - 2:
-                (this.PosX - (pText.Length / 2)) - 1);
-            int StartY = this.PosY - 4;
+            //TODO: Adjust position automatically so I don't go over the display buffer
 
-            GenerateBubble(pText, StartX, StartY);
+            string[] Lines = new string[] { pText };
+            int ci = 0;
+            int start = 0;
+            if (pText.Length > 25)
+            {
+                Lines = new string[(pText.Length / 25) + 1];
+                do
+                {
+                    if (start + 25 > pText.Length)
+                        Lines[ci] = pText.Substring(start, pText.Length - start);
+                    else
+                        Lines[ci] = pText.Substring(start, 25);
+                    ci++;
+                    start += 25;
+                } while (start < pText.Length);
+            }
+
+            int StartX = this.PosX - (Lines[0].Length / 2) - 1;
+            int StartY = this.PosY - (Lines.Length) - 3;
+
+            int TextStartX = StartX + 1;
+            int TextStartY = StartY + 1;
+
+            GenerateBubble(Lines[0].Length,
+                Lines.Length,
+                StartX,
+                StartY);
 
             // -- Insert Text --
-            Console.Write(pText);
+            for (int i = 0; i < Lines.Length; i++)
+            {
+                Console.SetCursorPosition(TextStartX, TextStartY + i);
+                Console.Write(Lines[i]);
+            }
 
             // Waiting for keypress
             Console.SetCursorPosition(0, 0);
@@ -146,7 +177,7 @@ namespace FWoD
             // Clear bubble
             //TODO: Put older chars back
             Console.SetCursorPosition(StartX, StartY);
-            int len = pText.Length + 4;
+            int len = Lines[0].Length + 4;
             for (int i = StartY; i < this.PosY; i++)
             {
                 ConsoleTools.GenerateHorizontalLine(' ', len);
@@ -160,12 +191,10 @@ namespace FWoD
 
             // determine the starting position of the bubble
             // lol copy paste 
-            int StartX = (tmp.Length > 2 ?
-                (this.PosX - (tmp.Length / 2)) - 2:
-                (this.PosX - (tmp.Length / 2)) - 1);
+            int StartX = this.PosX - (tmp.Length / 2) - 1;
             int StartY = this.PosY - 4;
 
-            GenerateBubble(tmp, StartX, StartY);
+            GenerateBubble(tmp.Length, 1, StartX, StartY);
 
             string Out = Console.ReadLine();
 

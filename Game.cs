@@ -55,8 +55,9 @@ namespace FWoD
           // ! Maybe I should move this to ConsoleTools !
           // Thinking about making those actual objects (for later manipulation instead of recalling this)
 
-            int Width = pWidth > 1 ? pWidth - 2 : 2; // Minimum: 2
-            int Height = pHeight > 1 ? pHeight - 2 : 2;
+
+            int Width = pWidth < 2 ? 1 : pWidth - 2; // Minimum: 2
+            int Height = pHeight < 2 ? 1 : pHeight - 1;
 
             // Default is single lines
             char CornerTLChar = Graphics.Lines.SingleCorner[0]; // Top Left
