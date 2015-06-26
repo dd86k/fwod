@@ -14,27 +14,11 @@ using System.Reflection;
 //TODO: F12 for screenshot (Dump display buffer to file)
 
 //TODO: Buffer (for collision)
-/* Idea(s) for buffer
- * (Because you can't fetch a char in Mono from the display buffer)
-
-- "history"-based
--- 2D char array or 2D enum array (with all types of stuff)
--- Only print what's necessary (most recent)
--- easy fetch at a coord (with method)
--- based on BufferWidth and BufferHeight
---+ Fastest
---- Implementing might be tricky (es. with 2D enum array)
-
-- "dumb"-based
--- 2D char array
--- Reprint entire buffer everytime
--- easy fetch at a coord (with method)
--- based on BufferWidth and BufferHeight
---+ Simplest
---- CPU heavy
-
-- chunk-based
--- forget that
+/*
+- multi-layer TextWriter
+-- Layer for game, menu, bubbles, etc.
+--+ Easy implementation, simple
+--- Reprints the whole thing or partially
 */
 
 #if DEBUG
@@ -47,8 +31,11 @@ namespace FWoD
 {
     class MainClass
     {
+        #region Consts
         const string ProjectName = "Four Walls of Death";
+        #endregion
 
+        #region Properties
         static readonly string nl = System.Environment.NewLine;
         static string ProjectVersion
         {
@@ -60,6 +47,10 @@ namespace FWoD
 
         static Player GamePlayer = new Player();
         static Enemy GameBoss = new Enemy(); //TODO: 1D Array for enemies [in Game]? (!!!)
+        static bool isPlaying = true; // Is the player playing?
+        static bool inMenu = false;
+        #endregion
+
         internal static int Main(string[] args)
         {
             // Default values
@@ -188,14 +179,16 @@ namespace FWoD
 
                 GamePlayer.PlayerSays("WHAT!?!?!");
 
-                GameBoss.EnemySays("I'll be back for you, " + GamePlayer.CharacterName + "!");
+                if (bosstext.Length > 0)
+                    GameBoss.EnemySays(bosstext);
+                else
+                    GameBoss.EnemySays("I'll be back for you, " + GamePlayer.CharacterName + "!");
             }
 
-            bool plays = true;
             do
             {
-                plays = Entry();
-            } while (plays);
+                Entry();
+            } while (isPlaying);
 
             // == The player is leaving the game ==
 
@@ -204,7 +197,7 @@ namespace FWoD
             return 0;
         }
 
-        static internal bool Entry()
+        static internal void Entry()
         { // Make a bool like isInMenu
             ConsoleKeyInfo key = Console.ReadKey(true);
 
@@ -230,12 +223,18 @@ namespace FWoD
                     GamePlayer.MoveRight();
                     break;
 
-                    // Exit the game
+                    // Menu button
                 case ConsoleKey.Escape:
-                    return false;
-            }
+                    if (inMenu)
+                    {
 
-            return true;
+                    }
+                    else
+                    {
+
+                    }
+                    break;
+            }
         }
 
         static void ShowHelp()

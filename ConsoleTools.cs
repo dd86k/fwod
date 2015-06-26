@@ -68,7 +68,8 @@ namespace FWoD
                 Console.SetCursorPosition(pPosX, pPosY++);
                 /* -- REASONS WHY I DO IT THIS WAY --
                  * NEWLINE FUCKS UP SHIT
-                 * ADDING SPACE (for padding) OVERWRITES [anything in between] BUFFER (Also waste of "cpu cycles")
+                 * ADDING SPACE (for padding) OVERWRITES [anything in between] BUFFER
+                 * "hurr durr ur cpu cycles!!!11"
                  */
             }
         }
@@ -84,6 +85,13 @@ namespace FWoD
                 Out += pChar;
             }
             return Out;
+        }
+
+        // If Console.OpenStandardOutput() fails on Linux, I'll just use this in the future
+        //System.IO.TextWriter OriginalOut = new System.IO.TextWriter();
+        static internal void ResetConsoleOut()
+        {
+            Console.SetOut(Console.OpenStandardOutput());
         }
     }
 }

@@ -92,6 +92,7 @@
     <Compile Include="Enemy.cs" />
     <Compile Include="Misc.cs" />
     <Compile Include="Debug.cs" />
+    <Compile Include="Menu.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

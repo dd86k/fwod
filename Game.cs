@@ -52,9 +52,7 @@ namespace FWoD
         /// <param name="pHeight">Height.</param>
         static internal void GenerateBox(TypeOfLine pType, int pPosX, int pPosY, int pWidth, int pHeight)
         { //TODO: Enum for opening (like if we want to open the box).
-          // ! Maybe I should move this to ConsoleTools !
           // Thinking about making those actual objects (for later manipulation instead of recalling this)
-
 
             int Width = pWidth < 2 ? 1 : pWidth - 2; // Minimum: 2
             int Height = pHeight < 2 ? 1 : pHeight - 1;
