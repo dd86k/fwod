@@ -20,7 +20,7 @@ You can always send me an [email](mailto:devddstuff@gmail.com).
 - Code reorganization/restructures/cleanups are made from time to time
 
 ### Builds
-Some builds will be available on my [website](http://didi.wilomgfx.net) (once I make the page!).
+Some builds will be available on my [website](http://www.wilomgfx.net/didier/pages/fwod.html).
 
 ### TODO
 - Every TODO are indicated with "//TODO:"

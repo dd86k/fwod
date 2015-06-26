@@ -8,7 +8,7 @@ namespace FWoD
 {
     internal class Game
     {
-        const string SaveFilename = "fwod.sg";
+        const string SaveFilenameModel = "fwod#.sg";
 
         internal struct Graphics
         {
@@ -64,8 +64,8 @@ namespace FWoD
             char CornerTRChar = Graphics.Lines.SingleCorner[1]; // Top Right
             char CornerBLChar = Graphics.Lines.SingleCorner[3]; // Bottom Left
             char CornerBRChar = Graphics.Lines.SingleCorner[2]; // Bottom Right
-            char HorizontalChar = Graphics.Lines.Single[1]; // Horizontal
-            char VerticalChar = Graphics.Lines.Single[0]; // Vertical
+            char HorizontalChar = Graphics.Lines.Single[1];     // Horizontal
+            char VerticalChar = Graphics.Lines.Single[0];       // Vertical
 
             switch (pType)
             { // By default TypeOfLine.Single is already defined as above.

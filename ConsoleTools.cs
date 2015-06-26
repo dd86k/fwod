@@ -8,22 +8,35 @@ namespace FWoD
 {
     internal class ConsoleTools
     {
+        static internal readonly int BufferHeight = 25;
+        static internal readonly int BufferWidth = 80;
+
         // Center
         static internal void WriteAndCenter(string pText)
         {
+            WriteAndCenter(pText, Console.CursorTop);
+        }
+
+        static internal void WriteAndCenter(string pText, int pTopPosition)
+        {
             // Calculate the starting position
-            int start = (Console.BufferWidth / 2) - (pText.Length / 2);
+            int start = (BufferWidth / 2) - (pText.Length / 2);
             // If the text is longer than the buffer, set it to 0
-            start = start + pText.Length > Console.BufferWidth ? 0 : start;
+            start = start + pText.Length > BufferWidth ? 0 : start;
             // Print away at the current cursor height (top)
-            Console.SetCursorPosition(start, Console.CursorTop);
+            Console.SetCursorPosition(start, pTopPosition);
             Console.Write(pText);
         }
 
         static internal void WriteLineAndCenter(string pText)
         {
-            WriteAndCenter(pText);
-            Console.SetCursorPosition(0, Console.CursorTop + 1);
+            WriteLineAndCenter(pText, Console.CursorTop);
+        }
+
+        static internal void WriteLineAndCenter(string pText, int pTopPosition)
+        {
+            WriteAndCenter(pText, pTopPosition);
+            Console.SetCursorPosition(0, pTopPosition + 1);
         }
 
         // Generate lines
@@ -54,7 +67,7 @@ namespace FWoD
                 Console.Write(pChar);
                 Console.SetCursorPosition(pPosX, pPosY++);
                 /* -- REASONS WHY I DO IT THIS WAY --
-                 * NEWLINE FUCKS UP (Also safer)
+                 * NEWLINE FUCKS UP SHIT
                  * ADDING SPACE (for padding) OVERWRITES [anything in between] BUFFER (Also waste of "cpu cycles")
                  */
             }
@@ -62,7 +75,7 @@ namespace FWoD
 
         // Generate string
         // Same at the GenerateHorizontalLine but returns a string instead
-        // GenerateHorizontalLine is prefered for "cpu cycles" (gosh can people stop on that)
+        // GenerateHorizontalLine is prefered because it directly prints out
         static internal string RepeatChar(char pChar, int pLenght)
         {
             string Out = string.Empty;

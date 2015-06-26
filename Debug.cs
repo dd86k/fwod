@@ -74,7 +74,7 @@ namespace FWoD
                 #endregion
 
                 #region Test #7
-                Console.Write("Test #" + testnum + ": Make the Player ask something");
+                Console.Write("Test #" + testnum + ": Make the Player answer something");
 
                 p.Initialize(); // Pause() clears the buffer
 
@@ -118,7 +118,43 @@ namespace FWoD
 
                 p.Initialize(); // Pause() clears the buffer
 
-                p.PlayerSays("Diamonds are actually unstable at surface temperature and pressure. Every diamond above ground is very, very slowly altering into graphite, another form of pure carbon.");
+                p.PlayerSays("A constant member is defined at compile time and cannot be changed at runtime.");
+
+                Pause(ref testnum);
+                #endregion
+
+                #region Test #12
+                Console.Write("Test #" + testnum + ": Recreate player at X:3 and make him talk");
+
+                p = new Player(3, Console.BufferHeight - 4);
+
+                p.Initialize(); // Pause() clears the buffer
+
+                p.PlayerSays("Didn't you knew that I was there all along?");
+
+                Pause(ref testnum);
+                #endregion
+
+                #region Test #13
+                Console.Write("Test #" + testnum + ": Recreate player at X:3|Y:1 and make him talk a bit more");
+
+                p = new Player(10, 1);
+
+                p.Initialize(); // Pause() clears the buffer
+
+                p.PlayerSays("Haha! TELEPORTER B O Y S. Okay no I'll stop I swear!");
+
+                Pause(ref testnum);
+                #endregion
+
+                #region Test #14
+                Console.Write("Test #" + testnum + ": Recreate player at the right and make him talk");
+
+                p = new Player(Console.BufferWidth - 3, Console.BufferHeight - 2);
+
+                p.Initialize(); // Pause() clears the buffer
+
+                p.PlayerSays("I will eat all of your pizza if you don't write me this documentation.");
 
                 Pause(ref testnum);
                 #endregion
@@ -133,7 +169,7 @@ namespace FWoD
                 Console.WriteLine();
                 Console.WriteLine(" !! An error occurred during test #" + testnum + " !!");
                 Console.WriteLine("Here's some debugging information:");
-                Console.WriteLine("Exception: " + ex.GetType().ToString());
+                Console.WriteLine("Exception: " + ex.GetType().ToString() + " " + string.Format("(0x{0:X8})", ex.HResult));
                 Console.WriteLine("Message: " + ex.Message);
                 Console.WriteLine(" -- Stack --" );
                 Console.WriteLine(ex.StackTrace);

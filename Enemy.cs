@@ -4,6 +4,8 @@
     This class is about anything related to the enemies.
 */
 
+//TODO: Merge Player.cs and Enemy.cs as 
+
 namespace FWoD
 {
     public class Enemy
@@ -90,8 +92,8 @@ namespace FWoD
         internal void Initialize()
         {
             //TODO: Should be random (Except for bosses)
-            this.PosX = (Console.BufferWidth / 2) - (Console.BufferWidth / 4);
-            this.PosY = Console.BufferHeight / 2;
+            this.PosX = (ConsoleTools.BufferWidth / 2) - (ConsoleTools.BufferWidth / 4);
+            this.PosY = ConsoleTools.BufferHeight / 2;
 
             Console.SetCursorPosition(this.PosX, this.PosY);
             Console.Write(this.EnemyChar);

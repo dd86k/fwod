@@ -13,7 +13,7 @@ using System.Reflection;
 
 //TODO: F12 for screenshot (Dump display buffer to file)
 
-//TODO: Buffer (Or just limit myself to 80x25?)
+//TODO: Buffer (for collision)
 /* Idea(s) for buffer
  * (Because you can't fetch a char in Mono from the display buffer)
 
@@ -106,10 +106,10 @@ namespace FWoD
             Console.Title = ProjectName + " " + ProjectVersion;
             
             #if WINDOWS
-                Console.SetBufferSize(80, 25);
-                Console.SetWindowSize(80, 25); // Window's default
+                Console.SetBufferSize(80, 25); // Window's default
+                Console.SetWindowSize(80, 25); // Remove scrollbar for maximum yes
             #elif WINDOWS10
-                // Crashes on SetBufferSize (because it's lower)
+                // Crashes on SetBufferSize (because it's lower, thx ms)
                 
             #elif LINUX
             //TODO: [LINUX] Find a way to set the Window or buffersize (no libs pls)
@@ -117,7 +117,7 @@ namespace FWoD
 
             #endif
 
-            GamePlayer = new Player((Console.BufferWidth / 4) + (Console.BufferWidth / 2), Console.BufferHeight / 2);
+            GamePlayer = new Player((ConsoleTools.BufferWidth / 4) + (ConsoleTools.BufferWidth / 2), ConsoleTools.BufferHeight / 2);
 
             // == Before the game ==
 
@@ -138,7 +138,7 @@ namespace FWoD
             */
 
             #if DEBUG
-                Console.WriteLine("This is a development build, so expect bugs!");
+                Console.WriteLine("This is a development build, so expect bugs and crashes!");
             #endif
 
             Console.WriteLine();
@@ -149,12 +149,15 @@ namespace FWoD
 
             // == Game starts here ==
 
-            Game.GenerateBox(Game.TypeOfLine.Double, 1, 1, Console.BufferWidth - 2, Console.BufferHeight - 2);
+            Game.GenerateBox(Game.TypeOfLine.Double, 1, 1, ConsoleTools.BufferWidth - 2, ConsoleTools.BufferHeight - 2);
 
             GamePlayer.CharacterName = Pname;
             GamePlayer.CharacterChar = Pchar;
             GamePlayer.Initialize();
             GameBoss.Initialize();
+
+            //TODO: Place scenary here
+
 
             if (!SkipIntro)
             {
