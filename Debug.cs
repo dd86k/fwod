@@ -180,8 +180,8 @@ namespace FWoD
 
         static void Pause(ref int pTestNum)
         {
-            pTestNum++;
             Console.ReadKey(true);
+            pTestNum++;
             Console.Clear();
         }
     }

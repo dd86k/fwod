@@ -80,14 +80,6 @@
     <AssemblyName>fwod-winnt10</AssemblyName>
     <LangVersion>5</LangVersion>
   </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyName>fwod</AssemblyName>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug %28Windows%29|AnyCPU'">
-    <ErrorReport>prompt</ErrorReport>
-    <DebugType>full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
