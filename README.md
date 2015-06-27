@@ -9,10 +9,8 @@ Yes, it is kind of like the original Rogue and NetHack.
 There isn't going to be much though, since my programming skills are not very advanced.
 
 Here is what I use:
-- Xamarin Studio 5.9.4 (With Mono 4.5)
+- Visual Studio 2012 (Update 4)
 - Windows 8.1 Pro
-
-_Note_ : If you want to use this in Visual Studio, just go in the project settings and rename the assembly name.
 
 You can always send me an [email](mailto:devddstuff@gmail.com).
 
@@ -20,7 +18,7 @@ You can always send me an [email](mailto:devddstuff@gmail.com).
 - Code reorganization/restructures/cleanups are made from time to time
 
 ### Builds
-Some builds will be available on my [website](http://www.wilomgfx.net/didier/pages/fwod.html).
+Some builds will be available on my [website](http://www.wilomgfx.net/didier/pages/fwod.html) (Sometime soon when I feel it's good enough).
 
 ### TODO
 - Every TODO are indicated with "//TODO:"
