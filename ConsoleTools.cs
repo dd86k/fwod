@@ -8,15 +8,29 @@ namespace FWoD
 {
     internal class ConsoleTools
     {
+        /// <summary>
+        /// Initial buffer height
+        /// </summary>
         static internal readonly int BufferHeight = 25;
+        /// <summary>
+        /// Initial buffer width
+        /// </summary>
         static internal readonly int BufferWidth = 80;
 
-        // Center
+        /// <summary>
+        /// Center text to middle and write
+        /// </summary>
+        /// <param name="pText">Input text</param>
         static internal void WriteAndCenter(string pText)
         {
             WriteAndCenter(pText, Console.CursorTop);
         }
 
+        /// <summary>
+        /// Center text to middle and write to a specific top position
+        /// </summary>
+        /// <param name="pText">Input text</param>
+        /// <param name="pTopPosition">Top position</param>
         static internal void WriteAndCenter(string pText, int pTopPosition)
         {
             // Calculate the starting position
@@ -28,23 +42,43 @@ namespace FWoD
             Console.Write(pText);
         }
 
+        /// <summary>
+        /// Center text to middle and write, then moves a line foward
+        /// </summary>
+        /// <param name="pText">Input text</param>
         static internal void WriteLineAndCenter(string pText)
         {
             WriteLineAndCenter(pText, Console.CursorTop);
         }
 
+        /// <summary>
+        /// Center text to middle and write, then moves a line foward
+        /// </summary>
+        /// <param name="pText">Input text</param>
+        /// <param name="pTopPosition">Top position</param>
         static internal void WriteLineAndCenter(string pText, int pTopPosition)
         {
             WriteAndCenter(pText, pTopPosition);
             Console.SetCursorPosition(0, pTopPosition + 1);
         }
 
-        // Generate lines
+        /// <summary>
+        /// Generates a horizontal line on screen
+        /// </summary>
+        /// <param name="pChar">Character to use</param>
+        /// <param name="pLenght">Length</param>
         static internal void GenerateHorizontalLine(char pChar, int pLenght)
         {
             GenerateHorizontalLine(pChar, Console.CursorLeft, Console.CursorTop, pLenght);
         }
 
+        /// <summary>
+        /// Generates a horizontal line on screen
+        /// </summary>
+        /// <param name="pChar">Character to use</param>
+        /// <param name="pPosX">Left position</param>
+        /// <param name="pPosY">Top position</param>
+        /// <param name="pLenght">Length</param>
         static internal void GenerateHorizontalLine(char pChar, int pPosX, int pPosY, int pLenght)
         {
             Console.SetCursorPosition(pPosX, pPosY);
@@ -54,11 +88,23 @@ namespace FWoD
             }
         }
 
+        /// <summary>
+        /// Generates a vertical line on screen
+        /// </summary>
+        /// <param name="pChar">Character to use</param>
+        /// <param name="pLenght">Length</param>
         static internal void GenerateVerticalLine(char pChar, int pLenght)
         {
             GenerateVerticalLine(pChar, Console.CursorLeft, Console.CursorTop, pLenght);
         }
 
+        /// <summary>
+        /// Generates a vertical line on screen
+        /// </summary>
+        /// <param name="pChar">Character to use</param>
+        /// <param name="pPosX">Left position</param>
+        /// <param name="pPosY">Top position</param>
+        /// <param name="pLenght">Length</param>
         static internal void GenerateVerticalLine(char pChar, int pPosX, int pPosY, int pLenght)
         {
             Console.SetCursorPosition(pPosX, pPosY);
@@ -74,9 +120,12 @@ namespace FWoD
             }
         }
 
-        // Generate string
-        // Same at the GenerateHorizontalLine but returns a string instead
-        // GenerateHorizontalLine is prefered because it directly prints out
+        /// <summary>
+        /// Generates a string out of a character
+        /// </summary>
+        /// <param name="pChar">Input char</param>
+        /// <param name="pLenght">Output string</param>
+        /// <returns></returns>
         static internal string RepeatChar(char pChar, int pLenght)
         {
             string Out = string.Empty;
@@ -87,11 +136,14 @@ namespace FWoD
             return Out;
         }
 
-        // If Console.OpenStandardOutput() fails on Linux, I'll just use this in the future
-        // ..Or use #if
-        //System.IO.TextWriter OriginalOut = new System.IO.TextWriter();
+        /// <summary>
+        /// Resets the Console's Out to the original one
+        /// </summary>
         static internal void ResetConsoleOut()
         {
+            // If Console.OpenStandardOutput() fails on Linux, I'll just use this in the future
+            // ..Or use #if
+            //System.IO.TextWriter OriginalOut = new System.IO.TextWriter();
             using (System.IO.StreamWriter tw = new System.IO.StreamWriter(Console.OpenStandardOutput()))
             {
                 tw.AutoFlush = true;

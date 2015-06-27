@@ -78,7 +78,7 @@ namespace FWoD
 
                 p.Initialize(); // Pause() clears the buffer
 
-                string tt = p.PlayerAnswer();
+                string tt = p.GetAnswerFromPlayer();
 
                 Pause(ref testnum);
                 #endregion
@@ -88,7 +88,7 @@ namespace FWoD
 
                 p.Initialize(); // Pause() clears the buffer
 
-                p.PlayerSays(tt);
+                p.Say(tt);
 
                 Pause(ref testnum);
                 #endregion
@@ -98,7 +98,7 @@ namespace FWoD
 
                 p.Initialize(); // Pause() clears the buffer
 
-                p.PlayerSays("ddddddddddddddddddddddddd");
+                p.Say("ddddddddddddddddddddddddd");
 
                 Pause(ref testnum);
                 #endregion
@@ -108,7 +108,7 @@ namespace FWoD
 
                 p.Initialize(); // Pause() clears the buffer
 
-                p.PlayerSays("Hey dere utube im here 2 show u my minecraft tutaliral we gonna have fun!!1");
+                p.Say("Hey dere utube im here 2 show u my minecraft tutaliral we gonna have fun!!1");
 
                 Pause(ref testnum);
                 #endregion
@@ -118,7 +118,7 @@ namespace FWoD
 
                 p.Initialize(); // Pause() clears the buffer
 
-                p.PlayerSays("A constant member is defined at compile time and cannot be changed at runtime.");
+                p.Say("A constant member is defined at compile time and cannot be changed at runtime.");
 
                 Pause(ref testnum);
                 #endregion
@@ -130,7 +130,7 @@ namespace FWoD
 
                 p.Initialize(); // Pause() clears the buffer
 
-                p.PlayerSays("Didn't you knew that I was there all along?");
+                p.Say("Didn't you knew that I was there all along?");
 
                 Pause(ref testnum);
                 #endregion
@@ -142,7 +142,7 @@ namespace FWoD
 
                 p.Initialize(); // Pause() clears the buffer
 
-                p.PlayerSays("Haha! TELEPORTER B O Y S. Okay no I'll stop I swear!");
+                p.Say("Haha! TELEPORTER B O Y S. Okay no I'll stop I swear!");
 
                 Pause(ref testnum);
                 #endregion
@@ -154,7 +154,7 @@ namespace FWoD
 
                 p.Initialize(); // Pause() clears the buffer
 
-                p.PlayerSays("I will eat all of your pizza if you don't write me this documentation.");
+                p.Say("I will eat all of your pizza if you don't write me this documentation.");
 
                 Pause(ref testnum);
                 #endregion
@@ -183,6 +183,13 @@ namespace FWoD
             pTestNum++;
             Console.ReadKey(true);
             Console.Clear();
+        }
+
+        static internal void TalkText(string pText)
+        {
+            Player p = new Player(ConsoleTools.BufferWidth / 2, ConsoleTools.BufferHeight - 3);
+            p.Initialize();
+            p.Say(pText);
         }
     }
 }

@@ -2,6 +2,8 @@
 
 /*
     This class is about the Player.
+    An enemy is basically a player as well, 
+    although the Player can't control them.
 */
 
 namespace FWoD
@@ -10,7 +12,10 @@ namespace FWoD
     {
         #region Properties
         int _posx;
-        int PosX
+        /// <summary>
+        /// Sets or gets the Player position (Left).
+        /// </summary>
+        internal int PosX
         {
             get { return _posx; }
             set
@@ -24,7 +29,10 @@ namespace FWoD
         }
 
         int _posy;
-        int PosY
+        /// <summary>
+        /// Sets or gets the Player position (Top).
+        /// </summary>
+        internal int PosY
         {
             get { return _posy; }
             set
@@ -37,13 +45,10 @@ namespace FWoD
             }
         }
 
-        string _characterName;
-
         int _hp;
         /// <summary>
         /// Gets or sets the HP.
         /// </summary>
-        /// <value>The HP.</value>
         int HP
         {
             get { return _hp; }
@@ -77,11 +82,16 @@ namespace FWoD
         /// The character's char.
         /// </summary>
         internal char CharacterChar;
+
+        /// <summary>
+        /// The Player's name.
+        /// </summary>
+        string _characterName;
         #endregion
 
         #region Construction
         /// <summary>
-        /// Creates a new player. Only one can be made!
+        /// Creates a new player.
         /// </summary>
         internal Player()
         { // Defaults
@@ -91,9 +101,13 @@ namespace FWoD
             this._hp = 10;
         }
 
-
+        /// <summary>
+        /// Creates a new player with specific coords.
+        /// </summary>
+        /// <param name="X">Left value.</param>
+        /// <param name="Y">Top value.</param>
         internal Player(int X, int Y)
-        { // Defaults
+        {
             this.CharacterChar = '@';
             this._posx = X;
             this._posy = Y;
@@ -103,7 +117,7 @@ namespace FWoD
 
         #region Methods
         /// <summary>
-        /// Places the Player.
+        /// Places the Player on screen.
         /// </summary>
         internal void Initialize()
         {
@@ -112,135 +126,21 @@ namespace FWoD
         }
 
         /// <summary>
-        /// Generates the bubble and readys the cursor
+        /// Makes the character talk.
         /// </summary>
-        /// <param name="pText">Text</param>
-        /// <param name="pPosX">Left position</param>
-        /// <param name="pPosY">Top position</param>
-        void GenerateBubble(int pTextLength, int pLines, int pPosX, int pPosY)
+        /// <param name="pText">Text!</param>
+        internal void Say(string pText)
         {
-            Game.GenerateBox(Game.TypeOfLine.Single, pPosX, pPosY, pTextLength + 2, pLines + 2);
-
-            // bubble chat "connector"
-            if (pPosY < this.PosY) // Over player
-            {
-                Console.SetCursorPosition(this.PosX, this.PosY - 2);
-                Console.Write(Game.Graphics.Lines.SingleConnector[2]);
-            }
-            else // Under player
-            {
-                Console.SetCursorPosition(this.PosX, this.PosY + 2);
-                Console.Write(Game.Graphics.Lines.SingleConnector[1]);
-            }
-
-            // Prepare to insert text
-            Console.SetCursorPosition(pPosX + 1, pPosY + 1);
+            Game.CharacterSays(this, pText);
         }
 
-        internal void PlayerSays(string pText)
+        /// <summary>
+        /// Get input from Player.
+        /// </summary>
+        /// <returns></returns>
+        internal string GetAnswerFromPlayer()
         {
-            string[] Lines = new string[] { pText };
-            int ci = 0;
-            int start = 0;
-            // Seperates the text in blocks of 25 letters in case
-            if (pText.Length != 0)
-            {
-                if (pText.Length > 25)
-                {
-                    Lines = new string[(pText.Length / 26) + 1];
-                    do
-                    {
-                        if (start + 25 > pText.Length)
-                            Lines[ci] = pText.Substring(start, pText.Length - start);
-                        else
-                            Lines[ci] = pText.Substring(start, 25);
-                        ci++;
-                        start += 25;
-                    } while (start < pText.Length);
-                }
-            }
-            else Lines = new string[] { " " }; // At least the bubble won't look squished out
-
-            // X/Left bubble starting position
-            int StartX = this.PosX - (Lines[0].Length / 2) - 1;
-            // Re-places StartX if it goes further than the display buffer
-            if (StartX + (Lines[0].Length + 2) > ConsoleTools.BufferWidth)
-            {
-                StartX = ConsoleTools.BufferWidth - (Lines[0].Length + 2);
-            }
-
-            if (StartX < 0)
-            {
-                StartX = 0;
-            }
-
-            // Y/Top bubble starting position
-            int StartY = this.PosY - (Lines.Length) - 3;
-            // Re-places StartY if it goes further than the display buffer
-            if (StartY > ConsoleTools.BufferWidth)
-            {
-                StartY = ConsoleTools.BufferWidth - (Lines[0].Length - 2);
-            }
-
-            if (StartY < 0)
-            {
-                StartY = 3;
-            }
-
-            int TextStartX = StartX + 1;
-            int TextStartY = StartY + 1;
-
-            GenerateBubble(Lines[0].Length,
-                Lines.Length,
-                StartX,
-                StartY);
-
-            // Insert Text
-            for (int i = 0; i < Lines.Length; i++)
-            {
-                Console.SetCursorPosition(TextStartX, TextStartY + i);
-                Console.Write(Lines[i]);
-            }
-
-            // Waiting for keypress
-            Console.SetCursorPosition(0, 0);
-            Console.ReadKey(true);
-
-            // Clear bubble
-            //TODO: Put older chars back
-            Console.SetCursorPosition(StartX, StartY);
-            int len = Lines[0].Length + 4;
-            for (int i = StartY; i < this.PosY; i++)
-            {
-                ConsoleTools.GenerateHorizontalLine(' ', len);
-                Console.SetCursorPosition(StartX, i);
-            }
-        }
-
-        internal string PlayerAnswer()
-        {
-            string tmp = ConsoleTools.RepeatChar(' ', 25);
-
-            // determine the starting position of the bubble
-            // lol copy paste 
-            int StartX = this.PosX - (tmp.Length / 2) - 1;
-            int StartY = this.PosY - 4;
-
-            GenerateBubble(tmp.Length, 1, StartX, StartY);
-
-            string Out = Console.ReadLine();
-
-            // Clear bubble
-            //TODO: Put older chars back
-            Console.SetCursorPosition(StartX, StartY);
-            int len = tmp.Length + 4;
-            for (int i = StartY; i < this.PosY; i++)
-            {
-                ConsoleTools.GenerateHorizontalLine(' ', len);
-                Console.SetCursorPosition(StartX, i);
-            }
-
-            return Out;
+            return Game.GetAnswerFromCharacter(this);
         }
 
         /// <summary>

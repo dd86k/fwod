@@ -97,7 +97,6 @@
     <Compile Include="Player.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="ConsoleTools.cs" />
-    <Compile Include="Enemy.cs" />
     <Compile Include="Misc.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="Menu.cs" />

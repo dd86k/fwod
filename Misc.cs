@@ -8,6 +8,9 @@ namespace FWoD
 {
     internal class Misc
     {
+        /// <summary>
+        /// thank you Wunkolo for existing 👌👀
+        /// </summary>
         internal static void ShowMeme()
         { //tip: good shit
             Console.Clear();

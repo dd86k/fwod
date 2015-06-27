@@ -9,14 +9,14 @@ using System.Reflection;
 //TODO: Enemy mechanics
 //TODO: Attack mechanics
 
-//TODO: Do menu (Options, Savegames, Quit, etc.) - Needs Buffer first!
+//TODO: Do menu (Options, Savegames, Quit, etc.) - Needs layer thing first!
 
-//TODO: F12 for screenshot (Dump display buffer to file)
+//TODO: F12 for screenshot (Dump display buffer to file?)
 
 #if DEBUG
-[assembly: AssemblyVersion("0.3.3.*")]
+[assembly: AssemblyVersion("0.3.4.*")]
 #else
-[assembly: AssemblyVersion("0.3.3.0")]
+[assembly: AssemblyVersion("0.3.4.0")]
 #endif
 
 namespace FWoD
@@ -38,7 +38,7 @@ namespace FWoD
         }
 
         static Player GamePlayer = new Player();
-        static Enemy GameBoss = new Enemy(); //TODO: 1D Array for enemies [in Game]? (!!!)
+        static Player GameBoss = new Player(); //TODO: 1D Array for enemies [in Game]? (!!!)
         static bool isPlaying = true; // Is the player playing?
         static bool inMenu = false;
         #endregion
@@ -82,6 +82,13 @@ namespace FWoD
                         int returnint = 0;
                         Debug.StartTests(ref returnint);
                         return returnint;
+                    case "--debugsay":
+                        if (args[i + 1] != null)
+                        {
+                            Debug.TalkText(args[i + 1]);
+                            return 0;
+                        }
+                        else return 1;
                 }
             }
 
@@ -113,14 +120,6 @@ namespace FWoD
             ConsoleTools.WriteLineAndCenter(BannerText);
             ConsoleTools.WriteLineAndCenter(BannerOutline);
             Console.WriteLine();
-            /* Some kind of lore/context/pre-story going on or something. */
-            /*
-            Console.WriteLine("");
-            Console.WriteLine("");
-            Console.WriteLine("");
-            Console.WriteLine("");
-            Console.WriteLine("");
-            */
 
             #if DEBUG
                 Console.WriteLine("This is a development build, so expect bugs and crashes!");
@@ -139,44 +138,42 @@ namespace FWoD
             GamePlayer.CharacterName = Pname;
             GamePlayer.CharacterChar = Pchar;
             GamePlayer.Initialize();
+            GameBoss.CharacterChar = '$';
             GameBoss.Initialize();
-
-            //TODO: Place scenary here
-
 
             if (!SkipIntro)
             {
-                GamePlayer.PlayerSays("Arrgh! Where am I?");
+                GamePlayer.Say("Arrgh! Where am I?");
 
-                GameBoss.EnemySays("Oh, you're awake...");
-                GameBoss.EnemySays("What is your name?");
+                GameBoss.Say("Oh, you're awake...");
+                GameBoss.Say("What is your name?");
 
                 string tmp_name = string.Empty;
                 do
                 {
-                    tmp_name = GamePlayer.PlayerAnswer();
+                    tmp_name = GamePlayer.GetAnswerFromPlayer();
                     // If the player entered at least something and not too long
                     if (tmp_name.Length == 0)
-                        GameBoss.EnemySays("Say something!");
+                        GameBoss.Say("Say something!");
                     else if (tmp_name.Length > 25)
-                        GameBoss.EnemySays("Hey, that's way too long.");
+                        GameBoss.Say("Hey, that's way too long.");
                 } while (tmp_name.Length == 0 || tmp_name.Length > 25);
 
                 GamePlayer.CharacterName = tmp_name;
-                GamePlayer.PlayerSays("It's " + GamePlayer.CharacterName + ".");
+                GamePlayer.Say("It's " + GamePlayer.CharacterName + ".");
 
-                GameBoss.EnemySays("Well, it's your unlucky day.");
+                GameBoss.Say("Well, it's your unlucky day.");
 
-                GamePlayer.PlayerSays("Why?");
+                GamePlayer.Say("Why?");
 
-                GameBoss.EnemySays("Because I will kill you.");
+                GameBoss.Say("Because I will kill you.");
 
-                GamePlayer.PlayerSays("WHAT!?!?!");
+                GamePlayer.Say("WHAT!?!?!");
 
                 if (bosstext.Length > 0)
-                    GameBoss.EnemySays(bosstext);
+                    GameBoss.Say(bosstext);
                 else
-                    GameBoss.EnemySays("I'll be back for you, " + GamePlayer.CharacterName + "!");
+                    GameBoss.Say("I'll be back for you, " + GamePlayer.CharacterName + "!");
             }
 
             do

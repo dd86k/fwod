@@ -10,6 +10,31 @@ namespace FWoD
     {
         const string SaveFilenameModel = "fwod#.sg";
 
+        // Our infamous buffer!
+        
+        /// <summary>
+        /// Multi-layered char buffer
+        /// </summary>
+        char[][,] Layers = new char[3][,]
+        { // 3 layers of 25 row and 80 rolumns each
+            new char[25, 80], // Menu
+            new char[25, 80], // Bubbles
+            new char[25, 80]  // Game
+        };
+
+        //TODO: Redirect output here, save it, and print it to console
+
+        /// <summary>
+        /// Layer to output
+        /// </summary>
+        enum Layer
+        {
+            Menu, Game, Bubble
+        }
+
+        /// <summary>
+        /// Graphic characters (char[])
+        /// </summary>
         internal struct Graphics
         {
             internal struct Tiles
@@ -36,7 +61,9 @@ namespace FWoD
             }
         }
 
-        //TODO: Find a better solution than this
+        /// <summary>
+        /// Type of line to use.
+        /// </summary>
         internal enum TypeOfLine
         {
             Single, Double
@@ -51,19 +78,30 @@ namespace FWoD
         /// <param name="pWidth">Width.</param>
         /// <param name="pHeight">Height.</param>
         static internal void GenerateBox(TypeOfLine pType, int pPosX, int pPosY, int pWidth, int pHeight)
-        { //TODO: Enum for opening (like if we want to open the box).
-          // Thinking about making those actual objects (for later manipulation instead of recalling this)
-
-            pWidth = pWidth < 2 ? 1 : pWidth - 2; // Minimum: 2
+        {
+            // Minimum value must be at least 2
+            pWidth = pWidth < 2 ? 1 : pWidth - 2;
             pHeight = pHeight < 2 ? 1 : pHeight - 1;
 
+            // Verify that values are within bounds
             if (pPosX < 0)
             {
                 pPosX = 0;
             }
+
             if (pPosX + pWidth > ConsoleTools.BufferWidth)
             {
                 pPosX = ConsoleTools.BufferWidth - pWidth;
+            }
+
+            if (pPosY < 0)
+            {
+                pPosY = 0;
+            }
+
+            if (pPosY + pHeight > ConsoleTools.BufferWidth)
+            {
+                pPosY = ConsoleTools.BufferWidth - pHeight;
             }
 
             // Default is single lines
@@ -75,7 +113,7 @@ namespace FWoD
             char VerticalChar = Graphics.Lines.Single[0];       // Vertical
 
             switch (pType)
-            { // By default TypeOfLine.Single is already defined as above.
+            {
                 case TypeOfLine.Double:
                     CornerTLChar = Graphics.Lines.DoubleCorner[0];
                     CornerTRChar = Graphics.Lines.DoubleCorner[1];
@@ -106,27 +144,14 @@ namespace FWoD
             Console.Write(CornerBRChar);
         }
 
-        internal static string GetAnswerFromEntity(Player pPlayer)
-        {
-
-        }
-
-        internal static void MakeEntityTalk(Player pPlayer, string pText)
-        {
-
-        }
-
-        internal static void MakeEntityTalk(Enemy pEnemy, string pText)
-        {
-
-        }
-
-        void PlayerSays(string pText)
+        #region Player specific stuff, centralized
+        static internal void CharacterSays(Player pPlayer, string pText)
         {
             string[] Lines = new string[] { pText };
             int ci = 0;
             int start = 0;
-            // Seperates the text in blocks of 25 letters in case
+
+            // This block seperates the input into 25 characters each lines equaly.
             if (pText.Length != 0)
             {
                 if (pText.Length > 25)
@@ -143,10 +168,15 @@ namespace FWoD
                     } while (start < pText.Length);
                 }
             }
-            else Lines = new string[] { " " }; // At least the bubble won't look squished out
+            // Minimum text so the bubble doesn't look too thin
+            else Lines = new string[] { " " };
+
+            //TODO: The verification is already done via GenerateBox, so
+                 // I'm wondering if I should just modify those values
+                 // with a ref or out
 
             // X/Left bubble starting position
-            int StartX = this.PosX - (Lines[0].Length / 2) - 1;
+            int StartX = pPlayer.PosX - (Lines[0].Length / 2) - 1;
             // Re-places StartX if it goes further than the display buffer
             if (StartX + (Lines[0].Length + 2) > ConsoleTools.BufferWidth)
             {
@@ -159,7 +189,7 @@ namespace FWoD
             }
 
             // Y/Top bubble starting position
-            int StartY = this.PosY - (Lines.Length) - 3;
+            int StartY = pPlayer.PosY - (Lines.Length) - 3;
             // Re-places StartY if it goes further than the display buffer
             if (StartY > ConsoleTools.BufferWidth)
             {
@@ -171,10 +201,13 @@ namespace FWoD
                 StartY = 3;
             }
 
+            // Define the position of the text
             int TextStartX = StartX + 1;
             int TextStartY = StartY + 1;
 
-            GenerateBubble(Lines[0].Length,
+            // Generate the bubble
+            GenerateBubble(pPlayer,
+                Lines[0].Length,
                 Lines.Length,
                 StartX,
                 StartY);
@@ -194,31 +227,33 @@ namespace FWoD
             //TODO: Put older chars back
             Console.SetCursorPosition(StartX, StartY);
             int len = Lines[0].Length + 4;
-            for (int i = StartY; i < this.PosY; i++)
+            for (int i = StartY; i < pPlayer.PosY; i++)
             {
                 ConsoleTools.GenerateHorizontalLine(' ', len);
                 Console.SetCursorPosition(StartX, i);
             }
         }
 
-        string PlayerAnswer()
+        static internal string GetAnswerFromCharacter(Player pPlayer)
         {
+            // Generates temporary text for spacer
             string tmp = ConsoleTools.RepeatChar(' ', 25);
 
-            // determine the starting position of the bubble
-            // lol copy paste 
-            int StartX = this.PosX - (tmp.Length / 2) - 1;
-            int StartY = this.PosY - 4;
+            // Determine the starting position of the bubble
+            int StartX = pPlayer.PosX - (tmp.Length / 2) - 1;
+            int StartY = pPlayer.PosY - 4;
 
-            GenerateBubble(tmp.Length, 1, StartX, StartY);
+            // Generate the bubble
+            GenerateBubble(pPlayer, tmp.Length, 1, StartX, StartY);
 
+            // Read input from player
             string Out = Console.ReadLine();
 
             // Clear bubble
             //TODO: Put older chars back
             Console.SetCursorPosition(StartX, StartY);
             int len = tmp.Length + 4;
-            for (int i = StartY; i < this.PosY; i++)
+            for (int i = StartY; i < pPlayer.PosY; i++)
             {
                 ConsoleTools.GenerateHorizontalLine(' ', len);
                 Console.SetCursorPosition(StartX, i);
@@ -227,26 +262,36 @@ namespace FWoD
             return Out;
         }
 
-        void GenerateBubble(int pTextLength, int pLines, int pPosX, int pPosY)
+        /// <summary>
+        /// Generates the bubble for a player.
+        /// </summary>
+        /// <param name="pPlayer">Player</param>
+        /// <param name="pTextLength">Lenght of the text (Width)</param>
+        /// <param name="pLines">Length of the text (Height)</param>
+        /// <param name="pPosX">Top position</param>
+        /// <param name="pPosY">Left position</param>
+        static void GenerateBubble(Player pPlayer, int pTextLength, int pLines, int pPosX, int pPosY)
         {
             Game.GenerateBox(Game.TypeOfLine.Single, pPosX, pPosY, pTextLength + 2, pLines + 2);
 
             // Bubble chat "connector"
-            if (pPosY < this.PosY) // Over player
+            if (pPosY < pPlayer.PosY) // Over player
             {
-                Console.SetCursorPosition(this.PosX, this.PosY - 2);
+                Console.SetCursorPosition(pPlayer.PosX, pPlayer.PosY - 2);
                 Console.Write(Game.Graphics.Lines.SingleConnector[2]);
             }
             else // Under player
             {
-                Console.SetCursorPosition(this.PosX, this.PosY + 2);
+                Console.SetCursorPosition(pPlayer.PosX, pPlayer.PosY + 2);
                 Console.Write(Game.Graphics.Lines.SingleConnector[1]);
             }
 
             // Prepare to insert text
             Console.SetCursorPosition(pPosX + 1, pPosY + 1);
         }
+        #endregion
 
+        #region Save/Load
         /* "UI" For save/load game
                 [ Save/Load game ]         <- Center text
         +--------------------------------+
@@ -266,5 +311,6 @@ namespace FWoD
         {
 
         }*/
+        #endregion
     }
 }
