@@ -13,14 +13,6 @@ using System.Reflection;
 
 //TODO: F12 for screenshot (Dump display buffer to file)
 
-//TODO: Buffer (for collision)
-/*
-- multi-layer TextWriter
--- Layer for game, menu, bubbles, etc.
---+ Easy implementation, simple
---- Reprints the whole thing or partially
-*/
-
 #if DEBUG
 [assembly: AssemblyVersion("0.3.3.*")]
 #else
@@ -95,6 +87,7 @@ namespace FWoD
 
             Console.Clear();
             Console.Title = ProjectName + " " + ProjectVersion;
+            Console.CancelKeyPress += Console_CancelKeyPress;
             
             #if WINDOWS
                 Console.SetBufferSize(80, 25); // Window's default
@@ -108,7 +101,8 @@ namespace FWoD
 
             #endif
 
-            GamePlayer = new Player((ConsoleTools.BufferWidth / 4) + (ConsoleTools.BufferWidth / 2), ConsoleTools.BufferHeight / 2);
+            GamePlayer = new Player((ConsoleTools.BufferWidth / 4) + (ConsoleTools.BufferWidth / 2), 
+                ConsoleTools.BufferHeight / 2);
 
             // == Before the game ==
 
@@ -169,7 +163,7 @@ namespace FWoD
                 } while (tmp_name.Length == 0 || tmp_name.Length > 25);
 
                 GamePlayer.CharacterName = tmp_name;
-                GamePlayer.PlayerSays("It's " + GamePlayer.CharacterName);
+                GamePlayer.PlayerSays("It's " + GamePlayer.CharacterName + ".");
 
                 GameBoss.EnemySays("Well, it's your unlucky day.");
 
@@ -195,6 +189,11 @@ namespace FWoD
             Console.Clear();
 
             return 0;
+        }
+
+        static void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)
+        {
+            Console.Clear();
         }
 
         static internal void Entry()
@@ -227,11 +226,13 @@ namespace FWoD
                 case ConsoleKey.Escape:
                     if (inMenu)
                     {
-
+                        Menu.Hide();
+                        inMenu = false;
                     }
                     else
                     {
-
+                        Menu.Show();
+                        inMenu = true;
                     }
                     break;
             }

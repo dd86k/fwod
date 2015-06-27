@@ -7,10 +7,10 @@ namespace FWoD
         string MenuLayout = "Exit";
         static internal void Show()
         {
-            System.IO.TextWriter twMenu = new System.IO.TextWriter();
-            Console.OpenStandardOutput(twMenu);
-
-
+            using (System.IO.StreamWriter swMenu = new System.IO.StreamWriter(Console.OpenStandardOutput()))
+            {
+                
+            }
         }
 
         static internal void Hide()

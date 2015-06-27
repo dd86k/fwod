@@ -28,11 +28,11 @@ namespace FWoD
                 internal static char[] DoubleConnector = {'╣', '╩', '╦', '╠', '╬'};
 
 
-                internal static char[] InnerSingleCorner = {'╒', '╖', '╜', '╙'};
-                internal static char[] InnerSingleConnector = {'╢', '╧', '╤', '╟', '╫'};
+                internal static char[] DoubleVerticalCorner = { '╓', '╖', '╜', '╙' };
+                internal static char[] DoubleVerticalConnector = { '╢', '╨', '╥', '╟', '╫' };
 
-                internal static char[] InnerDoubleCorner = {'╕', '╛', '╘', '╓'};
-                internal static char[] InnerDoubleConnector = {'╡', '╨', '╥', '╞', '╪'};
+                internal static char[] DoubleHorizontalCorner = {'╕', '╛', '╘', '╒'};
+                internal static char[] DoubleHorizontalConnector = { '╡', '╧', '╤', '╞', '╪' };
             }
         }
 
@@ -54,8 +54,17 @@ namespace FWoD
         { //TODO: Enum for opening (like if we want to open the box).
           // Thinking about making those actual objects (for later manipulation instead of recalling this)
 
-            int Width = pWidth < 2 ? 1 : pWidth - 2; // Minimum: 2
-            int Height = pHeight < 2 ? 1 : pHeight - 1;
+            pWidth = pWidth < 2 ? 1 : pWidth - 2; // Minimum: 2
+            pHeight = pHeight < 2 ? 1 : pHeight - 1;
+
+            if (pPosX < 0)
+            {
+                pPosX = 0;
+            }
+            if (pPosX + pWidth > ConsoleTools.BufferWidth)
+            {
+                pPosX = ConsoleTools.BufferWidth - pWidth;
+            }
 
             // Default is single lines
             char CornerTLChar = Graphics.Lines.SingleCorner[0]; // Top Left
@@ -80,21 +89,162 @@ namespace FWoD
             // Top wall
             Console.SetCursorPosition(pPosX, pPosY);
             Console.Write(CornerTLChar);
-            ConsoleTools.GenerateHorizontalLine(HorizontalChar, Width);
+            ConsoleTools.GenerateHorizontalLine(HorizontalChar, pWidth);
             Console.Write(CornerTRChar);
 
             // Side walls
             Console.SetCursorPosition(pPosX, pPosY + 1);
-            ConsoleTools.GenerateVerticalLine(VerticalChar, Height);
+            ConsoleTools.GenerateVerticalLine(VerticalChar, pHeight);
 
-            Console.SetCursorPosition(pPosX + Width + 1, pPosY + 1);
-            ConsoleTools.GenerateVerticalLine(VerticalChar, Height);
+            Console.SetCursorPosition(pPosX + pWidth + 1, pPosY + 1);
+            ConsoleTools.GenerateVerticalLine(VerticalChar, pHeight);
 
             // Bottom wall
-            Console.SetCursorPosition(pPosX, pPosY + Height);
+            Console.SetCursorPosition(pPosX, pPosY + pHeight);
             Console.Write(CornerBLChar);
-            ConsoleTools.GenerateHorizontalLine(HorizontalChar, Width);
+            ConsoleTools.GenerateHorizontalLine(HorizontalChar, pWidth);
             Console.Write(CornerBRChar);
+        }
+
+        internal static string GetAnswerFromEntity(Player pPlayer)
+        {
+
+        }
+
+        internal static void MakeEntityTalk(Player pPlayer, string pText)
+        {
+
+        }
+
+        internal static void MakeEntityTalk(Enemy pEnemy, string pText)
+        {
+
+        }
+
+        void PlayerSays(string pText)
+        {
+            string[] Lines = new string[] { pText };
+            int ci = 0;
+            int start = 0;
+            // Seperates the text in blocks of 25 letters in case
+            if (pText.Length != 0)
+            {
+                if (pText.Length > 25)
+                {
+                    Lines = new string[(pText.Length / 26) + 1];
+                    do
+                    {
+                        if (start + 25 > pText.Length)
+                            Lines[ci] = pText.Substring(start, pText.Length - start);
+                        else
+                            Lines[ci] = pText.Substring(start, 25);
+                        ci++;
+                        start += 25;
+                    } while (start < pText.Length);
+                }
+            }
+            else Lines = new string[] { " " }; // At least the bubble won't look squished out
+
+            // X/Left bubble starting position
+            int StartX = this.PosX - (Lines[0].Length / 2) - 1;
+            // Re-places StartX if it goes further than the display buffer
+            if (StartX + (Lines[0].Length + 2) > ConsoleTools.BufferWidth)
+            {
+                StartX = ConsoleTools.BufferWidth - (Lines[0].Length + 2);
+            }
+
+            if (StartX < 0)
+            {
+                StartX = 0;
+            }
+
+            // Y/Top bubble starting position
+            int StartY = this.PosY - (Lines.Length) - 3;
+            // Re-places StartY if it goes further than the display buffer
+            if (StartY > ConsoleTools.BufferWidth)
+            {
+                StartY = ConsoleTools.BufferWidth - (Lines[0].Length - 2);
+            }
+
+            if (StartY < 0)
+            {
+                StartY = 3;
+            }
+
+            int TextStartX = StartX + 1;
+            int TextStartY = StartY + 1;
+
+            GenerateBubble(Lines[0].Length,
+                Lines.Length,
+                StartX,
+                StartY);
+
+            // Insert Text
+            for (int i = 0; i < Lines.Length; i++)
+            {
+                Console.SetCursorPosition(TextStartX, TextStartY + i);
+                Console.Write(Lines[i]);
+            }
+
+            // Waiting for keypress
+            Console.SetCursorPosition(0, 0);
+            Console.ReadKey(true);
+
+            // Clear bubble
+            //TODO: Put older chars back
+            Console.SetCursorPosition(StartX, StartY);
+            int len = Lines[0].Length + 4;
+            for (int i = StartY; i < this.PosY; i++)
+            {
+                ConsoleTools.GenerateHorizontalLine(' ', len);
+                Console.SetCursorPosition(StartX, i);
+            }
+        }
+
+        string PlayerAnswer()
+        {
+            string tmp = ConsoleTools.RepeatChar(' ', 25);
+
+            // determine the starting position of the bubble
+            // lol copy paste 
+            int StartX = this.PosX - (tmp.Length / 2) - 1;
+            int StartY = this.PosY - 4;
+
+            GenerateBubble(tmp.Length, 1, StartX, StartY);
+
+            string Out = Console.ReadLine();
+
+            // Clear bubble
+            //TODO: Put older chars back
+            Console.SetCursorPosition(StartX, StartY);
+            int len = tmp.Length + 4;
+            for (int i = StartY; i < this.PosY; i++)
+            {
+                ConsoleTools.GenerateHorizontalLine(' ', len);
+                Console.SetCursorPosition(StartX, i);
+            }
+
+            return Out;
+        }
+
+        void GenerateBubble(int pTextLength, int pLines, int pPosX, int pPosY)
+        {
+            Game.GenerateBox(Game.TypeOfLine.Single, pPosX, pPosY, pTextLength + 2, pLines + 2);
+
+            // Bubble chat "connector"
+            if (pPosY < this.PosY) // Over player
+            {
+                Console.SetCursorPosition(this.PosX, this.PosY - 2);
+                Console.Write(Game.Graphics.Lines.SingleConnector[2]);
+            }
+            else // Under player
+            {
+                Console.SetCursorPosition(this.PosX, this.PosY + 2);
+                Console.Write(Game.Graphics.Lines.SingleConnector[1]);
+            }
+
+            // Prepare to insert text
+            Console.SetCursorPosition(pPosX + 1, pPosY + 1);
         }
 
         /* "UI" For save/load game
