@@ -10,26 +10,48 @@ namespace FWoD
     {
         const string SaveFilenameModel = "fwod#.sg";
 
-        // Our infamous buffer!
-        
         /// <summary>
         /// Multi-layered char buffer
         /// </summary>
         char[][,] Layers = new char[3][,]
         { // 3 layers of 25 row and 80 rolumns each
-            new char[25, 80], // Menu
-            new char[25, 80], // Bubbles
-            new char[25, 80]  // Game
+            new char[ConsoleTools.BufferHeight, ConsoleTools.BufferWidth], // Menu
+            new char[ConsoleTools.BufferHeight, ConsoleTools.BufferWidth], // Bubbles
+            new char[ConsoleTools.BufferHeight, ConsoleTools.BufferWidth]  // Game
         };
-
-        //TODO: Redirect output here, save it, and print it to console
-
-        /// <summary>
-        /// Layer to output
-        /// </summary>
-        enum Layer
+        
+        // Since we can't inherit from a static class
+        internal void Write(int pLayer, char pInput)
         {
-            Menu, Game, Bubble
+            // 2D Arrays are like this: [Y, X]
+            Layers[pLayer][Console.CursorTop, Console.CursorLeft] = pInput;
+            Console.Write(pInput);
+        }
+
+        internal void WriteLine(int pLayer, char pInput)
+        {
+            Layers[pLayer][Console.CursorTop, Console.CursorLeft] = pInput;
+            Console.WriteLine(pInput);
+        }
+
+        internal void Write(int pLayer, string pInput)
+        {
+            for (int i = 0; i < pInput.Length; i++)
+			{
+                Layers[pLayer][Console.CursorTop, Console.CursorLeft + i] = pInput[i];
+			}
+            
+            Console.Write(pInput);
+        }
+
+        internal void WriteLine(int pLayer, string pInput)
+        {
+            for (int i = 0; i < pInput.Length; i++)
+            {
+                Layers[pLayer][Console.CursorTop, Console.CursorLeft + i] = pInput[i];
+            }
+
+            Console.WriteLine(pInput);
         }
 
         /// <summary>
@@ -78,7 +100,7 @@ namespace FWoD
         /// <param name="pWidth">Width.</param>
         /// <param name="pHeight">Height.</param>
         static internal void GenerateBox(TypeOfLine pType, int pPosX, int pPosY, int pWidth, int pHeight)
-        {
+        { //IDEA: Move all the playersay stuff back to Player.cs?
             // Minimum value must be at least 2
             pWidth = pWidth < 2 ? 1 : pWidth - 2;
             pHeight = pHeight < 2 ? 1 : pHeight - 1;

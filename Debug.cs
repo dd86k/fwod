@@ -187,6 +187,7 @@ namespace FWoD
 
         static internal void TalkText(string pText)
         {
+            Console.Clear();
             Player p = new Player(ConsoleTools.BufferWidth / 2, ConsoleTools.BufferHeight - 3);
             p.Initialize();
             p.Say(pText);

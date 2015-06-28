@@ -38,7 +38,7 @@ namespace FWoD
         }
 
         static Player GamePlayer = new Player();
-        static Player GameBoss = new Player(); //TODO: 1D Array for enemies [in Game]? (!!!)
+        static Player GameBoss = new Player(); //TODO: Dictionary for enemies in map/floor
         static bool isPlaying = true; // Is the player playing?
         static bool inMenu = false;
         #endregion
@@ -98,7 +98,7 @@ namespace FWoD
             
             #if WINDOWS
                 Console.SetBufferSize(80, 25); // Window's default
-                Console.SetWindowSize(80, 25); // Remove scrollbar for maximum yes
+                Console.SetWindowSize(80, 25); // Remove scrollbar for maximum {{ GAMEPLAY }}
             #elif WINDOWS10
                 // Crashes on SetBufferSize (because it's lower, thx ms)
                 
