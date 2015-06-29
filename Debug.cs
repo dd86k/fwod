@@ -86,7 +86,7 @@ namespace FWoD
                 #region Test #6
                 Console.Write("Test #" + testnum + ": Create Player with custom position");
 
-                Player p = new Player(Console.BufferWidth / 2, Console.BufferHeight - 3);
+                Player p = new Player(ConsoleTools.BufferWidth / 2, ConsoleTools.BufferHeight - 3);
 
                 p.Initialize();
 
@@ -97,6 +97,8 @@ namespace FWoD
                 Console.Write("Test #" + testnum + ": Make the Player answer something");
 
                 p.Initialize(); // Pause() clears the buffer
+
+                ConsoleTools.WriteAndCenter("What is your favorite food?", p.PosY - 5);
 
                 string tt = p.GetAnswer();
 
@@ -180,11 +182,36 @@ namespace FWoD
                 #endregion
 
                 #region Test #15
-                Console.Write("Test #" + testnum + ": Show menu and hide it");
+                Console.Write("Test #" + testnum + ": Multi-layer test");
+
+                // Write
+                Core.Write(Core.Layer.Game, "Test", 0, 2);
+                // Erase
+                Console.SetCursorPosition(0, 2);
+                Console.Write("    ");
+                // Wait
+                Console.ReadKey(true);
+                // Retrieve info
+                string tmp = string.Empty;
+                for (int i = 2; i < 6; i++)
+                {
+                    tmp += Core.Layers[(int)Core.Layer.Game][i, 0];
+                }
+                // Print back
+                Console.SetCursorPosition(0, 2);
+                Console.Write(tmp);
+
+                Pause(ref testnum);
+                #endregion
+
+                #region Test #16
+                /*
+                Console.Write("Test #" + testnum + ": Menu test");
 
                 Menu.Show();
 
                 Pause(ref testnum);
+                */
                 #endregion
 
                 Console.Write("All tests passed without any exceptions");
@@ -195,7 +222,7 @@ namespace FWoD
             {
                 Console.WriteLine();
                 Console.WriteLine();
-                Console.WriteLine(" !! An error occurred during test #" + testnum + " !!");
+                Console.WriteLine("  !! An error occurred during test #" + testnum + " !!");
                 Console.WriteLine("Here's some debugging information:");
                 Console.WriteLine("Exception: " + ex.GetType().ToString() + " " + string.Format("(0x{0:X8})", ex.HResult));
                 Console.WriteLine("Message: " + ex.Message);

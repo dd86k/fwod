@@ -92,10 +92,10 @@ namespace FWoD
 
             Console.Clear();
             Console.Title = ProjectName + " " + ProjectVersion;
-            Console.CancelKeyPress += Console_CancelKeyPress;
 
             GamePlayer = new Player((ConsoleTools.BufferWidth / 4) + (ConsoleTools.BufferWidth / 2), 
                 ConsoleTools.BufferHeight / 2);
+            GameBoss = new Player(ConsoleTools.BufferWidth / 4, ConsoleTools.BufferHeight / 2);
 
             // == Before the game ==
 
@@ -124,7 +124,7 @@ namespace FWoD
             GamePlayer.CharacterName = Pname;
             GamePlayer.CharacterChar = Pchar;
             GamePlayer.Initialize();
-            GameBoss.CharacterChar = '$';
+            GameBoss.CharacterChar = '#';
             GameBoss.Initialize();
 
             if (!SkipIntro)
@@ -174,13 +174,8 @@ namespace FWoD
             return 0;
         }
 
-        static void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)
-        {
-            Console.Clear();
-        }
-
         static internal void Entry()
-        { // Make a bool like isInMenu
+        {
             ConsoleKeyInfo key = Console.ReadKey(true);
 
             switch (key.Key)
@@ -226,7 +221,8 @@ namespace FWoD
                 " --skipintro       Skip intro and use defaults" + nl +
                 nl +
                 "  --help, /?    Shows this screen" + nl +
-                "  --version     Shows version" + nl + nl +
+                "  --version     Shows version" + nl +
+                nl +
                 "Have fun!" + nl;
             
             Console.Write(Out);
@@ -235,9 +231,11 @@ namespace FWoD
         static void ShowVersion()
         {
             // Should the credits be here or somewhere else?
-            string Out = nl + "Version " + ProjectVersion + nl + nl +
+            string Out = nl + "Version " + ProjectVersion + nl +
+                nl +
                 " -- Credits --" + nl +
-                "DD~! (guitarxhero) - Original author" + nl + nl +
+                "DD~! (guitarxhero) - Original author" + nl +
+                nl +
                 "I'd like to thank the authors of Rogue, NetHack, and Pixel Dungeon for their awesome game and the many hours of fun I had in them." + nl;
             
             Console.Write(Out);

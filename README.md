@@ -16,57 +16,60 @@ You can always send me an [email](mailto:devddstuff@gmail.com) or open a ticket.
 - The game will change dramatically often during development process
 - Fixed 80x25 resolution for increased compatiblity
   - Windows 10 buffer screen size is bigger by default, and I can't shrink it
+- Colors are planned
 
 ### Progress
 Very likely in order
 - Proposal: Basic idea implemented, in code
 - Implemented: Implementation of the idea
-- Tested: Fully tested
+- Testing: Fully Testing
 - Functional: Finished and ready to use fully
 
-- [ ] Multi-layer 2D Arrays to remember past chars
+I'm sure I forgot something in this list:
+
+- [ ] Multi-layer buffers
   - [x] Proposal
-  - [ ] Implemented
-  - [ ] Tested
+  - [x] Implemented
+  - [x] Testing
   - [ ] Functional (Milestone)
 - [ ] Collision system
   - [ ] Proposal
   - [ ] Implemented
-  - [ ] Tested
+  - [ ] Testing
   - [ ] Functional
 - [ ] Random chamber generator
   - [ ] Proposal
   - [ ] Implemented
-  - [ ] Tested
+  - [ ] Testing
   - [ ] Functional (Milestone)
 - [ ] Enemy system
   - [ ] Proposal
   - [ ] Implemented
-  - [ ] Tested
+  - [ ] Testing
   - [ ] Functional
 - [ ] Attacking system
   - [ ] Proposal
   - [ ] Implemented
-  - [ ] Tested
+  - [ ] Testing
   - [ ] Functional (Milestone)
 - [ ] Items
   - [ ] Proposal
   - [ ] Implemented
-  - [ ] Tested
+  - [ ] Testing
   - [ ] Functional
 - [ ] Inventory system
   - [ ] Proposal
   - [ ] Implemented
-  - [ ] Tested
+  - [ ] Testing
   - [ ] Functional (Milestone)
 - [ ] Level system
   - [ ] Proposal
   - [ ] Implemented
-  - [ ] Tested
+  - [ ] Testing
   - [ ] Functional
 - [ ] Bosses (Optional)
 - [ ] Final bug fixing round
-- [ ] Optimization round
+- [ ] Optimization round (Optional)
 - [ ] Wiki (Optional)
 - [ ] Official Release (Milestone)
 - [ ] Celebrate!

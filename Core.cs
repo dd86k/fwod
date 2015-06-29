@@ -27,7 +27,7 @@ namespace FWoD
             Menu, Bubble, Game
         }
 
-        internal Layer CurrentLayer = Layer.Game;
+        //internal Layer CurrentLayer = Layer.Game;
 
         #region Write
         /// <summary>
@@ -113,6 +113,20 @@ namespace FWoD
             }
 
             Console.WriteLine(pInput);
+        }
+        #endregion
+
+        #region GetInfo
+        /// <summary>
+        /// Get a characters from a layer at a position.
+        /// </summary>
+        /// <param name="pLayer">Layer.</param>
+        /// <param name="pPosX">Left position.</param>
+        /// <param name="pPosY">Top position.</param>
+        /// <returns>Stored character.</returns>
+        internal static char GetCharAt(Layer pLayer, int pPosX, int pPosY)
+        {
+            return Layers[(int)pLayer][pPosY, pPosX];
         }
         #endregion
 
