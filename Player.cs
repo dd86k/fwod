@@ -138,7 +138,7 @@ namespace FWoD
         /// Get input from Player.
         /// </summary>
         /// <returns></returns>
-        internal string GetAnswerFromPlayer()
+        internal string GetAnswer()
         {
             return Game.GetAnswerFromCharacter(this);
         }

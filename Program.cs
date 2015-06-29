@@ -9,8 +9,6 @@ using System.Reflection;
 //TODO: Enemy mechanics
 //TODO: Attack mechanics
 
-//TODO: Do menu (Options, Savegames, Quit, etc.) - Needs layer thing first!
-
 //TODO: F12 for screenshot (Dump display buffer to file?)
 
 #if DEBUG
@@ -85,7 +83,7 @@ namespace FWoD
                     case "--debugsay":
                         if (args[i + 1] != null)
                         {
-                            Debug.TalkText(args[i + 1]);
+                            Debug.TalkTest(args[i + 1]);
                             return 0;
                         }
                         else return 1;
@@ -95,18 +93,6 @@ namespace FWoD
             Console.Clear();
             Console.Title = ProjectName + " " + ProjectVersion;
             Console.CancelKeyPress += Console_CancelKeyPress;
-            
-            #if WINDOWS
-                Console.SetBufferSize(80, 25); // Window's default
-                Console.SetWindowSize(80, 25); // Remove scrollbar for maximum {{ GAMEPLAY }}
-            #elif WINDOWS10
-                // Crashes on SetBufferSize (because it's lower, thx ms)
-                
-            #elif LINUX
-            //TODO: [LINUX] Find a way to set the Window or buffersize (no libs pls)
-            //"dude terminal doesn't have a 'buffer' its a real terminal rofl!!11"
-
-            #endif
 
             GamePlayer = new Player((ConsoleTools.BufferWidth / 4) + (ConsoleTools.BufferWidth / 2), 
                 ConsoleTools.BufferHeight / 2);
@@ -151,7 +137,7 @@ namespace FWoD
                 string tmp_name = string.Empty;
                 do
                 {
-                    tmp_name = GamePlayer.GetAnswerFromPlayer();
+                    tmp_name = GamePlayer.GetAnswer();
                     // If the player entered at least something and not too long
                     if (tmp_name.Length == 0)
                         GameBoss.Say("Say something!");
@@ -221,16 +207,7 @@ namespace FWoD
 
                     // Menu button
                 case ConsoleKey.Escape:
-                    if (inMenu)
-                    {
-                        Menu.Hide();
-                        inMenu = false;
-                    }
-                    else
-                    {
-                        Menu.Show();
-                        inMenu = true;
-                    }
+                    Menu.Show();
                     break;
             }
         }

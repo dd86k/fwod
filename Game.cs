@@ -11,50 +11,6 @@ namespace FWoD
         const string SaveFilenameModel = "fwod#.sg";
 
         /// <summary>
-        /// Multi-layered char buffer
-        /// </summary>
-        char[][,] Layers = new char[3][,]
-        { // 3 layers of 25 row and 80 rolumns each
-            new char[ConsoleTools.BufferHeight, ConsoleTools.BufferWidth], // Menu
-            new char[ConsoleTools.BufferHeight, ConsoleTools.BufferWidth], // Bubbles
-            new char[ConsoleTools.BufferHeight, ConsoleTools.BufferWidth]  // Game
-        };
-        
-        // Since we can't inherit from a static class
-        internal void Write(int pLayer, char pInput)
-        {
-            // 2D Arrays are like this: [Y, X]
-            Layers[pLayer][Console.CursorTop, Console.CursorLeft] = pInput;
-            Console.Write(pInput);
-        }
-
-        internal void WriteLine(int pLayer, char pInput)
-        {
-            Layers[pLayer][Console.CursorTop, Console.CursorLeft] = pInput;
-            Console.WriteLine(pInput);
-        }
-
-        internal void Write(int pLayer, string pInput)
-        {
-            for (int i = 0; i < pInput.Length; i++)
-			{
-                Layers[pLayer][Console.CursorTop, Console.CursorLeft + i] = pInput[i];
-			}
-            
-            Console.Write(pInput);
-        }
-
-        internal void WriteLine(int pLayer, string pInput)
-        {
-            for (int i = 0; i < pInput.Length; i++)
-            {
-                Layers[pLayer][Console.CursorTop, Console.CursorLeft + i] = pInput[i];
-            }
-
-            Console.WriteLine(pInput);
-        }
-
-        /// <summary>
         /// Graphic characters (char[])
         /// </summary>
         internal struct Graphics

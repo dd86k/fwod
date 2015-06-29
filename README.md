@@ -20,16 +20,23 @@ You can always send me an [email](mailto:devddstuff@gmail.com) or open a ticket 
 ### Progress (Very likely in order)
 - [x] Multi-layer remembering system proposal
 - [ ] Multi-layer remembering system implementated
+  - [ ] Functional
 - [ ] Collision system
-- [ ] Random chamber generator [Milestone]
+  - [ ] Functional
+- [ ] Random chamber generator
+  - [ ] Functional (Milestone)
 - [ ] Enemy system
+  - [ ] Functional
 - [ ] Attacking system
+  - [ ] Functional
 - [ ] Items
 - [ ] Inventory system
+  - [ ] Functional
 - [ ] Boss system (Woo binding of isaac!)
+  - [ ] Functional
 - [ ] Final open bug fixing round
 - [ ] Wiki
-- [ ] Official Release (If I reach that then.. I'll be proud of myself) [Milestone]
+- [ ] Official Release (:3) (Milestone)
 
 ### Builds
 Some builds will be available on my [website](http://www.wilomgfx.net/didier/pages/fwod.html) (When I reach 3000 tweets).

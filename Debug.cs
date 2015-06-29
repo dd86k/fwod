@@ -10,7 +10,7 @@ namespace FWoD
     {
         internal static void StartTests(ref int pReturnInt)
         {
-            int testnum = 1;
+            int testnum = 0;
             try
             {
                 Console.Clear();
@@ -18,6 +18,26 @@ namespace FWoD
                     Console.SetBufferSize(80, 25);
                     Console.SetWindowSize(80, 25);
                 #endif
+
+                #region Test #0
+                Console.Write("Test #" + testnum + ": Show what's in Graphics");
+                
+                Console.WriteLine();
+                Console.WriteLine("Grades                   : " + new string(Game.Graphics.Tiles.Grades));
+                Console.WriteLine("Half                     : " + new string(Game.Graphics.Tiles.Half));
+                Console.WriteLine("Single                   : " + new string(Game.Graphics.Lines.Single));
+                Console.WriteLine("SingleConnector          : " + new string(Game.Graphics.Lines.SingleConnector));
+                Console.WriteLine("SingleCorner             : " + new string(Game.Graphics.Lines.SingleCorner));
+                Console.WriteLine("Double                   : " + new string(Game.Graphics.Lines.Double));
+                Console.WriteLine("DoubleConnector          : " + new string(Game.Graphics.Lines.DoubleConnector));
+                Console.WriteLine("DoubleCorner             : " + new string(Game.Graphics.Lines.DoubleCorner));
+                Console.WriteLine("DoubleHorizontalConnector: " + new string(Game.Graphics.Lines.DoubleHorizontalConnector));
+                Console.WriteLine("DoubleHorizontalCorner   : " + new string(Game.Graphics.Lines.DoubleHorizontalCorner));
+                Console.WriteLine("DoubleVerticalConnector  : " + new string(Game.Graphics.Lines.DoubleVerticalConnector));
+                Console.WriteLine("DoubleVerticalCorner     : " + new string(Game.Graphics.Lines.DoubleVerticalCorner));
+
+                Pause(ref testnum);
+                #endregion
 
                 #region Test #1
                 Console.Write("Test #" + testnum + ": Generate 2 boxes of 4x4");
@@ -78,7 +98,7 @@ namespace FWoD
 
                 p.Initialize(); // Pause() clears the buffer
 
-                string tt = p.GetAnswerFromPlayer();
+                string tt = p.GetAnswer();
 
                 Pause(ref testnum);
                 #endregion
@@ -159,6 +179,14 @@ namespace FWoD
                 Pause(ref testnum);
                 #endregion
 
+                #region Test #15
+                Console.Write("Test #" + testnum + ": Show menu and hide it");
+
+                Menu.Show();
+
+                Pause(ref testnum);
+                #endregion
+
                 Console.Write("All tests passed without any exceptions");
 
                 pReturnInt = 0;
@@ -185,7 +213,7 @@ namespace FWoD
             Console.Clear();
         }
 
-        static internal void TalkText(string pText)
+        static internal void TalkTest(string pText)
         {
             Console.Clear();
             Player p = new Player(ConsoleTools.BufferWidth / 2, ConsoleTools.BufferHeight - 3);
