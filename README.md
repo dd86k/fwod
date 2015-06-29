@@ -7,7 +7,7 @@ Hello! This is a little something I'd like to show you, it's simply a console ap
 
 fwod would play like NetHack, a roguelike, turn-based game (well it's instant), dungeon crawling game.
 
-Reason I'm doing this is to expand my knownledge about C# even further and learn more profoundly about game development. (In a way. Next might be with Unity)
+Reason I'm doing this is to expand my knowledge about C# even further and learn more profoundly about game development. (In a way. Next might be with Unity)
 
 You can always send me an [email](mailto:devddstuff@gmail.com) or open a ticket. (I won't bite!)
 
@@ -15,10 +15,15 @@ You can always send me an [email](mailto:devddstuff@gmail.com) or open a ticket.
 - Code reorganization/restructures/cleanups are made from time to time
 - The game will change dramatically often during development process
 - Fixed 80x25 resolution for increased compatiblity
-  - Windows 10 buffer screen size is bigger, so I can't shrink it
+  - Windows 10 buffer screen size is bigger by default, and I can't shrink it
 
 ### Progress
 Very likely in order
+- Proposal: Basic idea implemented, in code
+- Implemented: Implementation of the idea
+- Tested: Fully tested
+- Functional: Finished and ready to use fully
+
 - [ ] Multi-layer 2D Arrays to remember past chars
   - [x] Proposal
   - [ ] Implemented
@@ -76,4 +81,4 @@ Some builds will be available on my [website](http://www.wilomgfx.net/didier/pag
 ### License
 This project uses the MIT license, which you can read from the LICENSE file.
 
-pls no bully :ok_hand::eyes::ok_hand::eyes::ok_hand::eyes:
+pls no bully :ok_hand::eyes::ok_hand::eyes::ok_hand::poop:
