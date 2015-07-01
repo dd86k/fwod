@@ -3,7 +3,7 @@
 /*
     This class is about the Player.
     An enemy is basically a player as well, 
-    although the Player can't control them.
+    although the player can't control them.
 */
 
 namespace FWoD
@@ -20,11 +20,15 @@ namespace FWoD
             get { return _posx; }
             set
             {
-                Console.SetCursorPosition(this._posx, this.PosY);
-                Console.Write(" ");
-                _posx = value;
-                Console.SetCursorPosition(this._posx, this.PosY);
-                Console.Write(this.CharacterChar);
+                if (!char.IsLetterOrDigit(Core.GetCharAt(Core.Layer.Game, value, this.PosY)))
+                {
+                    Console.SetCursorPosition(this._posx, this.PosY);
+                    Console.Write(Core.GetCharAt(Core.Layer.Game, this.PosX, this.PosY));
+                    _posx = value;
+                    Console.SetCursorPosition(this._posx, this.PosY);
+                    Console.Write(this.CharacterChar);
+                }
+               
             }
         }
 

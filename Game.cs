@@ -55,7 +55,7 @@ namespace FWoD
         /// <param name="pPosY">Left position.</param>
         /// <param name="pWidth">Width.</param>
         /// <param name="pHeight">Height.</param>
-        static internal void GenerateBox(TypeOfLine pType, int pPosX, int pPosY, int pWidth, int pHeight)
+        static internal void GenerateBox(Core.Layer pLayer, TypeOfLine pType, int pPosX, int pPosY, int pWidth, int pHeight)
         { //IDEA: Move all the playersay stuff back to Player.cs?
             // Minimum value must be at least 2
             pWidth = pWidth < 2 ? 1 : pWidth - 2;
@@ -103,22 +103,21 @@ namespace FWoD
             }
 
             // Top wall
-            Console.SetCursorPosition(pPosX, pPosY);
-            Console.Write(CornerTLChar);
-            ConsoleTools.GenerateHorizontalLine(HorizontalChar, pWidth);
-            Console.Write(CornerTRChar);
+            Core.Write(Core.Layer.Game, CornerTLChar, pPosX, pPosY);
+            ConsoleTools.GenerateHorizontalLine(pLayer, HorizontalChar, pWidth);
+            Core.Write(Core.Layer.Game, CornerTRChar);
 
             // Side walls
             Console.SetCursorPosition(pPosX, pPosY + 1);
-            ConsoleTools.GenerateVerticalLine(VerticalChar, pHeight);
+            ConsoleTools.GenerateVerticalLine(pLayer, VerticalChar, pHeight);
 
             Console.SetCursorPosition(pPosX + pWidth + 1, pPosY + 1);
-            ConsoleTools.GenerateVerticalLine(VerticalChar, pHeight);
+            ConsoleTools.GenerateVerticalLine(pLayer, VerticalChar, pHeight);
 
             // Bottom wall
             Console.SetCursorPosition(pPosX, pPosY + pHeight);
             Console.Write(CornerBLChar);
-            ConsoleTools.GenerateHorizontalLine(HorizontalChar, pWidth);
+            ConsoleTools.GenerateHorizontalLine(pLayer, HorizontalChar, pWidth);
             Console.Write(CornerBRChar);
         }
 
@@ -193,22 +192,23 @@ namespace FWoD
             // Insert Text
             for (int i = 0; i < Lines.Length; i++)
             {
-                Console.SetCursorPosition(TextStartX, TextStartY + i);
-                Console.Write(Lines[i]);
+                Core.Write(Core.Layer.Bubble, Lines[i], TextStartX, TextStartY + i);
             }
 
             // Waiting for keypress
-            Console.SetCursorPosition(0, 0);
             Console.ReadKey(true);
 
             // Clear bubble
-            //TODO: Put older chars back
-            Console.SetCursorPosition(StartX, StartY);
-            int len = Lines[0].Length + 4;
-            for (int i = StartY; i < pPlayer.PosY; i++)
+            //Console.SetCursorPosition(StartX, StartY);
+            int lenH = StartX + Lines[0].Length + 2; //UNDONE: this feels wrong
+            int lenV = StartY + Lines.Length + 2;
+            for (int row = StartY; row < lenV; row++)
             {
-                ConsoleTools.GenerateHorizontalLine(' ', len);
-                Console.SetCursorPosition(StartX, i);
+                for (int col = StartX; col < lenH; col++)
+                {
+                    // Write back what was at Game layer before
+                    Core.Write(Core.Layer.Game, Core.GetCharAt(Core.Layer.Game, col, row), col, row);
+                }
             }
         }
 
@@ -229,12 +229,15 @@ namespace FWoD
 
             // Clear bubble
             //TODO: Put older chars back
-            Console.SetCursorPosition(StartX, StartY);
-            int len = tmp.Length + 4;
-            for (int i = StartY; i < pPlayer.PosY; i++)
+            int lenH = StartX + tmp.Length + 2; //UNDONE: this feels wrong
+            int lenV = StartY + 3;
+            for (int row = StartY; row < lenV; row++)
             {
-                ConsoleTools.GenerateHorizontalLine(' ', len);
-                Console.SetCursorPosition(StartX, i);
+                for (int col = StartX; col < lenH; col++)
+                {
+                    // Write back what was at Game layer before
+                    Core.Write(Core.Layer.Game, Core.GetCharAt(Core.Layer.Game, col, row), col, row);
+                }
             }
 
             return Out;
@@ -250,18 +253,18 @@ namespace FWoD
         /// <param name="pPosY">Left position</param>
         static void GenerateBubble(Player pPlayer, int pTextLength, int pLines, int pPosX, int pPosY)
         {
-            Game.GenerateBox(Game.TypeOfLine.Single, pPosX, pPosY, pTextLength + 2, pLines + 2);
+            Game.GenerateBox(Core.Layer.Bubble, Game.TypeOfLine.Single, pPosX, pPosY, pTextLength + 2, pLines + 2);
 
             // Bubble chat "connector"
             if (pPosY < pPlayer.PosY) // Over player
             {
                 Console.SetCursorPosition(pPlayer.PosX, pPlayer.PosY - 2);
-                Console.Write(Game.Graphics.Lines.SingleConnector[2]);
+                Core.Write(Core.Layer.Bubble, Game.Graphics.Lines.SingleConnector[2]);
             }
             else // Under player
             {
                 Console.SetCursorPosition(pPlayer.PosX, pPlayer.PosY + 2);
-                Console.Write(Game.Graphics.Lines.SingleConnector[1]);
+                Core.Write(Core.Layer.Bubble, Game.Graphics.Lines.SingleConnector[1]);
             }
 
             // Prepare to insert text

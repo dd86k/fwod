@@ -186,6 +186,8 @@ namespace FWoD
 
                 // Write
                 Core.Write(Core.Layer.Game, "Test", 0, 2);
+                // Wait
+                Console.ReadKey(true);
                 // Erase
                 Console.SetCursorPosition(0, 2);
                 Console.Write("    ");
@@ -195,7 +197,6 @@ namespace FWoD
                 string tmp = string.Empty;
                 for (int i = 0; i < 4; i++)
                 {
-                    //tmp += Core.Layers[(int)Core.Layer.Game][i, 0];
                     tmp += Core.GetCharAt(Core.Layer.Game, i, 2);
                 }
                 // Print back
@@ -206,6 +207,16 @@ namespace FWoD
                 #endregion
 
                 #region Test #16
+                /*
+                Console.Write("Test #" + testnum + ": Multi-layer bubble test");
+
+                
+
+                Pause(ref testnum);
+                */
+                #endregion
+
+                #region Test #17
                 /*
                 Console.Write("Test #" + testnum + ": Menu test");
 
@@ -247,6 +258,7 @@ namespace FWoD
             Player p = new Player(ConsoleTools.BufferWidth / 2, ConsoleTools.BufferHeight - 3);
             p.Initialize();
             p.Say(pText);
+            Console.Clear();
         }
     }
 }

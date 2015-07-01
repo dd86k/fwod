@@ -17,13 +17,14 @@ namespace FWoD
         /// </summary>
         static internal readonly int BufferWidth = 80;
 
+        #region Center text
         /// <summary>
         /// Center text to middle and write
         /// </summary>
         /// <param name="pText">Input text</param>
-        static internal void WriteAndCenter(string pText)
+        static internal void WriteAndCenter(Core.Layer pLayer, string pText)
         {
-            WriteAndCenter(pText, Console.CursorTop);
+            WriteAndCenter(pLayer, pText, Console.CursorTop);
         }
 
         /// <summary>
@@ -31,7 +32,7 @@ namespace FWoD
         /// </summary>
         /// <param name="pText">Input text</param>
         /// <param name="pTopPosition">Top position</param>
-        static internal void WriteAndCenter(string pText, int pTopPosition)
+        static internal void WriteAndCenter(Core.Layer pLayer, string pText, int pTopPosition)
         {
             // Calculate the starting position
             int start = (BufferWidth / 2) - (pText.Length / 2);
@@ -39,16 +40,16 @@ namespace FWoD
             start = start + pText.Length > BufferWidth ? 0 : start;
             // Print away at the current cursor height (top)
             Console.SetCursorPosition(start, pTopPosition);
-            Console.Write(pText);
+            Core.Write(pLayer, pText);
         }
 
         /// <summary>
         /// Center text to middle and write, then moves a line foward
         /// </summary>
         /// <param name="pText">Input text</param>
-        static internal void WriteLineAndCenter(string pText)
+        static internal void WriteLineAndCenter(Core.Layer pLayer, string pText)
         {
-            WriteLineAndCenter(pText, Console.CursorTop);
+            WriteLineAndCenter(pLayer, pText, Console.CursorTop);
         }
 
         /// <summary>
@@ -56,20 +57,22 @@ namespace FWoD
         /// </summary>
         /// <param name="pText">Input text</param>
         /// <param name="pTopPosition">Top position</param>
-        static internal void WriteLineAndCenter(string pText, int pTopPosition)
+        static internal void WriteLineAndCenter(Core.Layer pLayer, string pText, int pTopPosition)
         {
-            WriteAndCenter(pText, pTopPosition);
+            WriteAndCenter(pLayer, pText, pTopPosition);
             Console.SetCursorPosition(0, pTopPosition + 1);
         }
+        #endregion
 
+        #region GenH
         /// <summary>
         /// Generates a horizontal line on screen
         /// </summary>
         /// <param name="pChar">Character to use</param>
         /// <param name="pLenght">Length</param>
-        static internal void GenerateHorizontalLine(char pChar, int pLenght)
+        static internal void GenerateHorizontalLine(Core.Layer pLayer, char pChar, int pLenght)
         {
-            GenerateHorizontalLine(pChar, Console.CursorLeft, Console.CursorTop, pLenght);
+            GenerateHorizontalLine(pLayer, pChar, Console.CursorLeft, Console.CursorTop, pLenght);
         }
 
         /// <summary>
@@ -79,23 +82,25 @@ namespace FWoD
         /// <param name="pPosX">Left position</param>
         /// <param name="pPosY">Top position</param>
         /// <param name="pLenght">Length</param>
-        static internal void GenerateHorizontalLine(char pChar, int pPosX, int pPosY, int pLenght)
+        static internal void GenerateHorizontalLine(Core.Layer pLayer, char pChar, int pPosX, int pPosY, int pLenght)
         {
             Console.SetCursorPosition(pPosX, pPosY);
             for (int i = 0; i < pLenght; i++)
             {
-                Console.Write(pChar);
+                Core.Write(pLayer, pChar);
             }
         }
+        #endregion
 
+        #region GenV
         /// <summary>
         /// Generates a vertical line on screen
         /// </summary>
         /// <param name="pChar">Character to use</param>
         /// <param name="pLenght">Length</param>
-        static internal void GenerateVerticalLine(char pChar, int pLenght)
+        static internal void GenerateVerticalLine(Core.Layer pLayer, char pChar, int pLenght)
         {
-            GenerateVerticalLine(pChar, Console.CursorLeft, Console.CursorTop, pLenght);
+            GenerateVerticalLine(pLayer, pChar, Console.CursorLeft, Console.CursorTop, pLenght);
         }
 
         /// <summary>
@@ -105,12 +110,12 @@ namespace FWoD
         /// <param name="pPosX">Left position</param>
         /// <param name="pPosY">Top position</param>
         /// <param name="pLenght">Length</param>
-        static internal void GenerateVerticalLine(char pChar, int pPosX, int pPosY, int pLenght)
+        static internal void GenerateVerticalLine(Core.Layer pLayer, char pChar, int pPosX, int pPosY, int pLenght)
         {
             Console.SetCursorPosition(pPosX, pPosY);
             for (int i = 0; i < pLenght; i++)
             {
-                Console.Write(pChar);
+                Core.Write(pLayer, pChar);
                 Console.SetCursorPosition(pPosX, pPosY++);
                 /* -- REASONS WHY I DO IT THIS WAY --
                  * NEWLINE FUCKS UP SHIT
@@ -119,6 +124,7 @@ namespace FWoD
                  */
             }
         }
+        #endregion
 
         /// <summary>
         /// Generates a string out of a character
@@ -142,7 +148,7 @@ namespace FWoD
         static internal void ResetConsoleOut()
         {
             // If Console.OpenStandardOutput() fails on Linux, I'll just use this in the future
-            // ..Or use #if
+            // ..Or use #if?
             //System.IO.TextWriter OriginalOut = new System.IO.TextWriter();
             using (System.IO.StreamWriter tw = new System.IO.StreamWriter(Console.OpenStandardOutput()))
             {

@@ -48,6 +48,8 @@ namespace FWoD
             char Pchar = '@';
             string Pname = "Player";
             bool SkipIntro = false;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.Black;
 
             for (int i = 0; i < args.Length; i++)
             {
@@ -102,9 +104,9 @@ namespace FWoD
             string BannerText = "* Welcome to " + ProjectName + " *";
             string BannerOutline = ConsoleTools.RepeatChar('*', BannerText.Length);
 
-            ConsoleTools.WriteLineAndCenter(BannerOutline);
-            ConsoleTools.WriteLineAndCenter(BannerText);
-            ConsoleTools.WriteLineAndCenter(BannerOutline);
+            ConsoleTools.WriteLineAndCenter(Core.Layer.Game, BannerOutline);
+            ConsoleTools.WriteLineAndCenter(Core.Layer.Game, BannerText);
+            ConsoleTools.WriteLineAndCenter(Core.Layer.Game, BannerOutline);
             Console.WriteLine();
 
             #if DEBUG
@@ -114,12 +116,14 @@ namespace FWoD
             Console.WriteLine();
             Console.Write("Press a key to start!");
 
+            Core.ClearLayer(Core.Layer.Game);
+
             Console.ReadKey(true);
             Console.Clear();
 
             // == Game starts here ==
 
-            Game.GenerateBox(Game.TypeOfLine.Double, 1, 1, ConsoleTools.BufferWidth - 2, ConsoleTools.BufferHeight - 2);
+            Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Double, 1, 1, ConsoleTools.BufferWidth - 2, ConsoleTools.BufferHeight - 2);
 
             GamePlayer.CharacterName = Pname;
             GamePlayer.CharacterChar = Pchar;
@@ -163,11 +167,11 @@ namespace FWoD
             }
 
             do
-            {
+            { // User is playing the game
                 Entry();
             } while (isPlaying);
 
-            // == The player is leaving the game ==
+            // == The user is leaving the game ==
 
             Console.Clear();
 

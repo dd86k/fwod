@@ -129,7 +129,7 @@ namespace FWoD
         /// <returns>Stored character.</returns>
         internal static char GetCharAt(Layer pLayer, int pPosX, int pPosY)
         {
-            return Layers[(int)pLayer][pPosY, pPosX];
+            return Layers[(int)pLayer][pPosY, pPosX]; //IDEA: Trinary if \0 ?
         }
         #endregion
 

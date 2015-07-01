@@ -9,6 +9,8 @@ fwod would play like NetHack, a roguelike, turn-based game (well it's instant), 
 
 Reason I'm doing this is to expand my knowledge about C# even further and learn more profoundly about game development. (In a way. Next might be with Unity)
 
+It's a personal project, so no rushing here.
+
 You can always send me an [email](mailto:devddstuff@gmail.com) or open a ticket. (I won't bite!)
 
 ### Notes
@@ -20,47 +22,57 @@ You can always send me an [email](mailto:devddstuff@gmail.com) or open a ticket.
 
 ### Progress
 Very likely in order
-- Proposal: Basic idea implemented, in code
-- Implemented: Implementation of the idea
-- Testing: Fully Testing
-- Functional: Finished and ready to use fully
+- Proposal: Basic idea, in code
+- Implementing: Implementation of the idea
+- Testing: Testing the implementation
+- Functional: Finished and ready to use
 
-I'm sure I forgot something in this list:
+This list will change often and probably miss something.
 
 - [x] Multi-layer buffers
 - [ ] Collision system
+  - [x] Proposal
+  - [x] Implementing
+  - [ ] Testing
+  - [ ] Functional
+- [ ] Menu
   - [ ] Proposal
-  - [ ] Implemented
+  - [ ] Implementing
   - [ ] Testing
   - [ ] Functional
 - [ ] Random chamber generator
   - [ ] Proposal
-  - [ ] Implemented
+  - [ ] Implementing
   - [ ] Testing
   - [ ] Functional (Milestone)
+- [ ] Floor system
+  - [ ] Proposal
+  - [ ] Implementing
+  - [ ] Testing
+  - [ ] Functional
 - [ ] Enemy system
   - [ ] Proposal
-  - [ ] Implemented
+  - [ ] Implementing
   - [ ] Testing
   - [ ] Functional
 - [ ] Attacking system
   - [ ] Proposal
-  - [ ] Implemented
+  - [ ] Implementing
   - [ ] Testing
   - [ ] Functional (Milestone)
 - [ ] Items
   - [ ] Proposal
-  - [ ] Implemented
+  - [ ] Implementing
   - [ ] Testing
   - [ ] Functional
 - [ ] Inventory system
   - [ ] Proposal
-  - [ ] Implemented
+  - [ ] Implementing
   - [ ] Testing
   - [ ] Functional (Milestone)
-- [ ] Level system
+- [ ] Leveling system
   - [ ] Proposal
-  - [ ] Implemented
+  - [ ] Implementing
   - [ ] Testing
   - [ ] Functional
 - [ ] Bosses (Optional)
