@@ -27,11 +27,7 @@ Very likely in order
 
 I'm sure I forgot something in this list:
 
-- [ ] Multi-layer buffers
-  - [x] Proposal
-  - [x] Implemented
-  - [x] Testing
-  - [ ] Functional (Milestone)
+- [x] Multi-layer buffers
 - [ ] Collision system
   - [ ] Proposal
   - [ ] Implemented

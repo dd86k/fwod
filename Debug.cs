@@ -193,9 +193,10 @@ namespace FWoD
                 Console.ReadKey(true);
                 // Retrieve info
                 string tmp = string.Empty;
-                for (int i = 2; i < 6; i++)
+                for (int i = 0; i < 4; i++)
                 {
-                    tmp += Core.Layers[(int)Core.Layer.Game][i, 0];
+                    //tmp += Core.Layers[(int)Core.Layer.Game][i, 0];
+                    tmp += Core.GetCharAt(Core.Layer.Game, i, 2);
                 }
                 // Print back
                 Console.SetCursorPosition(0, 2);

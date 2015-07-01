@@ -1,13 +1,16 @@
 ﻿using System;
 
 /*
-    Core system. 
+    Core system for the multi-layer system.
 */
 
 namespace FWoD
 {
     class Core
     {
+        //IDEA: Three jagged arrays (char[][][]) instead of a 2d jagged array (char[][,])?
+        // Reason: Performance
+        // Drawback: More memory
         /// <summary>
         /// Multi-layered char buffer
         /// </summary>
