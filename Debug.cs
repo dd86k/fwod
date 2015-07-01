@@ -4,7 +4,7 @@
     Used for debugging purposes.
 */
 
-namespace FWoD
+namespace fwod
 {
     internal class Debug
     {
@@ -14,10 +14,6 @@ namespace FWoD
             try
             {
                 Console.Clear();
-                #if WINDOWS
-                    Console.SetBufferSize(80, 25);
-                    Console.SetWindowSize(80, 25);
-                #endif
 
                 #region Test #0
                 Console.Write("Test #" + testnum + ": Show what's in Graphics");
@@ -42,8 +38,8 @@ namespace FWoD
                 #region Test #1
                 Console.Write("Test #" + testnum + ": Generate 2 boxes of 4x4");
 
-                Game.GenerateBox(Game.TypeOfLine.Single, 0, 2, 4, 4);
-                Game.GenerateBox(Game.TypeOfLine.Double, 5, 2, 4, 4);
+                Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Single, 0, 2, 4, 4);
+                Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Double, 5, 2, 4, 4);
 
                 Pause(ref testnum);
                 #endregion
@@ -51,8 +47,8 @@ namespace FWoD
                 #region Test #2
                 Console.Write("Test #" + testnum + ": Generate 2 boxes of 3x3");
 
-                Game.GenerateBox(Game.TypeOfLine.Single, 0, 2, 3, 3);
-                Game.GenerateBox(Game.TypeOfLine.Double, 5, 2, 3, 3);
+                Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Single, 0, 2, 3, 3);
+                Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Double, 5, 2, 3, 3);
 
                 Pause(ref testnum);
                 #endregion
@@ -60,17 +56,17 @@ namespace FWoD
                 #region Test #3
                 Console.Write("Test #" + testnum + ": Generate 2 boxes of 2x2 (Minimum)");
 
-                Game.GenerateBox(Game.TypeOfLine.Single, 0, 2, 2, 2);
-                Game.GenerateBox(Game.TypeOfLine.Double, 5, 2, 2, 2);
+                Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Single, 0, 2, 2, 2);
+                Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Double, 5, 2, 2, 2);
 
                 Pause(ref testnum);
                 #endregion
 
                 #region Test #4
                 Console.Write("Test #" + testnum + ": Generate 2 boxes inside of each other");
-                
-                Game.GenerateBox(Game.TypeOfLine.Double, 1, 2, 4, 4);
-                Game.GenerateBox(Game.TypeOfLine.Single, 2, 3, 2, 2);
+
+                Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Double, 1, 2, 4, 4);
+                Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Single, 2, 3, 2, 2);
 
                 Pause(ref testnum);
                 #endregion
@@ -78,7 +74,7 @@ namespace FWoD
                 #region Test #5
                 Console.Write("Test #" + testnum + ": Trying to generate a box with -1, -1 as width and height");
 
-                Game.GenerateBox(Game.TypeOfLine.Double, 1, 1, -1, -1);
+                Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Double, 1, 1, -1, -1);
 
                 Pause(ref testnum);
                 #endregion
@@ -98,7 +94,7 @@ namespace FWoD
 
                 p.Initialize(); // Pause() clears the buffer
 
-                ConsoleTools.WriteAndCenter("What is your favorite food?", p.PosY - 5);
+                ConsoleTools.WriteAndCenter(Core.Layer.Bubble, "What is your favorite food?", p.PosY - 5);
 
                 string tt = p.GetAnswer();
 
@@ -207,16 +203,33 @@ namespace FWoD
                 #endregion
 
                 #region Test #16
-                /*
                 Console.Write("Test #" + testnum + ": Multi-layer bubble test");
 
-                
+                Console.ReadKey(true);
+                // Fill buffer
+                Core.FillScreen(Core.Layer.Game, '.');
+                // Wait
+                Console.ReadKey(true);
+                // Place player
+                p = new Player();
+                p.Initialize();
+                p.Say("Woah!");
 
                 Pause(ref testnum);
-                */
                 #endregion
 
                 #region Test #17
+                Console.Write("Test #" + testnum + ": Multi-layer player test");
+
+                do
+                {
+                    fwod.MainClass.Entry();
+                } while (true);
+
+                Pause(ref testnum);
+                #endregion
+
+                #region Test #18
                 /*
                 Console.Write("Test #" + testnum + ": Menu test");
 
@@ -235,7 +248,6 @@ namespace FWoD
                 Console.WriteLine();
                 Console.WriteLine();
                 Console.WriteLine("  !! An error occurred during test #" + testnum + " !!");
-                Console.WriteLine("Here's some debugging information:");
                 Console.WriteLine("Exception: " + ex.GetType().ToString() + " " + string.Format("(0x{0:X8})", ex.HResult));
                 Console.WriteLine("Message: " + ex.Message);
                 Console.WriteLine(" -- Stack --" );

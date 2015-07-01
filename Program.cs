@@ -1,15 +1,12 @@
-﻿using System;
+﻿#define DEBUGNOW
+using System;
 using System.Reflection;
 
 /*
     This is the entry point of the program.
 */
 
-//TODO: Collision mechanics
-//TODO: Enemy mechanics
-//TODO: Attack mechanics
-
-//TODO: F12 for screenshot (Dump display buffer to file?)
+//TODO: F12 for screenshot (Dump Game buffer to file?)
 
 #if DEBUG
 [assembly: AssemblyVersion("0.3.4.*")]
@@ -17,7 +14,7 @@ using System.Reflection;
 [assembly: AssemblyVersion("0.3.4.0")]
 #endif
 
-namespace FWoD
+namespace fwod
 {
     class MainClass
     {
@@ -37,8 +34,6 @@ namespace FWoD
 
         static Player GamePlayer = new Player();
         static Player GameBoss = new Player(); //TODO: Dictionary for enemies in map/floor
-        static bool isPlaying = true; // Is the player playing?
-        static bool inMenu = false;
         #endregion
 
         internal static int Main(string[] args)
@@ -48,8 +43,12 @@ namespace FWoD
             char Pchar = '@';
             string Pname = "Player";
             bool SkipIntro = false;
-            Console.ForegroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Gray;
             Console.BackgroundColor = ConsoleColor.Black;
+
+            #if DEBUGNOW
+                args = new string[] { "--debug" };
+            #endif
 
             for (int i = 0; i < args.Length; i++)
             {
@@ -123,7 +122,8 @@ namespace FWoD
 
             // == Game starts here ==
 
-            Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Double, 1, 1, ConsoleTools.BufferWidth - 2, ConsoleTools.BufferHeight - 2);
+            Core.FillScreen(Core.Layer.Game, ' ');
+            Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Double, 1, 1, ConsoleTools.BufferWidth - 2, ConsoleTools.BufferHeight - 3);
 
             GamePlayer.CharacterName = Pname;
             GamePlayer.CharacterChar = Pchar;
@@ -166,9 +166,10 @@ namespace FWoD
                     GameBoss.Say("I'll be back for you, " + GamePlayer.CharacterName + "!");
             }
 
+            bool isPlaying = true;
             do
             { // User is playing the game
-                Entry();
+                isPlaying = Entry();
             } while (isPlaying);
 
             // == The user is leaving the game ==
@@ -178,7 +179,7 @@ namespace FWoD
             return 0;
         }
 
-        static internal void Entry()
+        static internal bool Entry()
         {
             ConsoleKeyInfo key = Console.ReadKey(true);
 
@@ -209,6 +210,8 @@ namespace FWoD
                     Menu.Show();
                     break;
             }
+
+            return true;
         }
 
         static void ShowHelp()

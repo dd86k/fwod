@@ -4,7 +4,7 @@
     Core system for the multi-layer system.
 */
 
-namespace FWoD
+namespace fwod
 {
     class Core
     {
@@ -23,7 +23,7 @@ namespace FWoD
         };
 
         /// <summary>
-        /// Layer to output at. Menu=0, etc.
+        /// Layer to output at. Menu=0 (topmost), etc.
         /// </summary>
         internal enum Layer
         {
@@ -133,14 +133,33 @@ namespace FWoD
         }
         #endregion
 
-        #region Clear
-        internal static void ClearLayer(Layer pLayer)
+        #region Fill
+        internal static void FillScreen(Layer pLayer, char pChar)
         {
+            Console.Clear();
+            int iLayer = (int)pLayer;
             for (int h = 0; h < ConsoleTools.BufferHeight; h++)
             {
                 for (int w = 0; w < ConsoleTools.BufferWidth; w++)
                 {
-                    Layers[(int)pLayer][h, w] = '\0';
+                    Layers[iLayer][h, w] = pChar;
+                    Console.SetCursorPosition(w, h);
+                    Console.Write(pChar);
+                }
+            }
+
+        }
+        #endregion
+
+        #region Clear
+        internal static void ClearLayer(Layer pLayer)
+        {
+            int iLayer = (int)pLayer;
+            for (int h = 0; h < ConsoleTools.BufferHeight; h++)
+            {
+                for (int w = 0; w < ConsoleTools.BufferWidth; w++)
+                {
+                    Layers[iLayer][h, w] = '\0';
                 }
             }
         }

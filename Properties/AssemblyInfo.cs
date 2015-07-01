@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Resources;
 
 // Information about this assembly is defined by the following attributes.
 // Change them to the values specific to your project.
@@ -26,3 +27,4 @@ using System.Runtime.InteropServices;
 
 //[assembly: AssemblyDelaySign(false)]
 //[assembly: AssemblyKeyFile("")]
+[assembly: NeutralResourcesLanguageAttribute("en")]

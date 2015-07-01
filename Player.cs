@@ -6,7 +6,7 @@
     although the player can't control them.
 */
 
-namespace FWoD
+namespace fwod
 {
     internal class Player
     {
@@ -20,15 +20,13 @@ namespace FWoD
             get { return _posx; }
             set
             {
+                char futrchar = Core.GetCharAt(Core.Layer.Game, this.PosX, this.PosY);
                 if (!char.IsLetterOrDigit(Core.GetCharAt(Core.Layer.Game, value, this.PosY)))
                 {
-                    Console.SetCursorPosition(this._posx, this.PosY);
-                    Console.Write(Core.GetCharAt(Core.Layer.Game, this.PosX, this.PosY));
+                    Core.Write(Core.Layer.Game, Core.GetCharAt(Core.Layer.Game, this.PosX, this.PosY), this.PosX, this.PosY);
                     _posx = value;
-                    Console.SetCursorPosition(this._posx, this.PosY);
-                    Console.Write(this.CharacterChar);
+                    Core.Write(Core.Layer.Game, this.CharacterChar, this.PosX, value);
                 }
-               
             }
         }
 
@@ -41,11 +39,13 @@ namespace FWoD
             get { return _posy; }
             set
             {
-                Console.SetCursorPosition(this._posx, this._posy);
-                Console.Write(" ");
-                _posy = value;
-                Console.SetCursorPosition(this._posx, this._posy);
-                Console.Write(this.CharacterChar);
+                char futrchar = Core.GetCharAt(Core.Layer.Game, this.PosX, this.PosY);
+                if (!char.IsLetterOrDigit(Core.GetCharAt(Core.Layer.Game, this.PosX, value)))
+                {
+                    Core.Write(Core.Layer.Game, Core.GetCharAt(Core.Layer.Game, this.PosX, this.PosY), this.PosX, this.PosY);
+                    _posx = value;
+                    Core.Write(Core.Layer.Game, this.CharacterChar, this.PosX, value);
+                }
             }
         }
 
@@ -59,7 +59,7 @@ namespace FWoD
             set
             {
                 _hp = value;
-                Console.SetCursorPosition(1, ConsoleTools.BufferHeight - 1);
+                Console.SetCursorPosition(ConsoleTools.BufferWidth / 2, 0);
                 Console.Write("HP: " + _hp);
             }
         }

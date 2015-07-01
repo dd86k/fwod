@@ -4,7 +4,7 @@
     General game mechanics.
 */
 
-namespace FWoD
+namespace fwod
 {
     internal class Game
     {
@@ -103,9 +103,9 @@ namespace FWoD
             }
 
             // Top wall
-            Core.Write(Core.Layer.Game, CornerTLChar, pPosX, pPosY);
+            Core.Write(pLayer, CornerTLChar, pPosX, pPosY);
             ConsoleTools.GenerateHorizontalLine(pLayer, HorizontalChar, pWidth);
-            Core.Write(Core.Layer.Game, CornerTRChar);
+            Core.Write(pLayer, CornerTRChar);
 
             // Side walls
             Console.SetCursorPosition(pPosX, pPosY + 1);
@@ -116,9 +116,9 @@ namespace FWoD
 
             // Bottom wall
             Console.SetCursorPosition(pPosX, pPosY + pHeight);
-            Console.Write(CornerBLChar);
+            Core.Write(pLayer, CornerBLChar);
             ConsoleTools.GenerateHorizontalLine(pLayer, HorizontalChar, pWidth);
-            Console.Write(CornerBRChar);
+            Core.Write(pLayer, CornerBRChar);
         }
 
         #region Player specific stuff, centralized

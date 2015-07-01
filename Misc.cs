@@ -4,7 +4,7 @@
     Unrelated of the game, for fun.
 */
 
-namespace FWoD
+namespace fwod
 {
     internal class Misc
     {

@@ -4,7 +4,7 @@
     Various tools for the command prompt and terminal.
 */
 
-namespace FWoD
+namespace fwod
 {
     internal class ConsoleTools
     {

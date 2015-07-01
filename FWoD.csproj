@@ -1,133 +1,65 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug (Windows)</Configuration>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7352A229-6235-49F2-9358-E621633D6233}</ProjectGuid>
+    <ProjectGuid>{578D4DA2-22B9-410C-B97B-04D94934C845}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>FWoD</RootNamespace>
-    <StartupObject>FWoD.MainClass</StartupObject>
-    <ReleaseVersion>1.0</ReleaseVersion>
-    <Description>Four Walls of Death</Description>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.0</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>fwod</RootNamespace>
+    <AssemblyName>fwod</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug (Windows)|AnyCPU' ">
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug (Windows)</OutputPath>
-    <WarningLevel>4</WarningLevel>
-    <DefineConstants>WINDOWS, DEBUG</DefineConstants>
-    <AssemblyName>fwod-win32</AssemblyName>
-    <LangVersion>5</LangVersion>
-    <ConsolePause>false</ConsolePause>
-    <Externalconsole>true</Externalconsole>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug (Linux)|AnyCPU' ">
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug (Linux)</OutputPath>
-    <WarningLevel>4</WarningLevel>
-    <DefineConstants>LINUX, DEBUG</DefineConstants>
-    <AssemblyName>fwod-linux</AssemblyName>
-    <Externalconsole>true</Externalconsole>
-    <LangVersion>5</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release (Windows)|AnyCPU' ">
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release (Windows)</OutputPath>
-    <WarningLevel>4</WarningLevel>
-    <DefineConstants>WINDOWS, RELEASE</DefineConstants>
-    <AssemblyName>fwod-win32</AssemblyName>
-    <Externalconsole>true</Externalconsole>
-    <LangVersion>5</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release (Linux)|AnyCPU' ">
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release (Linux)</OutputPath>
-    <WarningLevel>4</WarningLevel>
-    <DefineConstants>LINUX, RELEASE</DefineConstants>
-    <AssemblyName>fwod-linux</AssemblyName>
-    <Externalconsole>true</Externalconsole>
-    <LangVersion>5</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug (Windows 10)|AnyCPU' ">
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug (Windows 10)</OutputPath>
-    <DefineConstants>WINDOWS10, DEBUG</DefineConstants>
-    <WarningLevel>4</WarningLevel>
-    <AssemblyName>fwod-winnt10</AssemblyName>
-    <LangVersion>5</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release (Windows 10)|AnyCPU' ">
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Release (Windows 10)</OutputPath>
-    <DefineConstants>WINDOWS10, RELEASE</DefineConstants>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release (Windows 10)\fwod-winnt10.xml</DocumentationFile>
-    <AssemblyName>fwod-winnt10</AssemblyName>
-    <LangVersion>5</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug %28Windows%29|AnyCPU'">
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <ErrorReport>prompt</ErrorReport>
-    <DebugType>full</DebugType>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyName>fwod</AssemblyName>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug %28Linux%29|AnyCPU'">
-    <ErrorReport>prompt</ErrorReport>
-    <DebugType>full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
+    <StartupObject>fwod.MainClass</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConsoleTools.cs" />
     <Compile Include="Core.cs" />
+    <Compile Include="Debug.cs" />
+    <Compile Include="Game.cs" />
+    <Compile Include="Menu.cs" />
+    <Compile Include="Misc.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Player.cs" />
-    <Compile Include="Game.cs" />
-    <Compile Include="ConsoleTools.cs" />
-    <Compile Include="Misc.cs" />
-    <Compile Include="Debug.cs" />
-    <Compile Include="Menu.cs" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <None Include="README.md" />
-    <None Include="LICENSE" />
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.5</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>
