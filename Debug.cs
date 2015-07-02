@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if DEBUG
+using System;
 
 /*
     Used for debugging purposes.
@@ -274,3 +275,4 @@ namespace fwod
         }
     }
 }
+#endif

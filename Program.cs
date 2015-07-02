@@ -1,4 +1,4 @@
-﻿#define DEBUGNOW
+﻿//#define DEBUGGER
 using System;
 using System.Reflection;
 
@@ -46,7 +46,7 @@ namespace fwod
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.BackgroundColor = ConsoleColor.Black;
 
-            #if DEBUGNOW
+            #if DEBUGGER
                 args = new string[] { "--debug" };
             #endif
 
@@ -62,7 +62,7 @@ namespace fwod
                         ShowVersion();
                         return 0;
                     case "-bosssays":
-                    case "-B": //TODO: Find spot for custom text
+                    case "-B":
                         if (args[i + 1] != null)
                             bosstext = args[i + 1];
                         break;
@@ -77,6 +77,7 @@ namespace fwod
                     case "--showmeme":
                         Misc.ShowMeme(); // *shrugs*
                         return 0;
+                    #if DEBUG
                     case "--debug":
                         int returnint = 0;
                         Debug.StartTests(ref returnint);
@@ -88,15 +89,20 @@ namespace fwod
                             return 0;
                         }
                         else return 1;
+                    #endif
                 }
             }
 
             Console.Clear();
             Console.Title = ProjectName + " " + ProjectVersion;
 
+            int w = (ConsoleTools.BufferWidth / 4) + (ConsoleTools.BufferWidth / 2);
+            int h = ConsoleTools.BufferHeight / 2;
+
             GamePlayer = new Player((ConsoleTools.BufferWidth / 4) + (ConsoleTools.BufferWidth / 2), 
                 ConsoleTools.BufferHeight / 2);
-            GameBoss = new Player(ConsoleTools.BufferWidth / 4, ConsoleTools.BufferHeight / 2);
+            GameBoss = new Player(ConsoleTools.BufferWidth / 4,
+                ConsoleTools.BufferHeight / 2);
 
             // == Before the game ==
 
@@ -115,8 +121,6 @@ namespace fwod
             Console.WriteLine();
             Console.Write("Press a key to start!");
 
-            Core.ClearLayer(Core.Layer.Game);
-
             Console.ReadKey(true);
             Console.Clear();
 
@@ -130,6 +134,8 @@ namespace fwod
             GamePlayer.Initialize();
             GameBoss.CharacterChar = '#';
             GameBoss.Initialize();
+
+            Game.UpdateEvent("You wake up after being defeated in battle");
 
             if (!SkipIntro)
             {

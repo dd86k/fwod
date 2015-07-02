@@ -126,6 +126,7 @@ namespace fwod
         }
         #endregion
 
+        #region Repeatetion
         /// <summary>
         /// Generates a string out of a character
         /// </summary>
@@ -134,14 +135,12 @@ namespace fwod
         /// <returns></returns>
         static internal string RepeatChar(char pChar, int pLenght)
         {
-            string Out = string.Empty;
-            for (int i = 0; i < pLenght; i++)
-            {
-                Out += pChar;
-            }
-            return Out;
+            return new string(pChar, pLenght);
+            // fml is was this easy rofl
         }
+        #endregion
 
+        #region Misc
         /// <summary>
         /// Resets the Console's Out to the original one
         /// </summary>
@@ -156,5 +155,6 @@ namespace fwod
                 Console.SetOut(tw);
             }
         }
+        #endregion
     }
 }

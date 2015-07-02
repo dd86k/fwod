@@ -121,6 +121,14 @@ namespace fwod
             Core.Write(pLayer, CornerBRChar);
         }
 
+        #region Events
+        internal static void UpdateEvent(string pText)
+        {
+            Console.SetCursorPosition(1, ConsoleTools.BufferHeight - 2);
+            Console.Write(pText);
+        }
+        #endregion
+
         #region Player specific stuff, centralized
         static internal void CharacterSays(Player pPlayer, string pText)
         {

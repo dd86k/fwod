@@ -20,12 +20,12 @@ namespace fwod
             get { return _posx; }
             set
             {
-                char futrchar = Core.GetCharAt(Core.Layer.Game, this.PosX, this.PosY);
-                if (!char.IsLetterOrDigit(Core.GetCharAt(Core.Layer.Game, value, this.PosY)))
+                char pastchar = Core.GetCharAt(Core.Layer.Game, this.PosX, this.PosY);
+                if (!Core.GetCharAt(Core.Layer.Game, value, this.PosY).IsSolidObject())
                 {
-                    Core.Write(Core.Layer.Game, Core.GetCharAt(Core.Layer.Game, this.PosX, this.PosY), this.PosX, this.PosY);
-                    _posx = value;
-                    Core.Write(Core.Layer.Game, this.CharacterChar, this.PosX, value);
+                    this._posx = value;
+                    Core.Write(Core.Layer.Game, pastchar, this.PosX, this.PosY);
+                    Core.Write(Core.Layer.Game, this.CharacterChar, value, this.PosY);
                 }
             }
         }
@@ -39,12 +39,13 @@ namespace fwod
             get { return _posy; }
             set
             {
-                char futrchar = Core.GetCharAt(Core.Layer.Game, this.PosX, this.PosY);
-                if (!char.IsLetterOrDigit(Core.GetCharAt(Core.Layer.Game, this.PosX, value)))
+                char pastchar = Core.GetCharAt(Core.Layer.Game, this.PosX, this.PosY);
+                if (!Core.GetCharAt(Core.Layer.Game, this.PosX, value).IsSolidObject())
                 {
-                    Core.Write(Core.Layer.Game, Core.GetCharAt(Core.Layer.Game, this.PosX, this.PosY), this.PosX, this.PosY);
-                    _posx = value;
+                    this._posy = value;
+                    Core.Write(Core.Layer.Game, pastchar, this.PosX, this.PosY);
                     Core.Write(Core.Layer.Game, this.CharacterChar, this.PosX, value);
+                    // Permutte the two .Write to get a cool snake game! lol
                 }
             }
         }

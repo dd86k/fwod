@@ -9,14 +9,16 @@ namespace fwod
     class Core
     {
         //IDEA: Three jagged arrays (char[][][]) instead of a 2d jagged array (char[][,])?
-        // Reason: Performance
-        // Drawback: More memory
+        // +: Performance
+        // -: More memory
+        //    No Length property
+
         /// <summary>
         /// Multi-layered char buffer
         /// </summary>
         internal static char[][,] Layers = new char[3][,]
         { // 3 layers of 25 row and 80 rolumns each
-          // 2D Arrays work like this: [Y, X]
+          // 2D Arrays work like this: [ROW, COL]
             new char[ConsoleTools.BufferHeight, ConsoleTools.BufferWidth], // Menu
             new char[ConsoleTools.BufferHeight, ConsoleTools.BufferWidth], // Bubbles
             new char[ConsoleTools.BufferHeight, ConsoleTools.BufferWidth]  // Game
@@ -154,19 +156,18 @@ namespace fwod
         #region Clear
         internal static void ClearLayer(Layer pLayer)
         {
-            int iLayer = (int)pLayer;
             for (int h = 0; h < ConsoleTools.BufferHeight; h++)
             {
                 for (int w = 0; w < ConsoleTools.BufferWidth; w++)
                 {
-                    Layers[iLayer][h, w] = '\0';
+                    Layers[(int)pLayer][h, w] = '\0';
                 }
             }
         }
 
         internal static void ClearAllLayers()
         {
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < Layers.Length; i++)
             {
                 for (int h = 0; h < ConsoleTools.BufferHeight; h++)
                 {
