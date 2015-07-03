@@ -1,4 +1,4 @@
-﻿//#define DEBUGGER
+﻿#define DEBUGGER
 using System;
 using System.Reflection;
 

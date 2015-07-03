@@ -145,7 +145,7 @@ namespace fwod
                 #region Test #12
                 Console.Write("Test #" + testnum + ": Recreate player at X:3 and make him talk");
 
-                p = new Player(3, Console.BufferHeight - 4);
+                p = new Player(3, ConsoleTools.BufferHeight - 4);
 
                 p.Initialize(); // Pause() clears the buffer
 
@@ -169,7 +169,7 @@ namespace fwod
                 #region Test #14
                 Console.Write("Test #" + testnum + ": Recreate player at the right and make him talk");
 
-                p = new Player(Console.BufferWidth - 3, Console.BufferHeight - 2);
+                p = new Player(ConsoleTools.BufferWidth - 3, ConsoleTools.BufferHeight - 2);
 
                 p.Initialize(); // Pause() clears the buffer
 
@@ -222,10 +222,15 @@ namespace fwod
                 #region Test #17
                 Console.Write("Test #" + testnum + ": Multi-layer player test");
 
+                Console.ReadKey(true);
+
+                Core.FillScreen(Core.Layer.Game, '.');
+
+                bool isTesting = true;
                 do
                 {
-                    fwod.MainClass.Entry();
-                } while (true);
+                    isTesting = fwod.MainClass.Entry();
+                } while (isTesting);
 
                 Pause(ref testnum);
                 #endregion

@@ -208,7 +208,7 @@ namespace fwod
 
             // Clear bubble
             //Console.SetCursorPosition(StartX, StartY);
-            int lenH = StartX + Lines[0].Length + 2; //UNDONE: this feels wrong
+            int lenH = StartX + Lines[0].Length + 2;
             int lenV = StartY + Lines.Length + 2;
             for (int row = StartY; row < lenV; row++)
             {
@@ -236,8 +236,7 @@ namespace fwod
             string Out = Console.ReadLine();
 
             // Clear bubble
-            //TODO: Put older chars back
-            int lenH = StartX + tmp.Length + 2; //UNDONE: this feels wrong
+            int lenH = StartX + tmp.Length + 2;
             int lenV = StartY + 3;
             for (int row = StartY; row < lenV; row++)
             {
