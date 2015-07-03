@@ -20,12 +20,19 @@ namespace fwod
             get { return _posx; }
             set
             {
-                char pastchar = Core.GetCharAt(Core.Layer.Game, this.PosX, this.PosY);
+                
                 if (!Core.GetCharAt(Core.Layer.Game, value, this.PosY).IsSolidObject())
                 {
+                    // Note: if future coord is enemy, attack enemy instead
+
+                    // Get old char
+                    char pastchar = Core.GetCharAt(Core.Layer.Game, this.PosX, this.PosY);
+                    // Place old char
+                    Core.Write(Core.Layer.Bubble, pastchar, this.PosX, this.PosY);
+                    // Update value
                     this._posx = value;
-                    Core.Write(Core.Layer.Game, pastchar, this.PosX, this.PosY);
-                    Core.Write(Core.Layer.Game, this.CharacterChar, value, this.PosY);
+                    // Move player
+                    Core.Write(Core.Layer.Bubble, this.CharacterChar, value, this.PosY);
                 }
             }
         }
@@ -39,13 +46,16 @@ namespace fwod
             get { return _posy; }
             set
             {
-                char pastchar = Core.GetCharAt(Core.Layer.Game, this.PosX, this.PosY);
                 if (!Core.GetCharAt(Core.Layer.Game, this.PosX, value).IsSolidObject())
                 {
+                    // Place old char
+                    char pastchar = Core.GetCharAt(Core.Layer.Game, this.PosX, this.PosY);
+                    // Place old char
+                    Core.Write(Core.Layer.Bubble, pastchar, this.PosX, this.PosY);
+                    // Update value
                     this._posy = value;
-                    Core.Write(Core.Layer.Game, pastchar, this.PosX, this.PosY);
-                    Core.Write(Core.Layer.Game, this.CharacterChar, this.PosX, value);
-                    // Permutte the two .Write to get a cool snake game! lol
+                    // Move player
+                    Core.Write(Core.Layer.Bubble, this.CharacterChar, this.PosX, value);
                 }
             }
         }
