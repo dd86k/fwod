@@ -29,7 +29,7 @@ namespace fwod
         /// </summary>
         internal enum Layer
         {
-            Menu, Bubble, Game
+            Menu, Player, Game
         }
 
         //internal Layer CurrentLayer = Layer.Game;
@@ -136,20 +136,22 @@ namespace fwod
         #endregion
 
         #region Fill
+        /// <summary>
+        /// Fill a layer and the screen with a character
+        /// </summary>
+        /// <param name="pLayer"></param>
+        /// <param name="pChar"></param>
         internal static void FillScreen(Layer pLayer, char pChar)
         {
             Console.Clear();
             int iLayer = (int)pLayer;
+            for (int w = 0; w < ConsoleTools.BufferWidth; w++)
             for (int h = 0; h < ConsoleTools.BufferHeight; h++)
             {
-                for (int w = 0; w < ConsoleTools.BufferWidth; w++)
-                {
-                    Layers[iLayer][h, w] = pChar;
-                    Console.SetCursorPosition(w, h);
-                    Console.Write(pChar);
-                }
+                Layers[iLayer][h, w] = pChar;
+                Console.SetCursorPosition(w, h);
+                Console.Write(pChar);
             }
-
         }
         #endregion
 
@@ -163,6 +165,7 @@ namespace fwod
                     Layers[(int)pLayer][h, w] = '\0';
                 }
             }
+            Console.Clear();
         }
 
         internal static void ClearAllLayers()
@@ -177,6 +180,7 @@ namespace fwod
                     }
                 }
             }
+            Console.Clear();
         }
         #endregion
     }

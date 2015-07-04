@@ -1,5 +1,6 @@
-﻿#define DEBUGGER
+﻿//#define DEBUGGER
 using System;
+using System.IO;
 using System.Reflection;
 
 /*
@@ -93,7 +94,7 @@ namespace fwod
                 }
             }
 
-            Console.Clear();
+            //Console.Clear();
             Console.Title = ProjectName + " " + ProjectVersion;
 
             int w = (ConsoleTools.BufferWidth / 4) + (ConsoleTools.BufferWidth / 2);

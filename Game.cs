@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 /*
     General game mechanics.
@@ -9,6 +10,10 @@ namespace fwod
     internal class Game
     {
         const string SaveFilenameModel = "fwod#.sg";
+
+        //internal static Dictionary<int, Player> PlayerList = new Dictionary<int, Player>();
+
+        internal static List<Player> PlayerList = new List<Player>();
 
         /// <summary>
         /// Graphic characters (char[])
@@ -200,7 +205,7 @@ namespace fwod
             // Insert Text
             for (int i = 0; i < Lines.Length; i++)
             {
-                Core.Write(Core.Layer.Bubble, Lines[i], TextStartX, TextStartY + i);
+                Core.Write(Core.Layer.Player, Lines[i], TextStartX, TextStartY + i);
             }
 
             // Waiting for keypress
@@ -260,18 +265,18 @@ namespace fwod
         /// <param name="pPosY">Left position</param>
         static void GenerateBubble(Player pPlayer, int pTextLength, int pLines, int pPosX, int pPosY)
         {
-            Game.GenerateBox(Core.Layer.Bubble, Game.TypeOfLine.Single, pPosX, pPosY, pTextLength + 2, pLines + 2);
+            Game.GenerateBox(Core.Layer.Player, Game.TypeOfLine.Single, pPosX, pPosY, pTextLength + 2, pLines + 2);
 
             // Bubble chat "connector"
             if (pPosY < pPlayer.PosY) // Over player
             {
                 Console.SetCursorPosition(pPlayer.PosX, pPlayer.PosY - 2);
-                Core.Write(Core.Layer.Bubble, Game.Graphics.Lines.SingleConnector[2]);
+                Core.Write(Core.Layer.Player, Game.Graphics.Lines.SingleConnector[2]);
             }
             else // Under player
             {
                 Console.SetCursorPosition(pPlayer.PosX, pPlayer.PosY + 2);
-                Core.Write(Core.Layer.Bubble, Game.Graphics.Lines.SingleConnector[1]);
+                Core.Write(Core.Layer.Player, Game.Graphics.Lines.SingleConnector[1]);
             }
 
             // Prepare to insert text

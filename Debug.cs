@@ -95,7 +95,7 @@ namespace fwod
 
                 p.Initialize(); // Pause() clears the buffer
 
-                ConsoleTools.WriteAndCenter(Core.Layer.Bubble, "What is your favorite food?", p.PosY - 5);
+                ConsoleTools.WriteAndCenter(Core.Layer.Player, "What is your favorite food?", p.PosY - 5);
 
                 string tt = p.GetAnswer();
 
@@ -267,7 +267,7 @@ namespace fwod
         {
             pTestNum++;
             Console.ReadKey(true);
-            Console.Clear();
+            Core.ClearAllLayers();
         }
 
         static internal void TalkTest(string pText)

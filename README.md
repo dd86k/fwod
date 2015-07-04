@@ -83,11 +83,10 @@ This list will change often and probably miss something.
 - [ ] Celebrate!
 
 ### Builds
-Some builds will be available on my [website](http://www.wilomgfx.net/didier/pages/fwod.html) (When I reach 3000 tweets).
+Some builds will be available on my [website](http://www.wilomgfx.net/didier/pages/fwod.html) (When I reach 4000 tweets).
 
 ### Issues (Code specific unrelated)
-- MonoDevelop can't open the source files
-  - Xamarin Studio and Visual Studio can.
+- Linux builds are not working anymore
 
 ### License
 This project uses the MIT license, which you can read from the LICENSE file.

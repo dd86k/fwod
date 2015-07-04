@@ -20,19 +20,21 @@ namespace fwod
             get { return _posx; }
             set
             {
-                
-                if (!Core.GetCharAt(Core.Layer.Game, value, this.PosY).IsSolidObject())
+                char futrchar = Core.GetCharAt(Core.Layer.Game, value, this.PosY);
+                if (!futrchar.IsSolidObject())
                 {
                     // Note: if future coord is enemy, attack enemy instead
 
                     // Get old char
                     char pastchar = Core.GetCharAt(Core.Layer.Game, this.PosX, this.PosY);
                     // Place old char
-                    Core.Write(Core.Layer.Bubble, pastchar, this.PosX, this.PosY);
+                    //Core.Write(Core.Layer.Bubble, pastchar, this.PosX, this.PosY);
+                    Console.SetCursorPosition(this.PosX, this.PosY);
+                    Console.Write(pastchar);
                     // Update value
                     this._posx = value;
                     // Move player
-                    Core.Write(Core.Layer.Bubble, this.CharacterChar, value, this.PosY);
+                    Core.Write(Core.Layer.Player, this.CharacterChar, value, this.PosY);
                 }
             }
         }
@@ -51,11 +53,11 @@ namespace fwod
                     // Place old char
                     char pastchar = Core.GetCharAt(Core.Layer.Game, this.PosX, this.PosY);
                     // Place old char
-                    Core.Write(Core.Layer.Bubble, pastchar, this.PosX, this.PosY);
+                    Core.Write(Core.Layer.Player, pastchar, this.PosX, this.PosY);
                     // Update value
                     this._posy = value;
                     // Move player
-                    Core.Write(Core.Layer.Bubble, this.CharacterChar, this.PosX, value);
+                    Core.Write(Core.Layer.Player, this.CharacterChar, this.PosX, value);
                 }
             }
         }
