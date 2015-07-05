@@ -33,8 +33,7 @@ namespace fwod
             }
         }
 
-        static Player GamePlayer = new Player();
-        static Player GameBoss = new Player(); //TODO: Dictionary for enemies in map/floor
+        static Player MainPlayer = new Player();
         #endregion
 
         internal static int Main(string[] args)
@@ -44,8 +43,6 @@ namespace fwod
             char Pchar = '@';
             string Pname = "Player";
             bool SkipIntro = false;
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.BackgroundColor = ConsoleColor.Black;
 
             #if DEBUGGER
                 args = new string[] { "--debug" };
@@ -97,12 +94,14 @@ namespace fwod
             //Console.Clear();
             Console.Title = ProjectName + " " + ProjectVersion;
 
+            Game.EnemyList.Add(new Player());
+
             int w = (ConsoleTools.BufferWidth / 4) + (ConsoleTools.BufferWidth / 2);
             int h = ConsoleTools.BufferHeight / 2;
 
-            GamePlayer = new Player((ConsoleTools.BufferWidth / 4) + (ConsoleTools.BufferWidth / 2), 
+            MainPlayer = new Player((ConsoleTools.BufferWidth / 4) + (ConsoleTools.BufferWidth / 2), 
                 ConsoleTools.BufferHeight / 2);
-            GameBoss = new Player(ConsoleTools.BufferWidth / 4,
+            Game.EnemyList[0] = new Player(ConsoleTools.BufferWidth / 4,
                 ConsoleTools.BufferHeight / 2);
 
             // == Before the game ==
@@ -130,47 +129,47 @@ namespace fwod
             Core.FillScreen(Core.Layer.Game, ' ');
             Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Double, 1, 1, ConsoleTools.BufferWidth - 2, ConsoleTools.BufferHeight - 3);
 
-            GamePlayer.CharacterName = Pname;
-            GamePlayer.CharacterChar = Pchar;
-            GamePlayer.Initialize();
-            GameBoss.CharacterChar = '#';
-            GameBoss.Initialize();
+            MainPlayer.CharacterName = Pname;
+            MainPlayer.CharacterChar = Pchar;
+            MainPlayer.Initialize();
+            Game.EnemyList[0].CharacterChar = '#';
+            Game.EnemyList[0].Initialize();
 
             Game.UpdateEvent("You wake up after being defeated in battle");
 
             if (!SkipIntro)
             {
-                GamePlayer.Say("Arrgh! Where am I?");
+                MainPlayer.Say("Arrgh! Where am I?");
 
-                GameBoss.Say("Oh, you're awake...");
-                GameBoss.Say("What is your name?");
+                Game.EnemyList[0].Say("Oh, you're awake...");
+                Game.EnemyList[0].Say("What is your name?");
 
                 string tmp_name = string.Empty;
                 do
                 {
-                    tmp_name = GamePlayer.GetAnswer();
+                    tmp_name = MainPlayer.GetAnswer();
                     // If the player entered at least something and not too long
                     if (tmp_name.Length == 0)
-                        GameBoss.Say("Say something!");
+                        Game.EnemyList[0].Say("Say something!");
                     else if (tmp_name.Length > 25)
-                        GameBoss.Say("Hey, that's way too long.");
+                        Game.EnemyList[0].Say("Hey, that's way too long.");
                 } while (tmp_name.Length == 0 || tmp_name.Length > 25);
 
-                GamePlayer.CharacterName = tmp_name;
-                GamePlayer.Say("It's " + GamePlayer.CharacterName + ".");
+                MainPlayer.CharacterName = tmp_name;
+                MainPlayer.Say("It's " + MainPlayer.CharacterName + ".");
 
-                GameBoss.Say("Well, it's your unlucky day.");
+                Game.EnemyList[0].Say("Well, it's your unlucky day.");
 
-                GamePlayer.Say("Why?");
+                MainPlayer.Say("Why?");
 
-                GameBoss.Say("Because I will kill you.");
+                Game.EnemyList[0].Say("Because I will kill you.");
 
-                GamePlayer.Say("WHAT!?!?!");
+                MainPlayer.Say("WHAT!?!?!");
 
                 if (bosstext.Length > 0)
-                    GameBoss.Say(bosstext);
+                    Game.EnemyList[0].Say(bosstext);
                 else
-                    GameBoss.Say("I'll be back for you, " + GamePlayer.CharacterName + "!");
+                    Game.EnemyList[0].Say("I'll be back for you, " + MainPlayer.CharacterName + "!");
             }
 
             bool isPlaying = true;
@@ -194,22 +193,22 @@ namespace fwod
             {
                     // Move up
                 case ConsoleKey.UpArrow:
-                    GamePlayer.MoveUp();
+                    MainPlayer.MoveUp();
                     break;
 
                     // Move down
                 case ConsoleKey.DownArrow:
-                    GamePlayer.MoveDown();
+                    MainPlayer.MoveDown();
                     break;
 
                     // Move left
                 case ConsoleKey.LeftArrow:
-                    GamePlayer.MoveLeft();
+                    MainPlayer.MoveLeft();
                     break;
 
                     // Move right
                 case ConsoleKey.RightArrow:
-                    GamePlayer.MoveRight();
+                    MainPlayer.MoveRight();
                     break;
 
                     // Menu button

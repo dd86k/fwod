@@ -16,9 +16,12 @@ You can always send me an [email](mailto:devddstuff@gmail.com) or open a ticket.
 ### Notes
 - Code reorganization/restructures/cleanups are made from time to time
 - The game will change dramatically often during development process
-- Fixed 80x25 resolution for increased compatiblity
+- Fixed 80x23 resolution for increased compatiblity
   - Windows 10 buffer screen size is bigger by default, and I can't shrink it
+  - Some or most terminals under GNU/Linux "BufferHeight"'s stops at 24
+  - PuTTY's window stops at height 24
 - Colors are planned
+- Currently the game is not optimized
 
 ### Progress
 Very likely in order
@@ -30,11 +33,11 @@ Very likely in order
 This list will change often and probably miss something.
 
 - [x] Multi-layer buffers
-- [ ] Collision system
+- [ ] Collision system (NOW: Fixing bugs)
   - [x] Proposal
   - [x] Implementing
   - [x] Testing
-  - [ ] Functional
+  - [x] Functional
 - [ ] Menu
   - [ ] Proposal
   - [ ] Implementing
@@ -69,7 +72,7 @@ This list will change often and probably miss something.
   - [ ] Proposal
   - [ ] Implementing
   - [ ] Testing
-  - [ ] Functional (Milestone)
+  - [ ] Functional
 - [ ] Leveling system
   - [ ] Proposal
   - [ ] Implementing
@@ -77,16 +80,16 @@ This list will change often and probably miss something.
   - [ ] Functional
 - [ ] Bosses (Optional)
 - [ ] Final bug fixing round
-- [ ] Optimization round (Optional)
+- [ ] Optimization round
 - [ ] Wiki (Optional)
 - [ ] Official Release (Milestone)
 - [ ] Celebrate!
 
 ### Builds
-Some builds will be available on my [website](http://www.wilomgfx.net/didier/pages/fwod.html) (When I reach 4000 tweets).
+Some builds will be available on my [website](http://www.wilomgfx.net/didier/pages/fwod.html) (When I reach 5000 tweets).
 
 ### Issues (Code specific unrelated)
-- Linux builds are not working anymore
+- Code is _very_ unoptimized
 
 ### License
 This project uses the MIT license, which you can read from the LICENSE file.

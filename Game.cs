@@ -11,9 +11,14 @@ namespace fwod
     {
         const string SaveFilenameModel = "fwod#.sg";
 
-        //internal static Dictionary<int, Player> PlayerList = new Dictionary<int, Player>();
-
-        internal static List<Player> PlayerList = new List<Player>();
+        /// <summary>
+        /// List of the enemies.
+        /// </summary>
+        internal static List<Player> EnemyList = new List<Player>();
+        // Reasons of using a List<T>:
+        // You can't loop through a Dictionary<T, T> when a key isn't int (not even foreach)
+        // Using a char as a key is a bad idea, since Player.Character can change
+        // Arrays, once created, can't change size
 
         /// <summary>
         /// Graphic characters (char[])
@@ -52,6 +57,7 @@ namespace fwod
             Single, Double
         }
 
+        #region Box generation
         /// <summary>
         /// Generates a box.
         /// </summary>
@@ -61,7 +67,7 @@ namespace fwod
         /// <param name="pWidth">Width.</param>
         /// <param name="pHeight">Height.</param>
         static internal void GenerateBox(Core.Layer pLayer, TypeOfLine pType, int pPosX, int pPosY, int pWidth, int pHeight)
-        { //IDEA: Move all the playersay stuff back to Player.cs?
+        {
             // Minimum value must be at least 2
             pWidth = pWidth < 2 ? 1 : pWidth - 2;
             pHeight = pHeight < 2 ? 1 : pHeight - 1;
@@ -125,6 +131,7 @@ namespace fwod
             ConsoleTools.GenerateHorizontalLine(pLayer, HorizontalChar, pWidth);
             Core.Write(pLayer, CornerBRChar);
         }
+        #endregion
 
         #region Events
         internal static void UpdateEvent(string pText)
@@ -134,153 +141,22 @@ namespace fwod
         }
         #endregion
 
-        #region Player specific stuff, centralized
-        static internal void CharacterSays(Player pPlayer, string pText)
-        {
-            string[] Lines = new string[] { pText };
-            int ci = 0;
-            int start = 0;
-
-            // This block seperates the input into 25 characters each lines equaly.
-            if (pText.Length != 0)
-            {
-                if (pText.Length > 25)
-                {
-                    Lines = new string[(pText.Length / 26) + 1];
-                    do
-                    {
-                        if (start + 25 > pText.Length)
-                            Lines[ci] = pText.Substring(start, pText.Length - start);
-                        else
-                            Lines[ci] = pText.Substring(start, 25);
-                        ci++;
-                        start += 25;
-                    } while (start < pText.Length);
-                }
-            }
-            // Minimum text so the bubble doesn't look too thin
-            else Lines = new string[] { " " };
-
-            //TODO: The verification is already done via GenerateBox, so
-                 // I'm wondering if I should just modify those values
-                 // with a ref or out
-
-            // X/Left bubble starting position
-            int StartX = pPlayer.PosX - (Lines[0].Length / 2) - 1;
-            // Re-places StartX if it goes further than the display buffer
-            if (StartX + (Lines[0].Length + 2) > ConsoleTools.BufferWidth)
-            {
-                StartX = ConsoleTools.BufferWidth - (Lines[0].Length + 2);
-            }
-
-            if (StartX < 0)
-            {
-                StartX = 0;
-            }
-
-            // Y/Top bubble starting position
-            int StartY = pPlayer.PosY - (Lines.Length) - 3;
-            // Re-places StartY if it goes further than the display buffer
-            if (StartY > ConsoleTools.BufferWidth)
-            {
-                StartY = ConsoleTools.BufferWidth - (Lines[0].Length - 2);
-            }
-
-            if (StartY < 0)
-            {
-                StartY = 3;
-            }
-
-            // Define the position of the text
-            int TextStartX = StartX + 1;
-            int TextStartY = StartY + 1;
-
-            // Generate the bubble
-            GenerateBubble(pPlayer,
-                Lines[0].Length,
-                Lines.Length,
-                StartX,
-                StartY);
-
-            // Insert Text
-            for (int i = 0; i < Lines.Length; i++)
-            {
-                Core.Write(Core.Layer.Player, Lines[i], TextStartX, TextStartY + i);
-            }
-
-            // Waiting for keypress
-            Console.ReadKey(true);
-
-            // Clear bubble
-            //Console.SetCursorPosition(StartX, StartY);
-            int lenH = StartX + Lines[0].Length + 2;
-            int lenV = StartY + Lines.Length + 2;
-            for (int row = StartY; row < lenV; row++)
-            {
-                for (int col = StartX; col < lenH; col++)
-                {
-                    // Write back what was at Game layer before
-                    Core.Write(Core.Layer.Game, Core.GetCharAt(Core.Layer.Game, col, row), col, row);
-                }
-            }
-        }
-
-        static internal string GetAnswerFromCharacter(Player pPlayer)
-        {
-            // Generates temporary text for spacer
-            string tmp = ConsoleTools.RepeatChar(' ', 25);
-
-            // Determine the starting position of the bubble
-            int StartX = pPlayer.PosX - (tmp.Length / 2) - 1;
-            int StartY = pPlayer.PosY - 4;
-
-            // Generate the bubble
-            GenerateBubble(pPlayer, tmp.Length, 1, StartX, StartY);
-
-            // Read input from player
-            string Out = Console.ReadLine();
-
-            // Clear bubble
-            int lenH = StartX + tmp.Length + 2;
-            int lenV = StartY + 3;
-            for (int row = StartY; row < lenV; row++)
-            {
-                for (int col = StartX; col < lenH; col++)
-                {
-                    // Write back what was at Game layer before
-                    Core.Write(Core.Layer.Game, Core.GetCharAt(Core.Layer.Game, col, row), col, row);
-                }
-            }
-
-            return Out;
-        }
-
+        #region Utility
         /// <summary>
-        /// Generates the bubble for a player.
+        /// Determine the Player with position
         /// </summary>
-        /// <param name="pPlayer">Player</param>
-        /// <param name="pTextLength">Lenght of the text (Width)</param>
-        /// <param name="pLines">Length of the text (Height)</param>
-        /// <param name="pPosX">Top position</param>
-        /// <param name="pPosY">Left position</param>
-        static void GenerateBubble(Player pPlayer, int pTextLength, int pLines, int pPosX, int pPosY)
+        /// <param name="pFutureX">Future left position</param>
+        /// <param name="pFutureY">Future top position</param>
+        /// <returns>Enemy, null if no found</returns>
+        internal static Player GetPlayerObjectAt(int pFutureX, int pFutureY)
         {
-            Game.GenerateBox(Core.Layer.Player, Game.TypeOfLine.Single, pPosX, pPosY, pTextLength + 2, pLines + 2);
-
-            // Bubble chat "connector"
-            if (pPosY < pPlayer.PosY) // Over player
+            foreach (Player Enemy in Game.EnemyList)
             {
-                Console.SetCursorPosition(pPlayer.PosX, pPlayer.PosY - 2);
-                Core.Write(Core.Layer.Player, Game.Graphics.Lines.SingleConnector[2]);
-            }
-            else // Under player
-            {
-                Console.SetCursorPosition(pPlayer.PosX, pPlayer.PosY + 2);
-                Core.Write(Core.Layer.Player, Game.Graphics.Lines.SingleConnector[1]);
+                if (Enemy.PosX == pFutureX && Enemy.PosY == pFutureY)
+                    return Enemy;
             }
 
-            // Prepare to insert text
-            Console.SetCursorPosition(pPosX + 1, pPosY + 1);
+            return null;
         }
         #endregion
 

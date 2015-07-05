@@ -2,8 +2,8 @@
 
 /*
     This class is about the Player.
-    An enemy is basically a player as well, 
-    although the player can't control them.
+    Reason is an enemy uses this class is simply
+    due to lazyness. I could of just used an interface.
 */
 
 namespace fwod
@@ -20,8 +20,9 @@ namespace fwod
             get { return _posx; }
             set
             {
-                char futrchar = Core.GetCharAt(Core.Layer.Game, value, this.PosY);
-                if (!futrchar.IsSolidObject())
+                char futrG = Core.GetCharAt(Core.Layer.Game, value, this.PosY);
+                char futrP = Core.GetCharAt(Core.Layer.Player, value, this.PosY);
+                if (!futrG.IsSolidObject()/* || !futrP.IsPlayerObject()*/)
                 {
                     // Note: if future coord is enemy, attack enemy instead
 
@@ -48,12 +49,18 @@ namespace fwod
             get { return _posy; }
             set
             {
-                if (!Core.GetCharAt(Core.Layer.Game, this.PosX, value).IsSolidObject())
+                char futrG = Core.GetCharAt(Core.Layer.Game, this.PosX, value);
+                char futrP = Core.GetCharAt(Core.Layer.Player, this.PosX, value);
+                if (!futrG.IsSolidObject()/* || !futrP.IsPlayerObject()*/)
                 {
-                    // Place old char
+                    // Note: if future coord is enemy, attack enemy instead
+
+                    // Get old char
                     char pastchar = Core.GetCharAt(Core.Layer.Game, this.PosX, this.PosY);
                     // Place old char
-                    Core.Write(Core.Layer.Player, pastchar, this.PosX, this.PosY);
+                    //Core.Write(Core.Layer.Bubble, pastchar, this.PosX, this.PosY);
+                    Console.SetCursorPosition(this.PosX, this.PosY);
+                    Console.Write(pastchar);
                     // Update value
                     this._posy = value;
                     // Move player
@@ -148,7 +155,91 @@ namespace fwod
         /// <param name="pText">Text!</param>
         internal void Say(string pText)
         {
-            Game.CharacterSays(this, pText);
+            Say(pText, true);
+        }
+
+        internal void Say(string pText, bool pWait)
+        {
+            string[] Lines = new string[] { pText }; // In case of multiline scenario
+            int ci = 0; // Multiline scenario row index
+            int start = 0; // Multiline cutting index
+
+            // This block seperates the input into 25 characters each lines equaly.
+            if (pText.Length != 0)
+            {
+                if (pText.Length > 25)
+                {
+                    Lines = new string[(pText.Length / 26) + 1];
+                    do
+                    {
+                        if (start + 25 > pText.Length)
+                            Lines[ci] = pText.Substring(start, pText.Length - start);
+                        else
+                            Lines[ci] = pText.Substring(start, 25);
+                        ci++;
+                        start += 25;
+                    } while (start < pText.Length);
+                }
+            }
+            // Minimum text so the bubble doesn't look too thin
+            else Lines = new string[] { " " };
+
+            //TODO: The verification is already done via GenerateBox, so
+            // I'm wondering if I should just modify those values
+            // with a ref or out
+
+            // X/Left bubble starting position
+            int StartX = this.PosX - (Lines[0].Length / 2) - 1;
+            // Re-places StartX if it goes further than the display buffer
+            if (StartX + (Lines[0].Length + 2) > ConsoleTools.BufferWidth)
+            {
+                StartX = ConsoleTools.BufferWidth - (Lines[0].Length + 2);
+            }
+
+            if (StartX < 0)
+            {
+                StartX = 0;
+            }
+
+            // Y/Top bubble starting position
+            int StartY = this.PosY - (Lines.Length) - 3;
+            // Re-places StartY if it goes further than the display buffer
+            if (StartY > ConsoleTools.BufferWidth)
+            {
+                StartY = ConsoleTools.BufferWidth - (Lines[0].Length - 2);
+            }
+
+            if (StartY < 0)
+            {
+                StartY = 3;
+            }
+
+            // Define the position of the text
+            int TextStartX = StartX + 1;
+            int TextStartY = StartY + 1;
+
+            // Generate the bubble
+            GenerateBubble(Lines[0].Length, Lines.Length, StartX, StartY);
+
+            // Insert Text
+            for (int i = 0; i < Lines.Length; i++)
+                Core.Write(Core.Layer.Player, Lines[i], TextStartX, TextStartY + i); 
+
+            // Waiting for keypress
+            if (pWait) Console.ReadKey(true);
+
+            // Clear bubble
+            //Console.SetCursorPosition(StartX, StartY);
+            int lenH = StartX + Lines[0].Length + 2;
+            int lenV = StartY + Lines.Length + 2;
+            for (int row = StartY; row < lenV; row++)
+            {
+                for (int col = StartX; col < lenH; col++)
+                {
+                    // Write back what was at Game layer before
+                    Core.Write(Core.Layer.Game, Core.GetCharAt(Core.Layer.Game, col, row), col, row);
+                }
+            }
         }
 
         /// <summary>
@@ -157,9 +248,36 @@ namespace fwod
         /// <returns></returns>
         internal string GetAnswer()
         {
-            return Game.GetAnswerFromCharacter(this);
-        }
+            // Generates temporary text for spacer
+            string tmp = ConsoleTools.RepeatChar(' ', 25);
 
+            // Determine the starting position of the bubble
+            int StartX = this.PosX - (tmp.Length / 2) - 1;
+            int StartY = this.PosY - 4;
+
+            // Generate the bubble
+            GenerateBubble(tmp.Length, 1, StartX, StartY);
+
+            // Read input from player
+            string Out = Console.ReadLine();
+
+            // Clear bubble
+            int lenH = StartX + tmp.Length + 2;
+            int lenV = StartY + 3;
+            for (int row = StartY; row < lenV; row++)
+            {
+                for (int col = StartX; col < lenH; col++)
+                {
+                    // Write back what was at Game layer before
+                    Core.Write(Core.Layer.Game, Core.GetCharAt(Core.Layer.Game, col, row), col, row);
+                }
+            }
+
+            return Out;
+        }
+        #endregion
+
+        #region Movement
         /// <summary>
         /// Makes the enemy move up one square
         /// </summary>
@@ -190,6 +308,36 @@ namespace fwod
         internal void MoveRight()
         {
             this.PosX++;
+        }
+        #endregion
+
+        #region Talk
+        /// <summary>
+        /// Generates the bubble for a player.
+        /// </summary>
+        /// <param name="pPlayer">Player</param>
+        /// <param name="pTextLength">Lenght of the text (Width)</param>
+        /// <param name="pLines">Length of the text (Height)</param>
+        /// <param name="pPosX">Top position</param>
+        /// <param name="pPosY">Left position</param>
+        void GenerateBubble(int pTextLength, int pLines, int pPosX, int pPosY)
+        {
+            Game.GenerateBox(Core.Layer.Player, Game.TypeOfLine.Single, pPosX, pPosY, pTextLength + 2, pLines + 2);
+
+            // Bubble chat "connector"
+            if (pPosY < this.PosY) // Over player
+            {
+                Console.SetCursorPosition(this.PosX, this.PosY - 2);
+                Core.Write(Core.Layer.Player, Game.Graphics.Lines.SingleConnector[2]);
+            }
+            else // Under player
+            {
+                Console.SetCursorPosition(this.PosX, this.PosY + 2);
+                Core.Write(Core.Layer.Player, Game.Graphics.Lines.SingleConnector[1]);
+            }
+
+            // Prepare to insert text
+            Console.SetCursorPosition(pPosX + 1, pPosY + 1);
         }
         #endregion
     }

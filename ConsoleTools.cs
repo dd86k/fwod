@@ -11,11 +11,11 @@ namespace fwod
         /// <summary>
         /// Initial buffer height
         /// </summary>
-        static internal readonly int BufferHeight = 25;
+        static internal readonly int BufferHeight = 23; // Most GNU/Linux terminal doesn't like past 24
         /// <summary>
         /// Initial buffer width
         /// </summary>
-        static internal readonly int BufferWidth = 80;
+        static internal readonly int BufferWidth = 80; // Standard
 
         #region Center text
         /// <summary>
