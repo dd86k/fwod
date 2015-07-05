@@ -11,7 +11,7 @@ Reason I'm doing this is to expand my knowledge about C# even further and learn 
 
 It's a personal project, so no rushing here.
 
-You can always send me an [email](mailto:devddstuff@gmail.com) or open a ticket. (I won't bite!)
+You can always send me an [email](mailto:devddstuff@gmail.com) or open a ticket/issue. (I won't bite!)
 
 ### Notes
 - Code reorganization/restructures/cleanups are made from time to time
@@ -21,14 +21,13 @@ You can always send me an [email](mailto:devddstuff@gmail.com) or open a ticket.
   - Some or most terminals under GNU/Linux "BufferHeight"'s stops at 24
   - PuTTY's window stops at height 24
 - Colors are planned
-- Currently the game is not optimized
 
 ### Progress
 Very likely in order
 - Proposal: Basic idea, in code
 - Implementing: Implementation of the idea
+- Functional: Works, to say the least
 - Testing: Testing the implementation
-- Functional: Finished and ready to use
 
 This list will change often and probably miss something.
 
@@ -36,48 +35,48 @@ This list will change often and probably miss something.
 - [ ] Collision system (NOW: Fixing bugs)
   - [x] Proposal
   - [x] Implementing
-  - [x] Testing
   - [x] Functional
+  - [x] Testing
 - [ ] Menu
   - [ ] Proposal
   - [ ] Implementing
-  - [ ] Testing
   - [ ] Functional
-- [ ] Random chamber generator
+  - [ ] Testing
+- [ ] Random chamber generator (Milestone)
   - [ ] Proposal
   - [ ] Implementing
+  - [ ] Functional
   - [ ] Testing
-  - [ ] Functional (Milestone)
 - [ ] Floor system
   - [ ] Proposal
   - [ ] Implementing
-  - [ ] Testing
   - [ ] Functional
+  - [ ] Testing
 - [ ] Enemy system
   - [ ] Proposal
   - [ ] Implementing
-  - [ ] Testing
   - [ ] Functional
+  - [ ] Testing
 - [ ] Attacking system
   - [ ] Proposal
   - [ ] Implementing
+  - [ ] Functional
   - [ ] Testing
-  - [ ] Functional (Milestone)
 - [ ] Items
   - [ ] Proposal
   - [ ] Implementing
-  - [ ] Testing
   - [ ] Functional
-- [ ] Inventory system
+  - [ ] Testing
+- [ ] Inventory system (Milestone)
   - [ ] Proposal
   - [ ] Implementing
-  - [ ] Testing
   - [ ] Functional
+  - [ ] Testing
 - [ ] Leveling system
   - [ ] Proposal
   - [ ] Implementing
-  - [ ] Testing
   - [ ] Functional
+  - [ ] Testing
 - [ ] Bosses (Optional)
 - [ ] Final bug fixing round
 - [ ] Optimization round
@@ -88,7 +87,7 @@ This list will change often and probably miss something.
 ### Builds
 Some builds will be available on my [website](http://www.wilomgfx.net/didier/pages/fwod.html) (When I reach 5000 tweets).
 
-### Issues (Code specific unrelated)
+### General Issues
 - Code is _very_ unoptimized
 
 ### License
