@@ -91,8 +91,19 @@ namespace fwod
                 }
             }
 
-            //Console.Clear();
+            Console.Clear();
             Console.Title = ProjectName + " " + ProjectVersion;
+
+            /* Try to resize the console */
+            try
+            {
+                    Console.SetWindowSize(ConsoleTools.BufferWidth, ConsoleTools.BufferHeight);
+            }
+            catch(NotImplementedException)
+            {
+                    /* Mono sometimes throws an exception if it cannot change the window size */
+                    /* If so, keep going. */
+            }
 
             Game.EnemyList.Add(new Player());
 
