@@ -8,11 +8,6 @@ namespace fwod
 {
     class Core
     {
-        //IDEA: Three jagged arrays (char[][][]) instead of a 2d jagged array (char[][,])?
-        // +: Performance
-        // -: More memory
-        //    No Length property
-
         /// <summary>
         /// Multi-layered char buffer
         /// </summary>

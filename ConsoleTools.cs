@@ -148,12 +148,9 @@ namespace fwod
         {
             // If Console.OpenStandardOutput() fails on Linux, I'll just use this in the future
             // ..Or use #if?
-            //System.IO.TextWriter OriginalOut = new System.IO.TextWriter();
-            using (System.IO.StreamWriter tw = new System.IO.StreamWriter(Console.OpenStandardOutput()))
-            {
+            System.IO.StreamWriter tw = new System.IO.StreamWriter(Console.OpenStandardOutput());
                 tw.AutoFlush = true;
                 Console.SetOut(tw);
-            }
         }
         #endregion
     }

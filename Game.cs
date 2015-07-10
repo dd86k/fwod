@@ -10,15 +10,16 @@ namespace fwod
     internal class Game
     {
         const string SaveFilenameModel = "fwod#.sg";
+        const string ScreenshotFileNamePrefix = "screenshot-";
 
         /// <summary>
         /// List of the enemies.
         /// </summary>
         internal static List<Player> EnemyList = new List<Player>();
         // Reasons of using a List<T>:
-        // You can't loop through a Dictionary<T, T> when a key isn't int (not even foreach)
-        // Using a char as a key is a bad idea, since Player.Character can change
-        // Arrays, once created, can't change size
+        // - You can't loop through a Dictionary<T, T> when a key isn't int (not even foreach)
+        // - Using a char as a key is a bad idea, since Player.Character can change
+        // - Arrays, once created, can't change size
 
         /// <summary>
         /// Graphic characters (char[])
@@ -39,7 +40,6 @@ namespace fwod
                 internal static char[] Double = {'║', '═'};
                 internal static char[] DoubleCorner = {'╔', '╗', '╝', '╚'};
                 internal static char[] DoubleConnector = {'╣', '╩', '╦', '╠', '╬'};
-
 
                 internal static char[] DoubleVerticalCorner = { '╓', '╖', '╜', '╙' };
                 internal static char[] DoubleVerticalConnector = { '╢', '╨', '╥', '╟', '╫' };
@@ -148,7 +148,7 @@ namespace fwod
         /// <param name="pFutureX">Future left position</param>
         /// <param name="pFutureY">Future top position</param>
         /// <returns>Enemy, null if no found</returns>
-        internal static Player GetPlayerObjectAt(int pFutureX, int pFutureY)
+        internal static Player GetEnemyObjectAt(int pFutureX, int pFutureY)
         {
             foreach (Player Enemy in Game.EnemyList)
             {

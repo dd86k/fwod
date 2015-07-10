@@ -7,12 +7,10 @@ using System.Reflection;
     This is the entry point of the program.
 */
 
-//TODO: F12 for screenshot (Dump Game buffer to file?)
-
 #if DEBUG
-[assembly: AssemblyVersion("0.3.4.*")]
+[assembly: AssemblyVersion("0.3.5.*")]
 #else
-[assembly: AssemblyVersion("0.3.4.0")]
+[assembly: AssemblyVersion("0.3.5.0")]
 #endif
 
 namespace fwod
@@ -91,7 +89,7 @@ namespace fwod
                 }
             }
 
-            //Console.Clear();
+            Console.Clear();
             Console.Title = ProjectName + " " + ProjectVersion;
 
             Game.EnemyList.Add(new Player());
@@ -191,31 +189,34 @@ namespace fwod
 
             switch (key.Key)
             {
-                    // Move up
+                // Move up
                 case ConsoleKey.UpArrow:
                     MainPlayer.MoveUp();
                     break;
 
-                    // Move down
+                // Move down
                 case ConsoleKey.DownArrow:
                     MainPlayer.MoveDown();
                     break;
 
-                    // Move left
+                // Move left
                 case ConsoleKey.LeftArrow:
                     MainPlayer.MoveLeft();
                     break;
 
-                    // Move right
+                // Move right
                 case ConsoleKey.RightArrow:
                     MainPlayer.MoveRight();
                     break;
 
-                    // Menu button
+                // Menu button
                 case ConsoleKey.Escape:
                     Menu.Show();
                     break;
             }
+
+            // Steps a "turn" since this is turn based.. ish
+            //Game.Turn();
 
             return true;
         }

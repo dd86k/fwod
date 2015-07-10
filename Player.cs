@@ -22,7 +22,7 @@ namespace fwod
             {
                 char futrG = Core.GetCharAt(Core.Layer.Game, value, this.PosY);
                 char futrP = Core.GetCharAt(Core.Layer.Player, value, this.PosY);
-                if (!futrG.IsSolidObject()/* || !futrP.IsPlayerObject()*/)
+                if (!futrG.IsSolidObject() && !futrP.IsEnemyObject())
                 {
                     // Note: if future coord is enemy, attack enemy instead
 
@@ -51,7 +51,7 @@ namespace fwod
             {
                 char futrG = Core.GetCharAt(Core.Layer.Game, this.PosX, value);
                 char futrP = Core.GetCharAt(Core.Layer.Player, this.PosX, value);
-                if (!futrG.IsSolidObject()/* || !futrP.IsPlayerObject()*/)
+                if (!futrG.IsSolidObject() && !futrP.IsEnemyObject())
                 {
                     // Note: if future coord is enemy, attack enemy instead
 
