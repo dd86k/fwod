@@ -236,13 +236,11 @@ namespace fwod
                 #endregion
 
                 #region Test #18
-                /*
                 Console.Write("Test #" + testnum + ": Menu test");
 
                 Menu.Show();
 
                 Pause(ref testnum);
-                */
                 #endregion
 
                 Console.Write("All tests passed without any exceptions");

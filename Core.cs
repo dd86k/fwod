@@ -27,8 +27,6 @@ namespace fwod
             Menu, Player, Game
         }
 
-        //internal Layer CurrentLayer = Layer.Game;
-
         #region Write
         /// <summary>
         /// Write at current location.
@@ -132,11 +130,22 @@ namespace fwod
 
         #region Fill
         /// <summary>
+        /// Fill a layer and the screen with a character, shows to console
+        /// </summary>
+        /// <param name="pLayer">Layer</param>
+        /// <param name="pChar">Character to print</param>
+        internal static void FillScreen(Layer pLayer, char pChar)
+        {
+            FillScreen(pLayer, pChar, true);
+        }
+
+        /// <summary>
         /// Fill a layer and the screen with a character
         /// </summary>
-        /// <param name="pLayer"></param>
-        /// <param name="pChar"></param>
-        internal static void FillScreen(Layer pLayer, char pChar)
+        /// <param name="pLayer">Layer</param>
+        /// <param name="pChar">Character to print</param>
+        /// <param name="PrintToOutput">Show in console</param>
+        internal static void FillScreen(Layer pLayer, char pChar, bool PrintToOutput)
         {
             Console.Clear();
             int iLayer = (int)pLayer;
@@ -144,14 +153,31 @@ namespace fwod
             for (int h = 0; h < ConsoleTools.BufferHeight; h++)
             {
                 Layers[iLayer][h, w] = pChar;
-                Console.SetCursorPosition(w, h);
-                Console.Write(pChar);
+                if (PrintToOutput)
+                {
+                    Console.SetCursorPosition(w, h);
+                    Console.Write(pChar);
+                }
             }
         }
         #endregion
 
         #region Clear
+        /// <summary>
+        /// Clears a layer, updates console
+        /// </summary>
+        /// <param name="pLayer">Layer to clear</param>
         internal static void ClearLayer(Layer pLayer)
+        {
+            ClearLayer(pLayer, true);
+        }
+
+        /// <summary>
+        /// Clears a layer
+        /// </summary>
+        /// <param name="pLayer">Layer to clear</param>
+        /// <param name="PrintToConsole">Update console</param>
+        internal static void ClearLayer(Layer pLayer, bool PrintToConsole)
         {
             for (int h = 0; h < ConsoleTools.BufferHeight; h++)
             {
@@ -160,9 +186,13 @@ namespace fwod
                     Layers[(int)pLayer][h, w] = '\0';
                 }
             }
-            Console.Clear();
+
+            if (PrintToConsole) Console.Clear();
         }
 
+        /// <summary>
+        /// Clears all layers and update console
+        /// </summary>
         internal static void ClearAllLayers()
         {
             for (int i = 0; i < Layers.Length; i++)

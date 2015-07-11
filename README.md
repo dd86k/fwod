@@ -29,7 +29,6 @@ You can always send me an [email](mailto:devddstuff@gmail.com) or open a ticket/
 
 ### Progress
 Very likely in order
-- Proposal: Basic idea, in code
 - Implementing: Implementation of the idea
 - Functional: Works, to say the least (most of it)
 - Testing: Testing the implementation
@@ -37,48 +36,36 @@ Very likely in order
 This list will change often and probably miss something.
 
 - [x] Multi-layer buffers
-- [ ] Collision system (NOW: Fixing bugs)
-  - [x] Proposal
-  - [x] Implementing
-  - [x] Functional
-  - [x] Testing
+- [x] Collision system
 - [ ] Menu
-  - [ ] Proposal
-  - [ ] Implementing
+  - [x] Implementing
   - [ ] Functional
   - [ ] Testing
 - [ ] Random chamber generator (Milestone)
-  - [ ] Proposal
   - [ ] Implementing
   - [ ] Functional
   - [ ] Testing
 - [ ] Floor system
-  - [ ] Proposal
   - [ ] Implementing
   - [ ] Functional
   - [ ] Testing
 - [ ] Enemy system
-  - [ ] Proposal
   - [ ] Implementing
   - [ ] Functional
   - [ ] Testing
 - [ ] Attacking system
-  - [ ] Proposal
   - [ ] Implementing
   - [ ] Functional
   - [ ] Testing
 - [ ] Items
-  - [ ] Proposal
   - [ ] Implementing
   - [ ] Functional
   - [ ] Testing
 - [ ] Inventory system (Milestone)
-  - [ ] Proposal
   - [ ] Implementing
   - [ ] Functional
   - [ ] Testing
 - [ ] Leveling system
-  - [ ] Proposal
   - [ ] Implementing
   - [ ] Functional
   - [ ] Testing

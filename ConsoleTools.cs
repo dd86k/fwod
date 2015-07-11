@@ -11,11 +11,11 @@ namespace fwod
         /// <summary>
         /// Initial buffer height
         /// </summary>
-        static internal readonly int BufferHeight = 23; // Most GNU/Linux terminal doesn't like past 24
+        static internal readonly int BufferHeight = 23; // Compatibility reasons
         /// <summary>
         /// Initial buffer width
         /// </summary>
-        static internal readonly int BufferWidth = 80; // Standard
+        static internal readonly int BufferWidth = 80;
 
         #region Center text
         /// <summary>
@@ -132,11 +132,25 @@ namespace fwod
         /// </summary>
         /// <param name="pChar">Input char</param>
         /// <param name="pLenght">Output string</param>
-        /// <returns></returns>
+        /// <returns>Text</returns>
         static internal string RepeatChar(char pChar, int pLenght)
         {
             return new string(pChar, pLenght);
-            // fml is was this easy rofl
+        }
+
+        /// <summary>
+        /// Generates a string with margins.
+        /// </summary>
+        /// <param name="pText"></param>
+        /// <param name="pWidth"></param>
+        /// <returns></returns>
+        static internal string CenterString(string pText, int pWidth)
+        {
+            string stmp = new string(' ', pWidth);
+            int start = (pWidth / 2) - (pText.Length / 2);
+            stmp = stmp.Insert(start, pText);
+            stmp = stmp.Remove(start + pText.Length, pText.Length);
+            return stmp;
         }
         #endregion
 
