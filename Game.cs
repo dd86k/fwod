@@ -137,6 +137,8 @@ namespace fwod
         internal static void UpdateEvent(string pText)
         {
             Console.SetCursorPosition(1, ConsoleTools.BufferHeight - 2);
+            Console.Write(new string(' ', ConsoleTools.BufferWidth - 2));
+            Console.SetCursorPosition(1, ConsoleTools.BufferHeight - 2);
             Console.Write(pText);
         }
         #endregion

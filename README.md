@@ -5,7 +5,7 @@
 
 ![fwod on Windows](http://www.wilomgfx.net/didier/pages/fwod/img1.png)
 
-![fwod in PuTTY](http://www.wilomgfx.net/didier/pages/fwod/img3.png)
+![fwod on PuTTY](http://www.wilomgfx.net/didier/pages/fwod/img3.png)
 
 Hello! This is a little something I'd like to show you, it's simply a console application game using the .NET framework, while being Mono compatible.
 
@@ -20,55 +20,23 @@ You can always send me an [email](mailto:devddstuff@gmail.com) or open a ticket/
 ### Notes
 - Code reorganization/restructures/cleanups are made from time to time
 - The game will change dramatically often during development process
-- Fixed 80x24 resolution (buffer-limited) for increased compatiblity
-  - Windows 10 buffer screen size is bigger by default, and I can't shrink it
-    - Also NetHack works the same way
-  - Some or most terminals under GNU/Linux "BufferHeight"'s stops at 24
-  - PuTTY's window stops at height 24 (Window-wise, not buffer)
+- Fixed 80x24 resolution (buffer-limited) for **maximum** compatiblity
 - Colors are planned
 
 ### Progress
-Very likely in order
-- Implementing: Implementation of the idea
-- Functional: Works, to say the least (most of it)
-- Testing: Testing the implementation
 
 This list will change often and probably miss something.
 
 - [x] Multi-layer buffers
 - [x] Collision system
-- [ ] Menu
-  - [x] Implementing
-  - [ ] Functional
-  - [ ] Testing
+- [ ] Menu <
 - [ ] Random chamber generator (Milestone)
-  - [ ] Implementing
-  - [ ] Functional
-  - [ ] Testing
 - [ ] Floor system
-  - [ ] Implementing
-  - [ ] Functional
-  - [ ] Testing
 - [ ] Enemy system
-  - [ ] Implementing
-  - [ ] Functional
-  - [ ] Testing
 - [ ] Attacking system
-  - [ ] Implementing
-  - [ ] Functional
-  - [ ] Testing
 - [ ] Items
-  - [ ] Implementing
-  - [ ] Functional
-  - [ ] Testing
 - [ ] Inventory system (Milestone)
-  - [ ] Implementing
-  - [ ] Functional
-  - [ ] Testing
 - [ ] Leveling system
-  - [ ] Implementing
-  - [ ] Functional
-  - [ ] Testing
 - [ ] Bosses (Optional)
 - [ ] Final bug fixing round
 - [ ] Optimization round
@@ -81,7 +49,8 @@ Some builds will be available on my [website](http://www.wilomgfx.net/didier/pag
 A "GameServer" (cool name huh?) will be available to play the game via SSH (no Mono/.NET required!).
 
 It will be accessible via this command:
-``ssh -p 1337 -l anon {IP/address to be announced}``
+
+`ssh -p 1337 -l anon {IP/address to be announced}`
 
 ### General Issues
 - Code is _very_ unoptimized

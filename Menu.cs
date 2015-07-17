@@ -1,15 +1,19 @@
 ﻿using System;
 
+/*
+    Menu system
+*/
+
 namespace fwod
 {
     internal class Menu
     {
         const int MENU_WIDTH = 60;
         const int MENU_STARTTOP = 2;
-        const string MENU_SEPERATOR = "-";
+        const string MENU_SEPERATOR = "--";
 
         static string[] MenuItems = new string[]
-        { // "-" is a separator
+        {
             "Return",
             MENU_SEPERATOR,
             "Save",
@@ -35,12 +39,14 @@ namespace fwod
             {
                 MenuIndex++;
 
+                // Get the item if..
                 string item = (MenuItem == MENU_SEPERATOR ?
-                    // MENU_SEPERATOR item
+                    // ..it's a MENU_SEPERATOR item
                     Game.Graphics.Lines.SingleConnector[3] + new string(Game.Graphics.Lines.Single[1], MENU_WIDTH - 2) + Game.Graphics.Lines.SingleConnector[0] :
-                    // Regular item
+                    // ..or just a regular item
                     Game.Graphics.Lines.Single[0] + ConsoleTools.CenterString(MenuItem, MENU_WIDTH - 2) + Game.Graphics.Lines.Single[0]);
 
+                // Print item
                 ConsoleTools.WriteAndCenter(Core.Layer.Menu, item, MenuIndex);
             }
             ConsoleTools.WriteAndCenter(Core.Layer.Menu, bottom, MenuIndex + 1);
@@ -52,7 +58,7 @@ namespace fwod
             } while (inMenu);
 
             // Clear menu and reprint layer underneath
-
+            ClearMenu();
         }
 
         static internal void Entry()
@@ -76,42 +82,69 @@ namespace fwod
 
                 // Quitting menu
                 case ConsoleKey.Escape:
-                    ClearMenu();
                     inMenu = false;
                     break;
             }
         }
 
-        static internal void NextControl()
+        static void NextControl()
         {
+            // If index at Lenght of array...
+            
+
+            // Else increase index only if not MENU_SEP
+
+
+            // Update screen
 
         }
 
-        static internal void PreviousControl()
+        static void PreviousControl()
         {
 
         }
 
         static void Select()
         {
+            // swtich(MenuIndex) [...]
 
         }
 
+        static void UpdateMenuOnScreen()
+        {
+            // Place old text back
+
+
+            // Render new text
+
+        }
+
+        /// <summary>
+        /// Clears the menu and places things back on screen.
+        /// </summary>
         static void ClearMenu()
         {
             int startY = MENU_STARTTOP;
             int startX = (ConsoleTools.BufferWidth / 2) - (MENU_WIDTH / 2);
             int lengthY = MenuItems.Length + 4; // don't ask about the +4 like idk mang
+            int gamelayer = (int)Core.Layer.Game;
+
             for (int row = startY; row < lengthY; row++)
             {
                 for (int col = startX; col < ConsoleTools.BufferWidth; col++)
                 {
                     Console.SetCursorPosition(col, row);
-                    Console.Write(Core.Layers[(int)Core.Layer.Game][row, col]);
-                    Console.SetCursorPosition(col, row);
-                    Console.Write(Core.Layers[(int)Core.Layer.Player][row, col]);
+                    Console.Write(Core.Layers[gamelayer][row, col]);
                 }
             }
+
+            // Place enemies and player back on screen
+            foreach (Player enemy in Game.EnemyList)
+            {
+                enemy.Initialize();
+            }
+
+            MainClass.MainPlayer.Initialize();
         }
     }
 }

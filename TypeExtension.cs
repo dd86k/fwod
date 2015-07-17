@@ -1,5 +1,9 @@
 ﻿using System.Collections.Generic;
 
+/*
+    Type extensions
+*/
+
 namespace fwod
 {
     internal static class TypeExtension
@@ -8,7 +12,6 @@ namespace fwod
 
         internal static bool IsSolidObject(this char pChar)
         {
-            //TODO: Collisions also includes an enemy
             // .Contains can't take char and Mono doesn't like ToString()
             return SolidObjects.Contains(string.Format("{0}", pChar));
         }

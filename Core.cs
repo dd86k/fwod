@@ -11,11 +11,12 @@ namespace fwod
         /// <summary>
         /// Multi-layered char buffer
         /// </summary>
-        internal static char[][,] Layers = new char[3][,]
-        { // 3 layers of 25 row and 80 rolumns each
+        internal static char[][,] Layers = new char[4][,]
+        { // 4 layers of 25 row and 80 rolumns each
           // 2D Arrays work like this: [ROW, COL]
             new char[ConsoleTools.BufferHeight, ConsoleTools.BufferWidth], // Menu
             new char[ConsoleTools.BufferHeight, ConsoleTools.BufferWidth], // Bubbles
+            new char[ConsoleTools.BufferHeight, ConsoleTools.BufferWidth], // Player
             new char[ConsoleTools.BufferHeight, ConsoleTools.BufferWidth]  // Game
         };
 
@@ -24,7 +25,7 @@ namespace fwod
         /// </summary>
         internal enum Layer
         {
-            Menu, Player, Game
+            Menu, Bubble, Player, Game
         }
 
         #region Write

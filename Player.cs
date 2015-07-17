@@ -28,12 +28,17 @@ namespace fwod
 
                     // Get old char
                     char pastchar = Core.GetCharAt(Core.Layer.Game, this.PosX, this.PosY);
+                    
                     // Place old char
-                    //Core.Write(Core.Layer.Bubble, pastchar, this.PosX, this.PosY);
                     Console.SetCursorPosition(this.PosX, this.PosY);
                     Console.Write(pastchar);
+
+                    // Update event
+                    Game.UpdateEvent("Player moved " + (this._posx > value ? "left" : "right"));
+                    
                     // Update value
                     this._posx = value;
+                    
                     // Move player
                     Core.Write(Core.Layer.Player, this.CharacterChar, value, this.PosY);
                 }
@@ -57,12 +62,17 @@ namespace fwod
 
                     // Get old char
                     char pastchar = Core.GetCharAt(Core.Layer.Game, this.PosX, this.PosY);
+                    
                     // Place old char
-                    //Core.Write(Core.Layer.Bubble, pastchar, this.PosX, this.PosY);
                     Console.SetCursorPosition(this.PosX, this.PosY);
                     Console.Write(pastchar);
+
+                    // Update event
+                    Game.UpdateEvent("Player moved " + (this._posy > value ? "up" : "down"));
+                    
                     // Update value
                     this._posy = value;
+                    
                     // Move player
                     Core.Write(Core.Layer.Player, this.CharacterChar, this.PosX, value);
                 }
@@ -139,7 +149,6 @@ namespace fwod
         }
         #endregion
 
-        #region Methods
         /// <summary>
         /// Places the Player on screen.
         /// </summary>
@@ -149,6 +158,7 @@ namespace fwod
             this.PosY = this._posy;
         }
 
+        #region Conversation
         /// <summary>
         /// Makes the character talk.
         /// </summary>
@@ -223,7 +233,7 @@ namespace fwod
 
             // Insert Text
             for (int i = 0; i < Lines.Length; i++)
-                Core.Write(Core.Layer.Player, Lines[i], TextStartX, TextStartY + i); 
+                Core.Write(Core.Layer.Bubble, Lines[i], TextStartX, TextStartY + i); 
 
             // Waiting for keypress
             if (pWait) Console.ReadKey(true);
@@ -322,18 +332,18 @@ namespace fwod
         /// <param name="pPosY">Left position</param>
         void GenerateBubble(int pTextLength, int pLines, int pPosX, int pPosY)
         {
-            Game.GenerateBox(Core.Layer.Player, Game.TypeOfLine.Single, pPosX, pPosY, pTextLength + 2, pLines + 2);
+            Game.GenerateBox(Core.Layer.Bubble, Game.TypeOfLine.Single, pPosX, pPosY, pTextLength + 2, pLines + 2);
 
             // Bubble chat "connector"
             if (pPosY < this.PosY) // Over player
             {
                 Console.SetCursorPosition(this.PosX, this.PosY - 2);
-                Core.Write(Core.Layer.Player, Game.Graphics.Lines.SingleConnector[2]);
+                Core.Write(Core.Layer.Bubble, Game.Graphics.Lines.SingleConnector[2]);
             }
             else // Under player
             {
                 Console.SetCursorPosition(this.PosX, this.PosY + 2);
-                Core.Write(Core.Layer.Player, Game.Graphics.Lines.SingleConnector[1]);
+                Core.Write(Core.Layer.Bubble, Game.Graphics.Lines.SingleConnector[1]);
             }
 
             // Prepare to insert text

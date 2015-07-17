@@ -11,7 +11,7 @@ namespace fwod
         /// <summary>
         /// Initial buffer height
         /// </summary>
-        static internal readonly int BufferHeight = 23; // Compatibility reasons
+        static internal readonly int BufferHeight = 24; // Compatibility reasons
         /// <summary>
         /// Initial buffer width
         /// </summary>

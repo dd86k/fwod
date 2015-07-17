@@ -31,7 +31,7 @@ namespace fwod
             }
         }
 
-        static Player MainPlayer = new Player();
+        internal static Player MainPlayer = new Player();
         #endregion
 
         internal static int Main(string[] args)
