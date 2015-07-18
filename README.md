@@ -29,8 +29,8 @@ This list will change often and probably miss something.
 
 - [x] Multi-layer buffers
 - [x] Collision system
-- [ ] Menu <
-- [ ] Random chamber generator (Milestone)
+- [x] Menu
+- [ ] Random chamber generator (Milestone) <
 - [ ] Floor system
 - [ ] Enemy system
 - [ ] Attacking system
