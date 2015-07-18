@@ -16,6 +16,14 @@ namespace fwod
         /// Initial buffer width
         /// </summary>
         static internal readonly int BufferWidth = 80;
+        /// <summary>
+        /// Original foreground color
+        /// </summary>
+        static internal readonly ConsoleColor OriginalForegroundColor = Console.ForegroundColor;
+        /// <summary>
+        /// Original background color
+        /// </summary>
+        static internal readonly ConsoleColor OriginalBackgroundColor = Console.BackgroundColor;
 
         #region Center text
         /// <summary>

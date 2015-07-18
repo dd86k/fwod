@@ -9,10 +9,9 @@ namespace fwod
     internal class Menu
     {
         const int MENU_WIDTH = 60;
-        const int MENU_STARTTOP = 2;
+        const int MENU_STARTTOP = 4;
         const string MENU_SEPERATOR = "--";
-
-        static string[] MenuItems = new string[]
+        static readonly string[] MenuItems =
         {
             "Return",
             MENU_SEPERATOR,
@@ -23,33 +22,32 @@ namespace fwod
         };
 
         static bool inMenu = true;
-        static int MenuIndex = 0;
+        static int PastMenuIndex = 0, MenuIndex = 0;
 
         static internal void Show()
         {
-            //UNDONE: Menu.Show()
-
             // Generate and print the menu
-            int MenuIndex = MENU_STARTTOP;
             string top = Game.Graphics.Lines.SingleCorner[0] + ConsoleTools.RepeatChar(Game.Graphics.Lines.Single[1], MENU_WIDTH - 2) + Game.Graphics.Lines.SingleCorner[1];
             string bottom = Game.Graphics.Lines.SingleCorner[3] + ConsoleTools.RepeatChar(Game.Graphics.Lines.Single[1], MENU_WIDTH - 2) + Game.Graphics.Lines.SingleCorner[2];
 
-            ConsoleTools.WriteAndCenter(Core.Layer.Menu, top, MenuIndex);
-            foreach (string MenuItem in MenuItems)
+            // Generate menu
+            ConsoleTools.WriteAndCenter(Core.Layer.Menu, top, MENU_STARTTOP - 1);
+            for (int i = 0; i < MenuItems.Length; i++)
             {
-                MenuIndex++;
-
                 // Get the item if..
-                string item = (MenuItem == MENU_SEPERATOR ?
+                string item = (MenuItems[i] == MENU_SEPERATOR ?
                     // ..it's a MENU_SEPERATOR item
                     Game.Graphics.Lines.SingleConnector[3] + new string(Game.Graphics.Lines.Single[1], MENU_WIDTH - 2) + Game.Graphics.Lines.SingleConnector[0] :
                     // ..or just a regular item
-                    Game.Graphics.Lines.Single[0] + ConsoleTools.CenterString(MenuItem, MENU_WIDTH - 2) + Game.Graphics.Lines.Single[0]);
+                    Game.Graphics.Lines.Single[0] + ConsoleTools.CenterString(MenuItems[i], MENU_WIDTH - 2) + Game.Graphics.Lines.Single[0]);
 
                 // Print item
-                ConsoleTools.WriteAndCenter(Core.Layer.Menu, item, MenuIndex);
+                ConsoleTools.WriteAndCenter(Core.Layer.Menu, item, MENU_STARTTOP + i);
             }
-            ConsoleTools.WriteAndCenter(Core.Layer.Menu, bottom, MenuIndex + 1);
+            ConsoleTools.WriteAndCenter(Core.Layer.Menu, bottom, MENU_STARTTOP + MenuItems.Length);
+
+            // "Select" item
+            UpdateMenuOnScreen();
 
             // While in menu, do actions
             do
@@ -59,6 +57,8 @@ namespace fwod
 
             // Clear menu and reprint layer underneath
             ClearMenu();
+
+            // Returning to game!
         }
 
         static internal void Entry()
@@ -70,6 +70,7 @@ namespace fwod
                 case ConsoleKey.UpArrow:
                     PreviousControl();
                     break;
+
                 case ConsoleKey.DownArrow:
                     NextControl();
                     break;
@@ -87,36 +88,103 @@ namespace fwod
             }
         }
 
+        /// <summary>
+        /// Goes to the next control
+        /// </summary>
         static void NextControl()
         {
-            // If index at Lenght of array...
-            
+            bool found = false;
+            PastMenuIndex = MenuIndex;
 
-            // Else increase index only if not MENU_SEP
+            // Find a good index
+            while (!found)
+            {
+                MenuIndex++;
 
+                if (MenuIndex >= MenuItems.Length)
+                {
+                    MenuIndex = 0;
+                    found = true;
+                }
+
+                if (MenuItems[MenuIndex] != MENU_SEPERATOR)
+                    found = true;
+            }
 
             // Update screen
-
+            UpdateMenuOnScreen();
         }
 
+        /// <summary>
+        /// Goes to the previous control
+        /// </summary>
         static void PreviousControl()
         {
+            bool found = false;
+            PastMenuIndex = MenuIndex;
 
+            // Find a good index
+            while (!found)
+            {
+                MenuIndex--;
+
+                if (MenuIndex < 0)
+                {
+                    MenuIndex = MenuItems.Length - 1;
+                    found = true;
+                }
+
+                if (MenuItems[MenuIndex] != MENU_SEPERATOR)
+                    found = true;
+            }
+
+            // Update screen
+            UpdateMenuOnScreen();
         }
 
+        /// <summary>
+        /// Selects the 
+        /// </summary>
         static void Select()
         {
-            // swtich(MenuIndex) [...]
+            switch (MenuIndex)
+            { //UNDONE: switch (MenuIndex)
+                // Return
+                case 0:
+                    inMenu = false;
+                    break;
+                // Quit
+                case 5:
 
+                    break;
+            }
         }
 
+        /// <summary>
+        /// Update menu on screen
+        /// </summary>
         static void UpdateMenuOnScreen()
         {
-            // Place old text back
+            // Get coords
+            int MenuItemTop = MENU_STARTTOP + MenuIndex;
+            int MenuItemTopPast = MENU_STARTTOP + PastMenuIndex;
+            int MenuItemLeft = (ConsoleTools.BufferWidth / 2) - (MENU_WIDTH / 2);
 
+            // Remove old item's style
+            Console.SetCursorPosition(MenuItemLeft + 1, MenuItemTopPast);
+            Console.Write(ConsoleTools.CenterString(MenuItems[PastMenuIndex], MENU_WIDTH - 2));
 
-            // Render new text
+            // Apply colors
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.White;
 
+            // Apply new item's style
+            Console.SetCursorPosition(MenuItemLeft + 1, MenuItemTop);
+            Console.Write(ConsoleTools.CenterString(MenuItems[MenuIndex], MENU_WIDTH - 2));
+
+            // Revert to original colors
+            Console.ForegroundColor = ConsoleTools.OriginalForegroundColor;
+            Console.BackgroundColor = ConsoleTools.OriginalBackgroundColor;
         }
 
         /// <summary>
@@ -124,16 +192,16 @@ namespace fwod
         /// </summary>
         static void ClearMenu()
         {
-            int startY = MENU_STARTTOP;
+            int startY = MENU_STARTTOP - 1;
             int startX = (ConsoleTools.BufferWidth / 2) - (MENU_WIDTH / 2);
-            int lengthY = MenuItems.Length + 4; // don't ask about the +4 like idk mang
+            int lengthY = MenuItems.Length + 5; // don't ask about the +4 like idk mang
             int gamelayer = (int)Core.Layer.Game;
 
             for (int row = startY; row < lengthY; row++)
             {
                 for (int col = startX; col < ConsoleTools.BufferWidth; col++)
                 {
-                    Console.SetCursorPosition(col, row);
+                    Console.SetCursorPosition(col, row); // Safety measure
                     Console.Write(Core.Layers[gamelayer][row, col]);
                 }
             }

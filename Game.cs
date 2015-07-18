@@ -9,7 +9,7 @@ namespace fwod
 {
     internal class Game
     {
-        const string SaveFilenameModel = "fwod#.sg";
+        const string SaveFilenameModel = "fwod@.sg";
         const string ScreenshotFileNamePrefix = "screenshot-";
 
         /// <summary>
