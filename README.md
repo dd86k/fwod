@@ -9,19 +9,25 @@
 
 Hello! This is a little something I'd like to show you, it's simply a console application game using the .NET framework, while being Mono compatible.
 
-fwod would play like NetHack, a roguelike, turn-based game (well it's instant), dungeon crawling game.
+fwod would play like [NetHack](https://en.wikipedia.org/wiki/NetHack), a roguelike, turn-based game (well it's instantaneous), dungeon crawling game.
 
-Reason I'm doing this is to expand my knowledge about C# even further and learn more profoundly about game development. (In a way. Next might be with Unity)
+Reason I'm doing this is to expand my knowledge about C# even further and learn more profoundly about game development. (In a way. Next might be with the UnityAPI, who knows?)
 
-It's a personal project, so no rushing here.
+It's an open personal project, so no rushing here.
 
-You can always send me an [email](mailto:devddstuff@gmail.com) or open a ticket/issue. (I won't bite!)
+You can always send me an [email](mailto:devddstuff@gmail.com) (devddstuff@gmail.com) or open a ticket/issue. (I won't bite!)
 
 ### Notes
 - Code reorganization/restructures/cleanups are made from time to time
 - The game will change dramatically often during development process
-- Fixed 80x24 resolution (buffer-limited) for **maximum** compatiblity
+- Fixed 80x24 resolution for **maximum** compatiblity
 - Colors are planned
+- Mono doesn't like `{string}.ToString()`, using `string.Format("{0}", object)` is prefered.
+- A _milestone_ will be made when I reach 5000 tweets (with "alpha" builds).
+- Official "GameServer" planned.
+  - It's already set up, I just wish I could host it elsewhere than on my own network and server.
+  - Play the game via SSH.
+    - Telnet is considered.
 
 ### Progress
 
@@ -30,33 +36,32 @@ This list will change often and probably miss something.
 - [x] Multi-layer buffers
 - [x] Collision system
 - [x] Menu
-- [ ] Random chamber generator (Milestone) <
+- [ ] Random chamber generator <
 - [ ] Floor system
 - [ ] Enemy system
-- [ ] Attacking system
+- [ ] Attack system
 - [ ] Items
-- [ ] Inventory system (Milestone)
+- [ ] Inventory system
 - [ ] Leveling system
 - [ ] Bosses (Optional)
 - [ ] Final bug fixing round
 - [ ] Optimization round
 - [ ] Wiki (Optional)
-- [ ] Official Release (Milestone)
+- [ ] Official Release (Release)
 - [ ] Celebrate!
 
 ### Builds
-Some builds will be available on my [website](http://www.wilomgfx.net/didier/pages/fwod.html) (When I reach 5000 tweets).
-A "GameServer" (cool name huh?) will be available to play the game via SSH (no Mono/.NET required!).
-
-It will be accessible via this command:
-
-`ssh -p 1337 -l anon {IP/address to be announced}`
+Builds will be available on my [website](http://www.wilomgfx.net/didier/pages/fwod.html).
 
 ### General Issues
-- Code is _very_ unoptimized
-  - May redo the entire structure of it
+- Code may be _very_ unoptimized
+
+### Contributing
+You are free to fork my project in order to provide bug correcting suggestions.
+I try to be open ears most of the time.
 
 ### License
 This project uses the MIT license, which you can read from the LICENSE file.
+Copyright information is included in the LICENSE file.
 
 pls no bully :ok_hand::eyes::ok_hand::eyes::ok_hand::poop:
