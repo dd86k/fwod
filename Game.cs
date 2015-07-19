@@ -9,18 +9,24 @@ namespace fwod
 {
     internal class Game
     {
+        #region Constants
         const string SaveFilenameModel = "fwod@.sg";
         const string ScreenshotFileNamePrefix = "screenshot-";
+        #endregion
 
+        #region Players
         /// <summary>
         /// List of the enemies.
         /// </summary>
         internal static List<Player> EnemyList = new List<Player>();
-        // Reasons of using a List<T>:
-        // - You can't loop through a Dictionary<T, T> when a key isn't int (not even foreach)
-        // - Using a char as a key is a bad idea, since Player.Character can change
-        // - Arrays, once created, can't change size
 
+        /// <summary>
+        /// Main player
+        /// </summary>
+        internal static Player MainPlayer = new Player();
+        #endregion
+
+        #region Graphics
         /// <summary>
         /// Graphic characters (char[])
         /// </summary>
@@ -28,8 +34,8 @@ namespace fwod
         {
             internal struct Tiles
             {
-                internal static char[] Grades = new char[] {'░', '▒', '▓', '█'};
-                internal static char[] Half = new char[] {'▄', '▌', '▐', '▀'};
+                internal static char[] Grades = {'░', '▒', '▓', '█'};
+                internal static char[] Half = {'▄', '▌', '▐', '▀'};
             }
             internal struct Lines
             {
@@ -47,8 +53,18 @@ namespace fwod
                 internal static char[] DoubleHorizontalCorner = {'╕', '╛', '╘', '╒'};
                 internal static char[] DoubleHorizontalConnector = { '╡', '╧', '╤', '╞', '╪' };
             }
+            /*
+            internal struct Objects
+            {
+                internal static char StairsUp = '';
+                internal static char StairsDown = '';
+                internal static char Grass = '.';
+            }
+            */
         }
+        #endregion
 
+        #region Box generation
         /// <summary>
         /// Type of line to use.
         /// </summary>
@@ -57,7 +73,6 @@ namespace fwod
             Single, Double
         }
 
-        #region Box generation
         /// <summary>
         /// Generates a box.
         /// </summary>
@@ -140,25 +155,6 @@ namespace fwod
             Console.Write(new string(' ', ConsoleTools.BufferWidth - 2));
             Console.SetCursorPosition(1, ConsoleTools.BufferHeight - 2);
             Console.Write(pText);
-        }
-        #endregion
-
-        #region Utility
-        /// <summary>
-        /// Determine the Player with position
-        /// </summary>
-        /// <param name="pFutureX">Future left position</param>
-        /// <param name="pFutureY">Future top position</param>
-        /// <returns>Enemy, null if no found</returns>
-        internal static Player GetEnemyObjectAt(int pFutureX, int pFutureY)
-        {
-            foreach (Player Enemy in Game.EnemyList)
-            {
-                if (Enemy.PosX == pFutureX && Enemy.PosY == pFutureY)
-                    return Enemy;
-            }
-
-            return null;
         }
         #endregion
 

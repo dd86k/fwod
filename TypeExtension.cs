@@ -6,11 +6,25 @@ namespace fwod
 {
     internal static class TypeExtension
     {
-        const string SolidObjects = "░▒▓█▄█▀│─┤┴┬├┼┌┐┘└║═╣╩╦╠╬╔╗╝╚╣╩╦╠╬╗╝╚╔╣╩╦╠╬╔╗╝╚";
+        /// <summary>
+        /// Solid objects which the player can't pass through
+        /// </summary>
+        static readonly string SolidObjects = new string(Game.Graphics.Lines.Double) +
+            new string(Game.Graphics.Lines.DoubleConnector) +
+            new string(Game.Graphics.Lines.DoubleCorner) +
+            new string(Game.Graphics.Lines.DoubleHorizontalConnector) +
+            new string(Game.Graphics.Lines.DoubleHorizontalCorner) +
+            new string(Game.Graphics.Lines.DoubleVerticalConnector) +
+            new string(Game.Graphics.Lines.DoubleVerticalCorner) +
+            new string(Game.Graphics.Lines.Single) +
+            new string(Game.Graphics.Lines.SingleConnector) +
+            new string(Game.Graphics.Lines.SingleCorner) +
+            new string(Game.Graphics.Tiles.Grades) +
+            new string(Game.Graphics.Tiles.Half);
 
         internal static bool IsSolidObject(this char pChar)
         {
-            // .Contains can't take char and Mono doesn't like ToString()
+            // Note: .Contains can't take char and Mono doesn't like ToString()
             return SolidObjects.Contains(string.Format("{0}", pChar));
         }
 
@@ -28,8 +42,25 @@ namespace fwod
                     return true;
             }
 
-            // Return false if Count == 0 or not found
+            // Return false if not found
             return false;
+        }
+
+        /// <summary>
+        /// Determine the Player with position
+        /// </summary>
+        /// <param name="pFutureX">Future left position</param>
+        /// <param name="pFutureY">Future top position</param>
+        /// <returns>Enemy, null if no found</returns>
+        internal static Player GetEnemyObjectAt(int pFutureX, int pFutureY)
+        {
+            foreach (Player Enemy in Game.EnemyList)
+            {
+                if (Enemy.PosX == pFutureX && Enemy.PosY == pFutureY)
+                    return Enemy;
+            }
+
+            return null;
         }
     }
 }

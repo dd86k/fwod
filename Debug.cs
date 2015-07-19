@@ -229,7 +229,7 @@ namespace fwod
                 bool isTesting = true;
                 do
                 {
-                    isTesting = fwod.MainClass.Entry();
+                    fwod.MainClass.Entry();
                 } while (isTesting);
 
                 Pause(ref testnum);

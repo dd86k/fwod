@@ -23,11 +23,12 @@ You can always send me an [email](mailto:devddstuff@gmail.com) (devddstuff@gmail
 - Fixed 80x24 resolution for **maximum** compatiblity
 - Colors are planned
 - Mono doesn't like `{string}.ToString()`, using `string.Format("{0}", object)` is prefered.
-- A _milestone_ will be made when I reach 5000 tweets (with "alpha" builds).
+- A _milestone_ will be made when I reach 5000 tweets (with `Debug` builds).
 - Official "GameServer" planned.
   - It's already set up, I just wish I could host it elsewhere than on my own network and server.
   - Play the game via SSH.
     - Telnet is considered.
+- Using the `Release` compile config trims ~9.5KB compared to `Debug`
 
 ### Progress
 
@@ -36,16 +37,15 @@ This list will change often and probably miss something.
 - [x] Multi-layer buffers
 - [x] Collision system
 - [x] Menu
-- [ ] Random chamber generator <
-- [ ] Floor system
-- [ ] Enemy system
 - [ ] Attack system
 - [ ] Items
 - [ ] Inventory system
+- [ ] Enemy AI
+- [ ] Floor system
+- [ ] Random chamber generator
 - [ ] Leveling system
 - [ ] Bosses (Optional)
-- [ ] Final bug fixing round
-- [ ] Optimization round
+- [ ] Final bug fixing and optimization round
 - [ ] Wiki (Optional)
 - [ ] Official Release (Release)
 - [ ] Celebrate!

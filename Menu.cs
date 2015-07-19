@@ -8,9 +8,26 @@ namespace fwod
 {
     internal class Menu
     {
+        #region Constants
+        /// <summary>
+        /// Width of the menu
+        /// </summary>
         const int MENU_WIDTH = 60;
+        /// <summary>
+        /// Starting top position
+        /// </summary>
         const int MENU_STARTTOP = 4;
+        /// <summary>
+        /// Menu seperator item
+        /// </summary>
         const string MENU_SEPERATOR = "--";
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Menu items
+        /// </summary>
+        // May want to switch to a dictionary instead
         static readonly string[] MenuItems =
         {
             "Return",
@@ -21,9 +38,20 @@ namespace fwod
             "Quit"
         };
 
-        static bool inMenu = true;
-        static int PastMenuIndex = 0, MenuIndex = 0;
+        /// <summary>
+        /// Is user in the menu
+        /// </summary>
+        static bool inMenu;
 
+        /// <summary>
+        /// Present and past menu indexes
+        /// </summary>
+        static int PastMenuIndex = 0, MenuIndex = 0;
+        #endregion
+
+        /// <summary>
+        /// Show menu
+        /// </summary>
         static internal void Show()
         {
             inMenu = true;
@@ -63,6 +91,9 @@ namespace fwod
             // Returning to game!
         }
 
+        /// <summary>
+        /// Entry point for menu
+        /// </summary>
         static internal void Entry()
         {
             ConsoleKeyInfo cki = Console.ReadKey(true);
@@ -145,19 +176,21 @@ namespace fwod
         }
 
         /// <summary>
-        /// Selects the 
+        /// Selects the item in the menu
         /// </summary>
         static void Select()
         {
             switch (MenuIndex)
-            { //UNDONE: switch (MenuIndex)
+            {
                 // Return
                 case 0:
                     inMenu = false;
                     break;
+
                 // Quit
                 case 5:
-
+                    inMenu = false;
+                    MainClass.isPlaying = false;
                     break;
             }
         }
@@ -214,7 +247,7 @@ namespace fwod
                 enemy.Initialize();
             }
 
-            MainClass.MainPlayer.Initialize();
+            Game.MainPlayer.Initialize();
         }
     }
 }

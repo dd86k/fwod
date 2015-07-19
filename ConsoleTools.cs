@@ -8,10 +8,11 @@ namespace fwod
 {
     internal class ConsoleTools
     {
+        #region Properties
         /// <summary>
         /// Initial buffer height
         /// </summary>
-        static internal readonly int BufferHeight = 24; // Compatibility reasons
+        static internal readonly int BufferHeight = 24;
         /// <summary>
         /// Initial buffer width
         /// </summary>
@@ -24,15 +25,65 @@ namespace fwod
         /// Original background color
         /// </summary>
         static internal readonly ConsoleColor OriginalBackgroundColor = Console.BackgroundColor;
+        #endregion
 
-        #region Center text
+        #region Center text (Normal)
         /// <summary>
         /// Center text to middle and write
         /// </summary>
         /// <param name="pText">Input text</param>
-        static internal void WriteAndCenter(Core.Layer pLayer, string pText)
+        static internal void WriteAndCenter(string pText)
         {
-            WriteAndCenter(pLayer, pText, Console.CursorTop);
+            WriteAndCenter(pText, Console.CursorTop);
+        }
+
+        /// <summary>
+        /// Center text to middle and write to a specific top position
+        /// </summary>
+        /// <param name="pText">Input text</param>
+        /// <param name="pTopPosition">Top position</param>
+        static internal void WriteAndCenter(string pText, int pTopPosition)
+        {
+            // Calculate the starting position
+            int start = (BufferWidth / 2) - (pText.Length / 2);
+
+            // If the text is longer than the buffer, set it to 0
+            start = start + pText.Length > BufferWidth ? 0 : start;
+
+            // Print away at the current cursor height (top)
+            Console.SetCursorPosition(start, pTopPosition);
+            Console.Write(pText);
+        }
+
+        /// <summary>
+        /// Center text to middle and write, then moves a line foward
+        /// </summary>
+        /// <param name="pText">Input text</param>
+        static internal void WriteLineAndCenter(string pText)
+        {
+            WriteLineAndCenter(pText, Console.CursorTop);
+        }
+
+        /// <summary>
+        /// Center text to middle and write, then moves a line foward
+        /// </summary>
+        /// <param name="pText">Input text</param>
+        /// <param name="pTopPosition">Top position</param>
+        static internal void WriteLineAndCenter(string pText, int pTopPosition)
+        {
+            WriteAndCenter(pText, pTopPosition);
+            Console.SetCursorPosition(0, pTopPosition + 1);
+        }
+        #endregion
+
+        #region Center text (Core.cs)
+        /// <summary>
+        /// Center text to middle and write
+        /// </summary>
+        /// <param name="pText">Input text</param>
+        static internal void WriteAndCenterCore(string pText)
+        {
+            WriteAndCenter(pText, Console.CursorTop);
         }
 
         /// <summary>
@@ -44,8 +95,10 @@ namespace fwod
         {
             // Calculate the starting position
             int start = (BufferWidth / 2) - (pText.Length / 2);
+
             // If the text is longer than the buffer, set it to 0
             start = start + pText.Length > BufferWidth ? 0 : start;
+
             // Print away at the current cursor height (top)
             Console.SetCursorPosition(start, pTopPosition);
             Core.Write(pLayer, pText);
@@ -125,16 +178,11 @@ namespace fwod
             {
                 Core.Write(pLayer, pChar);
                 Console.SetCursorPosition(pPosX, pPosY++);
-                /* -- REASONS WHY I DO IT THIS WAY --
-                 * NEWLINE FUCKS UP SHIT
-                 * ADDING SPACE (for padding) OVERWRITES [anything in between] BUFFER
-                 * "hurr durr ur cpu cycles!!!11"
-                 */
             }
         }
         #endregion
 
-        #region Repeatetion
+        #region Repetition
         /// <summary>
         /// Generates a string out of a character
         /// </summary>
@@ -168,8 +216,6 @@ namespace fwod
         /// </summary>
         static internal void ResetConsoleOut()
         {
-            // If Console.OpenStandardOutput() fails on Linux, I'll just use this in the future
-            // ..Or use #if?
             System.IO.StreamWriter tw = new System.IO.StreamWriter(Console.OpenStandardOutput());
                 tw.AutoFlush = true;
                 Console.SetOut(tw);

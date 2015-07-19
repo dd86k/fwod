@@ -1,6 +1,4 @@
-﻿//#define DEBUGGER
-using System;
-using System.IO;
+﻿using System;
 using System.Reflection;
 
 /*
@@ -17,21 +15,15 @@ namespace fwod
 {
     class MainClass
     {
-        #region Consts
-        const string ProjectName = "Four Walls of Death";
+        #region Constants
+        const string ProjectName = "Four Walls Of Death";
         #endregion
 
         #region Properties
         static readonly string nl = System.Environment.NewLine;
-        static string ProjectVersion
-        {
-            get
-            {
-                return Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            }
-        }
-
-        internal static Player MainPlayer = new Player();
+        static readonly string ProjectVersion =
+                Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        static internal bool isPlaying = true;
         #endregion
 
         internal static int Main(string[] args)
@@ -42,10 +34,6 @@ namespace fwod
             string Pname = "Player";
             bool SkipIntro = false;
 
-            #if DEBUGGER
-                args = new string[] { "--debug" };
-            #endif
-
             for (int i = 0; i < args.Length; i++)
             {
                 switch (args[i])
@@ -54,30 +42,38 @@ namespace fwod
                     case "--help":
                         ShowHelp();
                         return 0;
+
                     case "--version":
                         ShowVersion();
                         return 0;
-                    case "-bosssays":
+
+                    case "--bosssays":
                     case "-B":
                         if (args[i + 1] != null)
                             bosstext = args[i + 1];
                         break;
-                    case "-playerchar":
+
+                    case "--playerchar":
                     case "-C":
                         if (args[i + 1] != null)
                             Pchar = args[i + 1][0];
                         break;
+
                     case "--skipintro":
+                    case "-S":
                         SkipIntro = true;
                         break;
+
+                    #if DEBUG
                     case "--showmeme":
                         Misc.ShowMeme(); // *shrugs*
                         return 0;
-                    #if DEBUG
+
                     case "--debug":
                         int returnint = 0;
                         Debug.StartTests(ref returnint);
                         return returnint;
+
                     case "--debugsay":
                         if (args[i + 1] != null)
                         {
@@ -89,27 +85,17 @@ namespace fwod
                 }
             }
 
+            // -- Before the game --
+
             Console.Clear();
             Console.Title = ProjectName + " " + ProjectVersion;
-
-            Game.EnemyList.Add(new Player());
-
-            int w = (ConsoleTools.BufferWidth / 4) + (ConsoleTools.BufferWidth / 2);
-            int h = ConsoleTools.BufferHeight / 2;
-
-            MainPlayer = new Player((ConsoleTools.BufferWidth / 4) + (ConsoleTools.BufferWidth / 2), 
-                ConsoleTools.BufferHeight / 2);
-            Game.EnemyList[0] = new Player(ConsoleTools.BufferWidth / 4,
-                ConsoleTools.BufferHeight / 2);
-
-            // == Before the game ==
 
             string BannerText = "* Welcome to " + ProjectName + " *";
             string BannerOutline = ConsoleTools.RepeatChar('*', BannerText.Length);
 
-            ConsoleTools.WriteLineAndCenter(Core.Layer.Game, BannerOutline);
-            ConsoleTools.WriteLineAndCenter(Core.Layer.Game, BannerText);
-            ConsoleTools.WriteLineAndCenter(Core.Layer.Game, BannerOutline);
+            ConsoleTools.WriteLineAndCenter(BannerOutline);
+            ConsoleTools.WriteLineAndCenter(BannerText);
+            ConsoleTools.WriteLineAndCenter(BannerOutline);
             Console.WriteLine();
 
             #if DEBUG
@@ -122,22 +108,29 @@ namespace fwod
             Console.ReadKey(true);
             Console.Clear();
 
-            // == Game starts here ==
+            // -- Game starts here --
 
-            Core.FillScreen(Core.Layer.Game, ' ');
+            // Add player and first enemy in game
+            Game.MainPlayer = new Player((ConsoleTools.BufferWidth / 4) + (ConsoleTools.BufferWidth / 2), 
+                ConsoleTools.BufferHeight / 2);
+            Game.EnemyList.Add(new Player(ConsoleTools.BufferWidth / 4,
+                ConsoleTools.BufferHeight / 2));
+
+            // Generate the 'main' box
             Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Double, 1, 1, ConsoleTools.BufferWidth - 2, ConsoleTools.BufferHeight - 3);
 
-            MainPlayer.CharacterName = Pname;
-            MainPlayer.CharacterChar = Pchar;
-            MainPlayer.Initialize();
+            // Set player stuff
+            Game.MainPlayer.CharacterName = Pname;
+            Game.MainPlayer.CharacterChar = Pchar;
+            Game.MainPlayer.Initialize();
             Game.EnemyList[0].CharacterChar = '#';
             Game.EnemyList[0].Initialize();
 
-            Game.UpdateEvent("You wake up after being defeated in battle");
+            Game.UpdateEvent("You wake up in a strange place");
 
             if (!SkipIntro)
             {
-                MainPlayer.Say("Arrgh! Where am I?");
+                Game.MainPlayer.Say("Ah! Where am I?");
 
                 Game.EnemyList[0].Say("Oh, you're awake...");
                 Game.EnemyList[0].Say("What is your name?");
@@ -145,45 +138,49 @@ namespace fwod
                 string tmp_name = string.Empty;
                 do
                 {
-                    tmp_name = MainPlayer.GetAnswer();
+                    tmp_name = Game.MainPlayer.GetAnswer();
+
                     // If the player entered at least something and not too long
                     if (tmp_name.Length == 0)
                         Game.EnemyList[0].Say("Say something!");
                     else if (tmp_name.Length > 25)
-                        Game.EnemyList[0].Say("Hey, that's way too long.");
+                        Game.EnemyList[0].Say("That's way too long.");
+
                 } while (tmp_name.Length == 0 || tmp_name.Length > 25);
 
-                MainPlayer.CharacterName = tmp_name;
-                MainPlayer.Say("It's " + MainPlayer.CharacterName + ".");
+                Game.MainPlayer.CharacterName = tmp_name;
+                Game.MainPlayer.Say("It's " + Game.MainPlayer.CharacterName + ".");
 
-                Game.EnemyList[0].Say("Well, it's your unlucky day.");
+                Game.EnemyList[0].Say("So, welcome to The Dungeon.");
 
-                MainPlayer.Say("Why?");
+                Game.MainPlayer.Say("The what now?");
 
-                Game.EnemyList[0].Say("Because I will kill you.");
+                Game.EnemyList[0].Say("We'll meet on the last floor.");
 
-                MainPlayer.Say("WHAT!?!?!");
+                Game.MainPlayer.Say("Um.. Okay?");
 
                 if (bosstext.Length > 0)
                     Game.EnemyList[0].Say(bosstext);
                 else
-                    Game.EnemyList[0].Say("I'll be back for you, " + MainPlayer.CharacterName + "!");
+                    Game.EnemyList[0].Say("I'll be back for you, " + Game.MainPlayer.CharacterName + "!");
+
+                //TODO: Make enemy walk to next floor and disapear
+
             }
 
-            bool isPlaying = true;
             do
             { // User is playing the game
-                isPlaying = Entry();
+                Entry();
             } while (isPlaying);
 
-            // == The user is leaving the game ==
+            // -- The user is leaving the game --
 
             Console.Clear();
 
             return 0;
         }
 
-        static internal bool Entry()
+        static internal void Entry()
         {
             ConsoleKeyInfo key = Console.ReadKey(true);
 
@@ -191,22 +188,22 @@ namespace fwod
             {
                 // Move up
                 case ConsoleKey.UpArrow:
-                    MainPlayer.MoveUp();
+                    Game.MainPlayer.MoveUp();
                     break;
 
                 // Move down
                 case ConsoleKey.DownArrow:
-                    MainPlayer.MoveDown();
+                    Game.MainPlayer.MoveDown();
                     break;
 
                 // Move left
                 case ConsoleKey.LeftArrow:
-                    MainPlayer.MoveLeft();
+                    Game.MainPlayer.MoveLeft();
                     break;
 
                 // Move right
                 case ConsoleKey.RightArrow:
-                    MainPlayer.MoveRight();
+                    Game.MainPlayer.MoveRight();
                     break;
 
                 // Menu button
@@ -216,41 +213,33 @@ namespace fwod
             }
 
             // Steps a "turn" since this is turn based.. ish
-            //Game.Turn();
-
-            return true;
+            //Game.TakeTurn();
         }
 
         static void ShowHelp()
         {
-            string Out = nl + "Usage:" + nl +
-                #if WINDOWS
-                    " fwod-win32 [options]" + nl + nl +
-                #elif LINUX
-                    " fwod-linux [options]" + nl + nl +
-                #endif
-                " -bosssays, -B     Custom text from the Boss" + nl +
-                "                   #P=Player name" + nl +
-                " -playerchar, -C   Sets the player's character" + nl +
-                " --skipintro       Skip intro and use defaults" + nl +
+            string Out = "Usage:" + nl +
+                    " fwod[.exe] [options]" + nl + nl +
+                " --bosssays, -B     Custom text from the Boss" + nl +
+                " --playerchar, -C   Sets the player's character" + nl +
+                " --skipintro, -S    Skip intro and use defaults" + nl +
                 nl +
-                "  --help, /?    Shows this screen" + nl +
-                "  --version     Shows version" + nl +
+                "  --help, /?      Shows this screen" + nl +
+                "  --version       Shows version" + nl +
                 nl +
-                "Have fun!" + nl;
+                "Have fun!";
             
             Console.Write(Out);
         }
 
         static void ShowVersion()
         {
-            // Should the credits be here or somewhere else?
-            string Out = nl + "Version " + ProjectVersion + nl +
+            string Out = ProjectName + " " + ProjectVersion + nl +
+                "Copyright (c) 2015 DD~!/guitarxhero" + nl +
+                "License: MIT License <http://opensource.org/licenses/MIT>" + nl +
                 nl +
                 " -- Credits --" + nl +
-                "DD~! (guitarxhero) - Original author" + nl +
-                nl +
-                "I'd like to thank the authors of Rogue, NetHack, and Pixel Dungeon for their awesome game and the many hours of fun I had in them." + nl;
+                "DD~! (guitarxhero) - Original author";
             
             Console.Write(Out);
         }

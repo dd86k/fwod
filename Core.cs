@@ -8,6 +8,7 @@ namespace fwod
 {
     class Core
     {
+        #region Layers
         /// <summary>
         /// Multi-layered char buffer
         /// </summary>
@@ -27,6 +28,7 @@ namespace fwod
         {
             Menu, Bubble, Player, Game
         }
+        #endregion
 
         #region Write
         /// <summary>
@@ -115,7 +117,7 @@ namespace fwod
         }
         #endregion
 
-        #region GetInfo
+        #region Get info
         /// <summary>
         /// Get a characters from a layer at a position.
         /// </summary>
@@ -125,7 +127,7 @@ namespace fwod
         /// <returns>Stored character.</returns>
         internal static char GetCharAt(Layer pLayer, int pPosX, int pPosY)
         {
-            return Layers[(int)pLayer][pPosY, pPosX]; //IDEA: Trinary if \0 ?
+            return Layers[(int)pLayer][pPosY, pPosX];
         }
         #endregion
 
@@ -165,7 +167,7 @@ namespace fwod
 
         #region Clear
         /// <summary>
-        /// Clears a layer, updates console
+        /// Clears a layer and prints to console
         /// </summary>
         /// <param name="pLayer">Layer to clear</param>
         internal static void ClearLayer(Layer pLayer)
@@ -192,7 +194,7 @@ namespace fwod
         }
 
         /// <summary>
-        /// Clears all layers and update console
+        /// Clears all layers and prints to console
         /// </summary>
         internal static void ClearAllLayers()
         {

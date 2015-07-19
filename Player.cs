@@ -97,7 +97,6 @@ namespace fwod
         /// <summary>
         /// Gets or sets the name of the character.
         /// </summary>
-        /// <value>The name of the character.</value>
         internal string CharacterName
         {
             get { return _characterName; }
@@ -149,6 +148,7 @@ namespace fwod
         }
         #endregion
 
+        #region Init
         /// <summary>
         /// Places the Player on screen.
         /// </summary>
@@ -157,6 +157,7 @@ namespace fwod
             this.PosX = this._posx;
             this.PosY = this._posy;
         }
+        #endregion
 
         #region Conversation
         /// <summary>
@@ -168,6 +169,11 @@ namespace fwod
             Say(pText, true);
         }
 
+        /// <summary>
+        /// Makes the character talk.
+        /// </summary>
+        /// <param name="pText">Text!</param>
+        /// <param name="pWait">Wait for keydown?</param>
         internal void Say(string pText, bool pWait)
         {
             string[] Lines = new string[] { pText }; // In case of multiline scenario
@@ -193,10 +199,6 @@ namespace fwod
             }
             // Minimum text so the bubble doesn't look too thin
             else Lines = new string[] { " " };
-
-            //TODO: The verification is already done via GenerateBox, so
-            // I'm wondering if I should just modify those values
-            // with a ref or out
 
             // X/Left bubble starting position
             int StartX = this.PosX - (Lines[0].Length / 2) - 1;
@@ -239,7 +241,6 @@ namespace fwod
             if (pWait) Console.ReadKey(true);
 
             // Clear bubble
-            //Console.SetCursorPosition(StartX, StartY);
             int lenH = StartX + Lines[0].Length + 2;
             int lenV = StartY + Lines.Length + 2;
             for (int row = StartY; row < lenV; row++)
@@ -255,7 +256,7 @@ namespace fwod
         /// <summary>
         /// Get input from Player.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Answer</returns>
         internal string GetAnswer()
         {
             // Generates temporary text for spacer
@@ -321,7 +322,7 @@ namespace fwod
         }
         #endregion
 
-        #region Talk
+        #region Bubble
         /// <summary>
         /// Generates the bubble for a player.
         /// </summary>
