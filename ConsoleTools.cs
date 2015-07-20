@@ -210,6 +210,55 @@ namespace fwod
         }
         #endregion
 
+        #region Read
+        /// <summary>
+        /// Readline with a maximum length.
+        /// </summary>
+        /// <param name="pLimit">Limit in characters</param>
+        /// <returns>User's input</returns>
+        internal static string ReadLine(int pLimit)
+        {
+            System.Text.StringBuilder _out = new System.Text.StringBuilder();
+            int _index = 0;
+            bool _get = true;
+            const char Enter = (char)ConsoleKey.Enter;
+            const char Backspace = (char)ConsoleKey.Backspace;
+            int OrigninalLeft = Console.CursorLeft;
+            while (_get)
+            {
+                char c = Console.ReadKey(true).KeyChar;
+
+                switch (c)
+                {
+                    case Enter:
+                        _get = false;
+                        break;
+                    case Backspace:
+                        if (_index > 0)
+                        {
+                            _out = _out.Remove(_out.Length - 1, 1);
+                            _index--;
+                            Console.SetCursorPosition(OrigninalLeft + _index, Console.CursorTop);
+                            Console.Write(' ');
+                            Console.SetCursorPosition(OrigninalLeft + _index, Console.CursorTop);
+                        }
+                        break;
+                    default:
+                        if (_index < pLimit)
+                        {
+                            _out.Append(c);
+                            _index++;
+                            Console.Write(c);
+                        }
+                        break;
+                }
+            }
+
+            if (_out.Length > 0) return _out.ToString();
+            return null;
+        }
+        #endregion
+
         #region Misc
         /// <summary>
         /// Resets the Console's Out to the original one

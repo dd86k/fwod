@@ -270,7 +270,7 @@ namespace fwod
             GenerateBubble(tmp.Length, 1, StartX, StartY);
 
             // Read input from player
-            string Out = Console.ReadLine();
+            string Out = ConsoleTools.ReadLine(25);
 
             // Clear bubble
             int lenH = StartX + tmp.Length + 2;

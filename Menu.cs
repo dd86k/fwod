@@ -12,7 +12,7 @@ namespace fwod
         /// <summary>
         /// Width of the menu
         /// </summary>
-        const int MENU_WIDTH = 60;
+        const int MENU_WIDTH = 40;
         /// <summary>
         /// Starting top position
         /// </summary>
@@ -27,7 +27,6 @@ namespace fwod
         /// <summary>
         /// Menu items
         /// </summary>
-        // May want to switch to a dictionary instead
         static readonly string[] MenuItems =
         {
             "Return",
@@ -35,7 +34,7 @@ namespace fwod
             "Save",
             "Load",
             MENU_SEPERATOR,
-            "Quit"
+            "Quit",
         };
 
         /// <summary>
@@ -205,15 +204,13 @@ namespace fwod
             int MenuItemTopPast = MENU_STARTTOP + PastMenuIndex;
             int MenuItemLeft = (ConsoleTools.BufferWidth / 2) - (MENU_WIDTH / 2);
 
-            // Remove old item's style
+            // Deselect old item
             Console.SetCursorPosition(MenuItemLeft + 1, MenuItemTopPast);
             Console.Write(ConsoleTools.CenterString(MenuItems[PastMenuIndex], MENU_WIDTH - 2));
 
-            // Apply colors
+            // Apply new item's style
             Console.ForegroundColor = ConsoleColor.Black;
             Console.BackgroundColor = ConsoleColor.White;
-
-            // Apply new item's style
             Console.SetCursorPosition(MenuItemLeft + 1, MenuItemTop);
             Console.Write(ConsoleTools.CenterString(MenuItems[MenuIndex], MENU_WIDTH - 2));
 
@@ -229,7 +226,7 @@ namespace fwod
         {
             int startY = MENU_STARTTOP - 1;
             int startX = (ConsoleTools.BufferWidth / 2) - (MENU_WIDTH / 2);
-            int lengthY = MenuItems.Length + 5; // don't ask about the +4 like idk mang
+            int lengthY = MenuItems.Length + 5; // Yeah I know it's that odd
             int gamelayer = (int)Core.Layer.Game;
 
             for (int row = startY; row < lengthY; row++)

@@ -20,7 +20,7 @@ You can always send me an [email](mailto:devddstuff@gmail.com) (devddstuff@gmail
 ### Notes
 - Code reorganization/restructures/cleanups are made from time to time
 - The game will change dramatically often during development process
-- Fixed 80x24 resolution for **maximum** compatiblity
+- Fixed 80x24 resolution for **maximum** compatiblity (ISO/ANSI screen size)
 - Colors are planned
 - Mono doesn't like `{string}.ToString()`, using `string.Format("{0}", object)` is prefered.
 - A _milestone_ will be made when I reach 5000 tweets (with `Debug` builds).
