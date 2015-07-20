@@ -143,10 +143,8 @@ namespace fwod
                     // If the player entered at least something and not too long
                     if (tmp_name.Length == 0)
                         Game.EnemyList[0].Say("Say something!");
-                    else if (tmp_name.Length > 25)
-                        Game.EnemyList[0].Say("That's way too long.");
 
-                } while (tmp_name.Length == 0 || tmp_name.Length > 25);
+                } while (tmp_name.Length == 0);
 
                 Game.MainPlayer.CharacterName = tmp_name;
                 Game.MainPlayer.Say("It's " + Game.MainPlayer.CharacterName + ".");

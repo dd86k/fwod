@@ -53,9 +53,6 @@ This list will change often and probably miss something.
 ### Builds
 Builds will be available on my [website](http://www.wilomgfx.net/didier/pages/fwod.html).
 
-### General Issues
-- Code may be _very_ unoptimized
-
 ### Contributing
 You are free to fork my project in order to provide bug correcting suggestions.
 I try to be open ears most of the time.
