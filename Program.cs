@@ -66,7 +66,7 @@ namespace fwod
 
                     #if DEBUG
                     case "--showmeme":
-                        Misc.ShowMeme(); // *shrugs*
+                        Misc.ShowMeme(); // :^)
                         return 0;
 
                     case "--debug":
@@ -128,6 +128,7 @@ namespace fwod
 
             Game.UpdateEvent("You wake up in a strange place");
 
+            #region Intro
             if (!SkipIntro)
             {
                 Game.MainPlayer.Say("Ah! Where am I?");
@@ -165,9 +166,10 @@ namespace fwod
                 //TODO: Make enemy walk to next floor and disapear
 
             }
+            #endregion
 
             do
-            { // User is playing the game
+            {
                 Entry();
             } while (isPlaying);
 

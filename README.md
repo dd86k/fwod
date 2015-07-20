@@ -15,7 +15,7 @@ Reason I'm doing this is to expand my knowledge about C# even further and learn 
 
 It's an open personal project, so no rushing here.
 
-You can always send me an [email](mailto:devddstuff@gmail.com) (devddstuff@gmail.com) or open a ticket/issue. (I won't bite!)
+You can always send me an email at devddstuff@gmail.com or open a ticket/issue. (I won't bite!)
 
 ### Notes
 - Code reorganization/restructures/cleanups are made from time to time
@@ -23,7 +23,7 @@ You can always send me an [email](mailto:devddstuff@gmail.com) (devddstuff@gmail
 - Fixed 80x24 resolution for **maximum** compatiblity (ISO/ANSI screen size)
 - Colors are planned
 - Mono doesn't like `{string}.ToString()`, using `string.Format("{0}", object)` is prefered.
-- A _milestone_ will be made when I reach 5000 tweets (with `Debug` builds).
+- A _Release_ will be made when I reach 5000 tweets (with `Debug` builds).
 - Official "GameServer" planned.
   - It's already set up, I just wish I could host it elsewhere than on my own network and server.
   - Play the game via SSH.

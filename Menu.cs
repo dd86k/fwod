@@ -30,10 +30,10 @@ namespace fwod
         static readonly MenuItem[] MenuItems =
         {
             new MenuItem("Return", MenuItemAction.Return),
-            new MenuItem(MENU_SEPERATOR, MenuItemAction.None),
+            new MenuItem(MENU_SEPERATOR),
             new MenuItem("Load", MenuItemAction.Load),
             new MenuItem("Save", MenuItemAction.Save),
-            new MenuItem(MENU_SEPERATOR, MenuItemAction.None),
+            new MenuItem(MENU_SEPERATOR),
             new MenuItem("Quit", MenuItemAction.Quit),
         };
 
@@ -44,6 +44,8 @@ namespace fwod
         {
             internal string Text;
             internal MenuItemAction Action;
+
+            internal MenuItem(string pText) : this(pText, MenuItemAction.None) { }
 
             internal MenuItem(string pText, MenuItemAction pAction)
             {
@@ -79,7 +81,6 @@ namespace fwod
         static internal void Show()
         {
             inMenu = true;
-            MenuItem gg = new MenuItem("Return", MenuItemAction.Return);
 
             // Generate and print the menu
             string top = Game.Graphics.Lines.SingleCorner[0] + ConsoleTools.RepeatChar(Game.Graphics.Lines.Single[1], MENU_WIDTH - 2) + Game.Graphics.Lines.SingleCorner[1];

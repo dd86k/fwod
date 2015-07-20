@@ -149,6 +149,16 @@ namespace fwod
         #endregion
 
         #region Events
+        /*
+        internal static void TakeTurn()
+        {
+            foreach (Player Enemy in EnemyList)
+            {
+
+            }
+        }
+        */
+
         internal static void UpdateEvent(string pText)
         {
             Console.SetCursorPosition(1, ConsoleTools.BufferHeight - 2);
