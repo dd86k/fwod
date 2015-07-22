@@ -45,22 +45,5 @@ namespace fwod
             // Return false if not found
             return false;
         }
-
-        /// <summary>
-        /// Determine the Player with position
-        /// </summary>
-        /// <param name="pFutureX">Future left position</param>
-        /// <param name="pFutureY">Future top position</param>
-        /// <returns>Enemy, null if no found</returns>
-        internal static Player GetEnemyObjectAt(int pFutureX, int pFutureY)
-        {
-            foreach (Player Enemy in Game.EnemyList)
-            {
-                if (Enemy.PosX == pFutureX && Enemy.PosY == pFutureY)
-                    return Enemy;
-            }
-
-            return null;
-        }
     }
 }

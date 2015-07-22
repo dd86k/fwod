@@ -11,7 +11,7 @@ Hello! This is a little something I'd like to show you, it's simply a console ap
 
 fwod would play like [NetHack](https://en.wikipedia.org/wiki/NetHack), a roguelike, turn-based game (well it's instantaneous), dungeon crawling game.
 
-Reason I'm doing this is to expand my knowledge about C# even further and learn more profoundly about game development. (In a way. Next might be with the UnityAPI, who knows?)
+Reason I'm doing this is to expand my knowledge about C# even further and learn more about game development. In a way. Next might be with the UnityAPI, who knows?
 
 It's an open personal project, so no rushing here.
 
@@ -23,16 +23,15 @@ You can always send me an email at devddstuff@gmail.com or open a ticket/issue. 
 - Fixed 80x24 resolution for **maximum** compatiblity (ISO/ANSI screen size)
 - Colors are planned
 - Mono doesn't like `{string}.ToString()`, using `string.Format("{0}", object)` is prefered.
-- A _Release_ will be made when I reach 5000 tweets (with `Debug` builds).
+- A _Release_ will be made when I reach 5000 tweets.
 - Official "GameServer" planned.
   - It's already set up, I just wish I could host it elsewhere than on my own network and server.
   - Play the game via SSH.
     - Telnet is considered.
 - Using the `Release` compile config trims ~9.5KB compared to `Debug`
+- Console is damaged-based, meaning I only update what I need on screen.
 
 ### Progress
-
-This list will change often and probably miss something.
 
 - [x] Multi-layer buffers
 - [x] Collision system
@@ -48,7 +47,7 @@ This list will change often and probably miss something.
 - [ ] Final bug fixing and optimization round
 - [ ] Wiki (Optional)
 - [ ] Official Release (Release)
-- [ ] Celebrate!
+  - [ ] Celebrate!
 
 ### Builds
 Builds will be available on my [website](http://www.wilomgfx.net/didier/pages/fwod.html).
@@ -56,6 +55,9 @@ Builds will be available on my [website](http://www.wilomgfx.net/didier/pages/fw
 ### Contributing
 You are free to fork my project in order to provide bug correcting suggestions.
 I try to be open ears most of the time.
+
+### Installing
+You only need Visual Studio 2012+, MonoDevelop, or Xamarin Studio, and you're good to go!
 
 ### License
 This project uses the MIT license, which you can read from the LICENSE file.

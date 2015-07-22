@@ -6,7 +6,7 @@
 
 namespace fwod
 {
-    class Core
+    static class Core
     {
         #region Layers
         /// <summary>
@@ -110,7 +110,7 @@ namespace fwod
         {
             for (int i = 0; i < pInput.Length; i++)
             {
-                Layers[(int)pLayer][Console.CursorTop, Console.CursorLeft + i] = pInput[i];
+                Layers[(int)pLayer][pPosY, pPosX + i] = pInput[i];
             }
 
             Console.WriteLine(pInput);

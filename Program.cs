@@ -47,20 +47,20 @@ namespace fwod
                         ShowVersion();
                         return 0;
 
-                    case "--bosssays":
                     case "-B":
+                    case "--bosssays":
                         if (args[i + 1] != null)
                             bosstext = args[i + 1];
                         break;
 
-                    case "--playerchar":
                     case "-C":
+                    case "--playerchar":
                         if (args[i + 1] != null)
                             Pchar = args[i + 1][0];
                         break;
 
-                    case "--skipintro":
                     case "-S":
+                    case "--skipintro":
                         SkipIntro = true;
                         break;
 
@@ -113,8 +113,7 @@ namespace fwod
             // Add player and first enemy in game
             Game.MainPlayer = new Player((ConsoleTools.BufferWidth / 4) + (ConsoleTools.BufferWidth / 2), 
                 ConsoleTools.BufferHeight / 2);
-            Game.EnemyList.Add(new Player(ConsoleTools.BufferWidth / 4,
-                ConsoleTools.BufferHeight / 2));
+            Game.EnemyList.Add(new Player(ConsoleTools.BufferWidth / 4, ConsoleTools.BufferHeight / 2));
 
             // Generate the 'main' box
             Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Double, 1, 1, ConsoleTools.BufferWidth - 2, ConsoleTools.BufferHeight - 3);
@@ -164,7 +163,6 @@ namespace fwod
                     Game.EnemyList[0].Say("I'll be back for you, " + Game.MainPlayer.CharacterName + "!");
 
                 //TODO: Make enemy walk to next floor and disapear
-
             }
             #endregion
 
@@ -218,30 +216,28 @@ namespace fwod
 
         static void ShowHelp()
         {
-            string Out = "Usage:" + nl +
-                    " fwod[.exe] [options]" + nl + nl +
-                " --bosssays, -B     Custom text from the Boss" + nl +
-                " --playerchar, -C   Sets the player's character" + nl +
-                " --skipintro, -S    Skip intro and use defaults" + nl +
-                nl +
-                "  --help, /?      Shows this screen" + nl +
-                "  --version       Shows version" + nl +
-                nl +
-                "Have fun!";
-            
-            Console.Write(Out);
+            Console.WriteLine(" Usage:");
+            Console.WriteLine("  fwod [options]");
+            Console.WriteLine();
+            Console.WriteLine("  -B --bosssays     Custom text from the Boss");
+            Console.WriteLine("  -C --playerchar   Sets the player's character");
+            Console.WriteLine("  -S --skipintro    Skip intro and use defaults");
+            Console.WriteLine();
+            Console.WriteLine("  --help, /?      Shows this screen");
+            Console.WriteLine("  --version       Shows version");
+            Console.WriteLine();
+            Console.WriteLine("Have fun!");
         }
 
         static void ShowVersion()
         {
-            string Out = ProjectName + " " + ProjectVersion + nl +
-                "Copyright (c) 2015 DD~!/guitarxhero" + nl +
-                "License: MIT License <http://opensource.org/licenses/MIT>" + nl +
-                nl +
-                " -- Credits --" + nl +
-                "DD~! (guitarxhero) - Original author";
-            
-            Console.Write(Out);
+            Console.WriteLine(ProjectName + " " + ProjectVersion );
+            Console.WriteLine("Copyright (c) 2015 DD~!/guitarxhero");
+            Console.WriteLine("License: MIT License <http://opensource.org/licenses/MIT>");
+            Console.WriteLine("Project page: https://github.com/guitarxhero/fwod");
+            Console.WriteLine();
+            Console.WriteLine(" -- Credits --");
+            Console.WriteLine("DD~! (guitarxhero) - Original author");
         }
     }
 }

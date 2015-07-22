@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace fwod
 {
-    internal class Game
+    static class Game
     {
         #region Constants
         const string SaveFilenameModel = "fwod@.sg";
@@ -24,6 +24,23 @@ namespace fwod
         /// Main player
         /// </summary>
         internal static Player MainPlayer = new Player();
+
+        /// <summary>
+        /// Determine the Player with position
+        /// </summary>
+        /// <param name="pFutureX">Future left position</param>
+        /// <param name="pFutureY">Future top position</param>
+        /// <returns>Enemy, null if no found</returns>
+        internal static Player GetEnemyObjectAt(int pFutureX, int pFutureY)
+        {
+            foreach (Player Enemy in Game.EnemyList)
+            {
+                if (Enemy.PosX == pFutureX && Enemy.PosY == pFutureY)
+                    return Enemy;
+            }
+
+            return null;
+        }
         #endregion
 
         #region Graphics

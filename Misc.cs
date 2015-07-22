@@ -7,7 +7,7 @@ using System;
 
 namespace fwod
 {
-    internal class Misc
+    static class Misc
     {
         /// <summary>
         /// thank you Wunkolo for existing 👌👀

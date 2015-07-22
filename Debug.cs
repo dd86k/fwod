@@ -250,11 +250,10 @@ namespace fwod
             catch (Exception ex)
             {
                 Console.WriteLine();
-                Console.WriteLine();
                 Console.WriteLine("  !! An error occurred during test #" + testnum + " !!");
-                Console.WriteLine("Exception: " + ex.GetType().ToString() + " " + string.Format("(0x{0:X8})", ex.HResult));
+                Console.WriteLine("Exception: " + ex.GetType().ToString() + " - " + string.Format("0x{0:X8}", ex.HResult));
                 Console.WriteLine("Message: " + ex.Message);
-                Console.WriteLine(" -- Stack --" );
+                Console.WriteLine("    -- Stack --");
                 Console.WriteLine(ex.StackTrace);
 
                 pReturnInt = ex.HResult;

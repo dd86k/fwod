@@ -6,17 +6,17 @@
 
 namespace fwod
 {
-    internal class ConsoleTools
+    static class ConsoleTools
     {
         #region Properties
         /// <summary>
         /// Initial buffer height
         /// </summary>
-        static internal readonly int BufferHeight = 24;
+        internal const int BufferHeight = 24;
         /// <summary>
         /// Initial buffer width
         /// </summary>
-        static internal readonly int BufferWidth = 80;
+        internal const int BufferWidth = 80;
         /// <summary>
         /// Original foreground color
         /// </summary>
@@ -221,15 +221,22 @@ namespace fwod
             System.Text.StringBuilder _out = new System.Text.StringBuilder();
             int _index = 0;
             bool _get = true;
+            int OrigninalLeft = Console.CursorLeft;
+
             const char Enter = (char)ConsoleKey.Enter;
             const char Backspace = (char)ConsoleKey.Backspace;
-            int OrigninalLeft = Console.CursorLeft;
+            const char Tab = (char)ConsoleKey.Tab;
+
             while (_get)
             {
                 char c = Console.ReadKey(true).KeyChar;
 
                 switch (c)
                 {
+                    case '\0':
+                    case Tab:
+                        break;
+
                     case Enter:
                         _get = false;
                         break;
@@ -256,18 +263,6 @@ namespace fwod
 
             if (_out.Length > 0) return _out.ToString();
             return null;
-        }
-        #endregion
-
-        #region Misc
-        /// <summary>
-        /// Resets the Console's Out to the original one
-        /// </summary>
-        static internal void ResetConsoleOut()
-        {
-            System.IO.StreamWriter tw = new System.IO.StreamWriter(Console.OpenStandardOutput());
-                tw.AutoFlush = true;
-                Console.SetOut(tw);
         }
         #endregion
     }

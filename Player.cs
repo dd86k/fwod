@@ -22,25 +22,37 @@ namespace fwod
             {
                 char futrG = Core.GetCharAt(Core.Layer.Game, value, this.PosY);
                 char futrP = Core.GetCharAt(Core.Layer.Player, value, this.PosY);
-                if (!futrG.IsSolidObject() && !futrP.IsEnemyObject())
+                bool futrIsSolid = futrG.IsSolidObject();
+                bool futrIsEnemy = futrP.IsEnemyObject();
+                if (!futrIsSolid)
                 {
-                    // Note: if future coord is enemy, attack enemy instead
+                    if (futrIsEnemy)
+                    {
+                        Player Enemy = Game.GetEnemyObjectAt(value, this.PosY);
+                        if (Enemy != null)
+                        {
+                            Enemy.Say("Stop poking me!");
+                            Enemy.HP--;
+                        }
+                    }
+                    else
+                    {
+                        // Get old char
+                        char pastchar = Core.GetCharAt(Core.Layer.Game, this.PosX, this.PosY);
 
-                    // Get old char
-                    char pastchar = Core.GetCharAt(Core.Layer.Game, this.PosX, this.PosY);
-                    
-                    // Place old char
-                    Console.SetCursorPosition(this.PosX, this.PosY);
-                    Console.Write(pastchar);
+                        // Place old char
+                        Console.SetCursorPosition(this.PosX, this.PosY);
+                        Console.Write(pastchar);
 
-                    // Update event
-                    Game.UpdateEvent("Player moved " + (this._posx > value ? "left" : "right"));
-                    
-                    // Update value
-                    this._posx = value;
-                    
-                    // Move player
-                    Core.Write(Core.Layer.Player, this.CharacterChar, value, this.PosY);
+                        // Update event
+                        Game.UpdateEvent("Player moved " + (this._posx > value ? "left" : "right"));
+
+                        // Update value
+                        this._posx = value;
+
+                        // Move player
+                        Core.Write(Core.Layer.Player, this.CharacterChar, value, this.PosY);
+                    }
                 }
             }
         }
@@ -56,25 +68,37 @@ namespace fwod
             {
                 char futrG = Core.GetCharAt(Core.Layer.Game, this.PosX, value);
                 char futrP = Core.GetCharAt(Core.Layer.Player, this.PosX, value);
-                if (!futrG.IsSolidObject() && !futrP.IsEnemyObject())
+                bool futrIsSolid = futrG.IsSolidObject();
+                bool futrIsEnemy = futrP.IsEnemyObject();
+                if (!futrIsSolid)
                 {
-                    // Note: if future coord is enemy, attack enemy instead
+                    if (futrIsEnemy)
+                    {
+                        Player Enemy = Game.GetEnemyObjectAt(this.PosX, value);
+                        if (Enemy != null)
+                        {
+                            Enemy.Say("Stop poking me!");
+                            Enemy.HP--;
+                        }
+                    }
+                    else
+                    {
+                        // Get old char
+                        char pastchar = Core.GetCharAt(Core.Layer.Game, this.PosX, this.PosY);
 
-                    // Get old char
-                    char pastchar = Core.GetCharAt(Core.Layer.Game, this.PosX, this.PosY);
-                    
-                    // Place old char
-                    Console.SetCursorPosition(this.PosX, this.PosY);
-                    Console.Write(pastchar);
+                        // Place old char
+                        Console.SetCursorPosition(this.PosX, this.PosY);
+                        Console.Write(pastchar);
 
-                    // Update event
-                    Game.UpdateEvent("Player moved " + (this._posy > value ? "up" : "down"));
-                    
-                    // Update value
-                    this._posy = value;
-                    
-                    // Move player
-                    Core.Write(Core.Layer.Player, this.CharacterChar, this.PosX, value);
+                        // Update event
+                        Game.UpdateEvent("Player moved " + (this._posy > value ? "up" : "down"));
+
+                        // Update value
+                        this._posy = value;
+
+                        // Move player
+                        Core.Write(Core.Layer.Player, this.CharacterChar, this.PosX, value);
+                    }
                 }
             }
         }
@@ -87,10 +111,13 @@ namespace fwod
         {
             get { return _hp; }
             set
-            {
+            {//TODO: hp == 0 -> disapear
                 _hp = value;
-                Console.SetCursorPosition(ConsoleTools.BufferWidth / 2, 0);
-                Console.Write("HP: " + _hp);
+                if (Game.MainPlayer == this)
+                {
+                    Console.SetCursorPosition(ConsoleTools.BufferWidth / 2, 0);
+                    Console.Write("HP: " + _hp);
+                }
             }
         }
 
