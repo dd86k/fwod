@@ -176,7 +176,11 @@ namespace fwod
         }
         */
 
-        internal static void UpdateEvent(string pText)
+        /// <summary>
+        /// Display what's going on.
+        /// </summary>
+        /// <param name="pText">Event entry.</param>
+        internal static void Display(string pText)
         {
             Console.SetCursorPosition(1, ConsoleTools.BufferHeight - 2);
             Console.Write(new string(' ', ConsoleTools.BufferWidth - 2));

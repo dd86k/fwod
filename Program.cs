@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Reflection;
 
 /*
     This is the entry point of the program.
 */
 
 #if DEBUG
-[assembly: AssemblyVersion("0.3.5.*")]
+[assembly: System.Reflection.AssemblyVersion("0.3.6.*")]
 #else
-[assembly: AssemblyVersion("0.3.5.0")]
+[assembly: System.Reflection.AssemblyVersion("0.3.6.0")]
 #endif
 
 namespace fwod
@@ -22,7 +21,7 @@ namespace fwod
         #region Properties
         static readonly string nl = System.Environment.NewLine;
         static readonly string ProjectVersion =
-                Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                string.Format("{0}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
         static internal bool isPlaying = true;
         #endregion
 
@@ -124,8 +123,9 @@ namespace fwod
             Game.MainPlayer.Initialize();
             Game.EnemyList[0].CharacterChar = '#';
             Game.EnemyList[0].Initialize();
+            Game.EnemyList[0].HP = 2;
 
-            Game.UpdateEvent("You wake up in a strange place");
+            Game.Display("You wake up in a strange place");
 
             #region Intro
             if (!SkipIntro)

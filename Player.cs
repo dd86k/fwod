@@ -29,7 +29,8 @@ namespace fwod
                     if (futrIsEnemy)
                     {
                         Player Enemy = Game.GetEnemyObjectAt(value, this.PosY);
-                        if (Enemy != null)
+
+                        if (Enemy != null && Enemy != this)
                         {
                             Enemy.Say("Stop poking me!");
                             Enemy.HP--;
@@ -45,7 +46,7 @@ namespace fwod
                         Console.Write(pastchar);
 
                         // Update event
-                        Game.UpdateEvent("Player moved " + (this._posx > value ? "left" : "right"));
+                        Game.Display("Player moved " + (this._posx > value ? "left" : "right"));
 
                         // Update value
                         this._posx = value;
@@ -75,7 +76,8 @@ namespace fwod
                     if (futrIsEnemy)
                     {
                         Player Enemy = Game.GetEnemyObjectAt(this.PosX, value);
-                        if (Enemy != null)
+                        
+                        if (Enemy != null && Enemy != this)
                         {
                             Enemy.Say("Stop poking me!");
                             Enemy.HP--;
@@ -91,7 +93,7 @@ namespace fwod
                         Console.Write(pastchar);
 
                         // Update event
-                        Game.UpdateEvent("Player moved " + (this._posy > value ? "up" : "down"));
+                        Game.Display("Player moved " + (this._posy > value ? "up" : "down"));
 
                         // Update value
                         this._posy = value;
@@ -107,22 +109,30 @@ namespace fwod
         /// <summary>
         /// Gets or sets the HP.
         /// </summary>
-        int HP
+        internal int HP
         {
             get { return _hp; }
             set
-            {//TODO: hp == 0 -> disapear
+            {
                 _hp = value;
+
                 if (Game.MainPlayer == this)
                 {
                     Console.SetCursorPosition(ConsoleTools.BufferWidth / 2, 0);
-                    Console.Write("HP: " + _hp);
+                    Console.Write(new string(' ', 7));
+                    Console.SetCursorPosition(ConsoleTools.BufferWidth / 2, 0);
+                    Console.Write(string.Format("HP: {0,3}", this.HP));
                 }
+
+                if (this.HP <= 0)
+                    this.Destroy();
             }
         }
 
+        string _characterName;
         /// <summary>
         /// Gets or sets the name of the character.
+        /// Not to use with an enemy!
         /// </summary>
         internal string CharacterName
         {
@@ -139,14 +149,9 @@ namespace fwod
         }
 
         /// <summary>
-        /// The character's char.
+        /// The Player's literal character.
         /// </summary>
         internal char CharacterChar;
-
-        /// <summary>
-        /// The Player's name.
-        /// </summary>
-        string _characterName;
         #endregion
 
         #region Construction
@@ -376,6 +381,17 @@ namespace fwod
 
             // Prepare to insert text
             Console.SetCursorPosition(pPosX + 1, pPosY + 1);
+        }
+        #endregion
+
+        #region Destroy
+        /// <summary>
+        /// Remove completely from game.
+        /// Not to use with the MainPlayer!
+        /// </summary>
+        internal void Destroy()
+        {
+            Game.EnemyList.Remove(this);
         }
         #endregion
     }
