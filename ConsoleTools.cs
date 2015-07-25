@@ -10,11 +10,11 @@ namespace fwod
     {
         #region Properties
         /// <summary>
-        /// Initial buffer height
+        /// Initial buffer height. ANSI/ISO screen size.
         /// </summary>
         internal const int BufferHeight = 24;
         /// <summary>
-        /// Initial buffer width
+        /// Initial buffer width. ANSI/ISO screen size.
         /// </summary>
         internal const int BufferWidth = 80;
         /// <summary>

@@ -35,7 +35,7 @@ namespace fwod
         /// <returns>True if player</returns>
         internal static bool IsEnemyObject(this char pChar)
         {
-            foreach (Player Enemy in Game.EnemyList)
+            foreach (Person Enemy in Game.EnemyList)
             {
                 // Return true if we find it in the list
                 if (Enemy.CharacterChar == pChar)

@@ -83,7 +83,7 @@ namespace fwod
                 #region Test #6
                 Console.Write("Test #" + testnum + ": Create Player with custom position");
 
-                Player p = new Player(ConsoleTools.BufferWidth / 2, ConsoleTools.BufferHeight - 3);
+                Person p = new Person(ConsoleTools.BufferWidth / 2, ConsoleTools.BufferHeight - 3);
 
                 p.Initialize();
 
@@ -95,7 +95,7 @@ namespace fwod
 
                 p.Initialize(); // Pause() clears the buffer
 
-                ConsoleTools.WriteAndCenter(Core.Layer.Player, "What is your favorite food?", p.PosY - 5);
+                ConsoleTools.WriteAndCenter(Core.Layer.Person, "What is your favorite food?", p.PosY - 5);
 
                 string tt = p.GetAnswer();
 
@@ -145,7 +145,7 @@ namespace fwod
                 #region Test #12
                 Console.Write("Test #" + testnum + ": Recreate player at X:3 and make him talk");
 
-                p = new Player(3, ConsoleTools.BufferHeight - 4);
+                p = new Person(3, ConsoleTools.BufferHeight - 4);
 
                 p.Initialize(); // Pause() clears the buffer
 
@@ -157,7 +157,7 @@ namespace fwod
                 #region Test #13
                 Console.Write("Test #" + testnum + ": Recreate player at X:3|Y:1 and make him talk a bit more");
 
-                p = new Player(10, 1);
+                p = new Person(10, 1);
 
                 p.Initialize(); // Pause() clears the buffer
 
@@ -169,7 +169,7 @@ namespace fwod
                 #region Test #14
                 Console.Write("Test #" + testnum + ": Recreate player at the right and make him talk");
 
-                p = new Player(ConsoleTools.BufferWidth - 3, ConsoleTools.BufferHeight - 2);
+                p = new Person(ConsoleTools.BufferWidth - 3, ConsoleTools.BufferHeight - 2);
 
                 p.Initialize(); // Pause() clears the buffer
 
@@ -212,7 +212,7 @@ namespace fwod
                 // Wait
                 Console.ReadKey(true);
                 // Place player
-                p = new Player();
+                p = new Person();
                 p.Initialize();
                 p.Say("Woah!");
 
@@ -270,7 +270,7 @@ namespace fwod
         static internal void TalkTest(string pText)
         {
             Console.Clear();
-            Player p = new Player(ConsoleTools.BufferWidth / 2, ConsoleTools.BufferHeight - 3);
+            Person p = new Person(ConsoleTools.BufferWidth / 2, ConsoleTools.BufferHeight - 3);
             p.Initialize();
             p.Say(pText);
             Console.Clear();

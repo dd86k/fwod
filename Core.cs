@@ -12,11 +12,10 @@ namespace fwod
         /// <summary>
         /// Multi-layered char buffer
         /// </summary>
-        internal static char[][,] Layers = new char[4][,]
-        { // 4 layers of 25 row and 80 rolumns each
+        internal static char[][,] Layers = new char[3][,]
+        { // 3 layers of 25 row and 80 rolumns each
           // 2D Arrays work like this: [ROW, COL]
             new char[ConsoleTools.BufferHeight, ConsoleTools.BufferWidth], // Menu
-            new char[ConsoleTools.BufferHeight, ConsoleTools.BufferWidth], // Bubbles
             new char[ConsoleTools.BufferHeight, ConsoleTools.BufferWidth], // Player
             new char[ConsoleTools.BufferHeight, ConsoleTools.BufferWidth]  // Game
         };
@@ -26,7 +25,7 @@ namespace fwod
         /// </summary>
         internal enum Layer
         {
-            Menu, Bubble, Player, Game
+            Menu, Person, Game, None
         }
         #endregion
 
@@ -50,7 +49,8 @@ namespace fwod
         /// <param name="pPosY">Top position.</param>
         internal static void Write(Layer pLayer, char pInput, int pPosX, int pPosY)
         {
-            Layers[(int)pLayer][pPosY, pPosX] = pInput;
+            if (pLayer != Layer.None)
+                Layers[(int)pLayer][pPosY, pPosX] = pInput;
             Console.SetCursorPosition(pPosX, pPosY);
             Console.Write(pInput);
         }
@@ -74,9 +74,12 @@ namespace fwod
         /// <param name="pPosY">Top position.</param>
         internal static void Write(Layer pLayer, string pInput, int pPosX, int pPosY)
         {
-            for (int i = 0; i < pInput.Length; i++)
+            if (pLayer != Layer.None)
             {
-                Layers[(int)pLayer][pPosY, pPosX + i] = pInput[i];
+                for (int i = 0; i < pInput.Length; i++)
+                {
+                    Layers[(int)pLayer][pPosY, pPosX + i] = pInput[i];
+                }
             }
 
             Console.SetCursorPosition(pPosX, pPosY);
@@ -97,7 +100,9 @@ namespace fwod
 
         internal static void WriteLine(Layer pLayer, char pInput, int pPosX, int pPosY)
         {
-            Layers[(int)pLayer][pPosY, pPosX] = pInput;
+            if (pLayer != Layer.None)
+                Layers[(int)pLayer][pPosY, pPosX] = pInput;
+
             Console.WriteLine(pInput);
         }
 
@@ -108,9 +113,12 @@ namespace fwod
 
         internal static void WriteLine(Layer pLayer, string pInput, int pPosX, int pPosY)
         {
-            for (int i = 0; i < pInput.Length; i++)
+            if (pLayer != Layer.None)
             {
-                Layers[(int)pLayer][pPosY, pPosX + i] = pInput[i];
+                for (int i = 0; i < pInput.Length; i++)
+                {
+                    Layers[(int)pLayer][pPosY, pPosX + i] = pInput[i];
+                }
             }
 
             Console.WriteLine(pInput);

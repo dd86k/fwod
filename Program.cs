@@ -21,7 +21,8 @@ namespace fwod
         #region Properties
         static readonly string nl = System.Environment.NewLine;
         static readonly string ProjectVersion =
-                string.Format("{0}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
+                string.Format("{0}",
+                System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
         static internal bool isPlaying = true;
         #endregion
 
@@ -110,9 +111,9 @@ namespace fwod
             // -- Game starts here --
 
             // Add player and first enemy in game
-            Game.MainPlayer = new Player((ConsoleTools.BufferWidth / 4) + (ConsoleTools.BufferWidth / 2), 
+            Game.MainPlayer = new Person((ConsoleTools.BufferWidth / 4) + (ConsoleTools.BufferWidth / 2), 
                 ConsoleTools.BufferHeight / 2);
-            Game.EnemyList.Add(new Player(ConsoleTools.BufferWidth / 4, ConsoleTools.BufferHeight / 2));
+            Game.EnemyList.Add(new Person(ConsoleTools.BufferWidth / 4, ConsoleTools.BufferHeight / 2));
 
             // Generate the 'main' box
             Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Double, 1, 1, ConsoleTools.BufferWidth - 2, ConsoleTools.BufferHeight - 3);
@@ -120,12 +121,14 @@ namespace fwod
             // Set player stuff
             Game.MainPlayer.CharacterName = Pname;
             Game.MainPlayer.CharacterChar = Pchar;
+            Game.MainPlayer.PersonType = Person.Type.Player;
             Game.MainPlayer.Initialize();
             Game.EnemyList[0].CharacterChar = '#';
+            Game.EnemyList[0].HP = 1;
+            Game.EnemyList[0].PersonType = Person.Type.MysteriousStranger;
             Game.EnemyList[0].Initialize();
-            Game.EnemyList[0].HP = 2;
 
-            Game.Display("You wake up in a strange place");
+            Game.DisplayEvent("You wake up in a strange place");
 
             #region Intro
             if (!SkipIntro)
@@ -135,25 +138,32 @@ namespace fwod
                 Game.EnemyList[0].Say("Oh, you're awake...");
                 Game.EnemyList[0].Say("What is your name?");
 
-                string tmp_name = string.Empty;
-                do
+                if (Pname == "Player")
                 {
-                    tmp_name = Game.MainPlayer.GetAnswer();
+                    string tmp_name = string.Empty;
 
-                    // If the player entered at least something and not too long
-                    if (tmp_name.Length == 0)
-                        Game.EnemyList[0].Say("Say something!");
+                    do
+                    {
+                        tmp_name = Game.MainPlayer.GetAnswer();
 
-                } while (tmp_name.Length == 0);
+                        // If the player entered at least something and not too long
+                        if (tmp_name.Length == 0)
+                            Game.EnemyList[0].Say("Say something!");
 
-                Game.MainPlayer.CharacterName = tmp_name;
+                    } while (tmp_name.Length == 0);
+
+                    Game.MainPlayer.CharacterName = tmp_name;
+                }
+
                 Game.MainPlayer.Say("It's " + Game.MainPlayer.CharacterName + ".");
 
                 Game.EnemyList[0].Say("So, welcome to The Dungeon.");
+                Game.MainPlayer.HP--;
+                Game.EnemyList[0].Say("Here's your HP meter.");
 
-                Game.MainPlayer.Say("The what now?");
+                Game.MainPlayer.Say("My HP...?");
 
-                Game.EnemyList[0].Say("We'll meet on the last floor.");
+                Game.EnemyList[0].Say("Health Points, boy.");
 
                 Game.MainPlayer.Say("Um.. Okay?");
 
@@ -162,7 +172,11 @@ namespace fwod
                 else
                     Game.EnemyList[0].Say("I'll be back for you, " + Game.MainPlayer.CharacterName + "!");
 
+                Game.MainPlayer.Say("Wait!");
+
                 //TODO: Make enemy walk to next floor and disapear
+
+                Game.MainPlayer.Say("Oh, alright.. Time to get out.");
             }
             #endregion
 
@@ -231,7 +245,7 @@ namespace fwod
 
         static void ShowVersion()
         {
-            Console.WriteLine(ProjectName + " " + ProjectVersion );
+            Console.WriteLine(ProjectName + " - " + ProjectVersion );
             Console.WriteLine("Copyright (c) 2015 DD~!/guitarxhero");
             Console.WriteLine("License: MIT License <http://opensource.org/licenses/MIT>");
             Console.WriteLine("Project page: https://github.com/guitarxhero/fwod");

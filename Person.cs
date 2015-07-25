@@ -1,16 +1,20 @@
 ﻿using System;
 
 /*
-    This class is about the Player.
-    Reason is an enemy uses this class is simply
-    due to lazyness. I could of just used an interface.
+    A Person, whenever it be a player, enemy, etc.
 */
 
 namespace fwod
 {
-    internal class Player
+    internal class Person
     {
-        #region Properties
+        #region Consts
+        const int BUBBLE_PADDING_X = 0;
+        const int BUBBLE_PADDING_Y = 0; // Not ready
+        #endregion
+
+        #region Object properties
+        #region Position
         int _posx;
         /// <summary>
         /// Sets or gets the Player position (Left).
@@ -21,18 +25,17 @@ namespace fwod
             set
             {
                 char futrG = Core.GetCharAt(Core.Layer.Game, value, this.PosY);
-                char futrP = Core.GetCharAt(Core.Layer.Player, value, this.PosY);
+                char futrP = Core.GetCharAt(Core.Layer.Person, value, this.PosY);
                 bool futrIsSolid = futrG.IsSolidObject();
                 bool futrIsEnemy = futrP.IsEnemyObject();
                 if (!futrIsSolid)
                 {
                     if (futrIsEnemy)
                     {
-                        Player Enemy = Game.GetEnemyObjectAt(value, this.PosY);
+                        Person Enemy = Game.GetEnemyObjectAt(value, this.PosY);
 
                         if (Enemy != null && Enemy != this)
                         {
-                            Enemy.Say("Stop poking me!");
                             Enemy.HP--;
                         }
                     }
@@ -46,13 +49,13 @@ namespace fwod
                         Console.Write(pastchar);
 
                         // Update event
-                        Game.Display("Player moved " + (this._posx > value ? "left" : "right"));
+                        Game.DisplayEvent("Player moved " + (this._posx > value ? "left" : "right"));
 
                         // Update value
                         this._posx = value;
 
                         // Move player
-                        Core.Write(Core.Layer.Player, this.CharacterChar, value, this.PosY);
+                        Core.Write(Core.Layer.Person, this.CharacterChar, value, this.PosY);
                     }
                 }
             }
@@ -68,18 +71,17 @@ namespace fwod
             set
             {
                 char futrG = Core.GetCharAt(Core.Layer.Game, this.PosX, value);
-                char futrP = Core.GetCharAt(Core.Layer.Player, this.PosX, value);
+                char futrP = Core.GetCharAt(Core.Layer.Person, this.PosX, value);
                 bool futrIsSolid = futrG.IsSolidObject();
                 bool futrIsEnemy = futrP.IsEnemyObject();
                 if (!futrIsSolid)
                 {
                     if (futrIsEnemy)
                     {
-                        Player Enemy = Game.GetEnemyObjectAt(this.PosX, value);
+                        Person Enemy = Game.GetEnemyObjectAt(this.PosX, value);
                         
                         if (Enemy != null && Enemy != this)
                         {
-                            Enemy.Say("Stop poking me!");
                             Enemy.HP--;
                         }
                     }
@@ -93,18 +95,20 @@ namespace fwod
                         Console.Write(pastchar);
 
                         // Update event
-                        Game.Display("Player moved " + (this._posy > value ? "up" : "down"));
+                        Game.DisplayEvent("Player moved " + (this._posy > value ? "up" : "down"));
 
                         // Update value
                         this._posy = value;
 
                         // Move player
-                        Core.Write(Core.Layer.Player, this.CharacterChar, this.PosX, value);
+                        Core.Write(Core.Layer.Person, this.CharacterChar, this.PosX, value);
                     }
                 }
             }
         }
+        #endregion
 
+        #region Health
         int _hp;
         /// <summary>
         /// Gets or sets the HP.
@@ -124,11 +128,13 @@ namespace fwod
                     Console.Write(string.Format("HP: {0,3}", this.HP));
                 }
 
-                if (this.HP <= 0)
+                if (value <= 0)
                     this.Destroy();
             }
         }
+        #endregion
 
+        #region Name, appearance
         string _characterName;
         /// <summary>
         /// Gets or sets the name of the character.
@@ -154,35 +160,78 @@ namespace fwod
         internal char CharacterChar;
         #endregion
 
+        #region Type
+        /// <summary>
+        /// Types of Person
+        /// </summary>
+        internal enum Type
+        {
+            // Player
+            Player,
+            // Neutral
+            MysteriousStranger,
+            // Enemies
+            Rat,
+            // NPCs
+            Seller,
+            // Misc
+            Dummy
+        }
+
+        Type _type;
+        /// <summary>
+        /// Gets or sets the type of the Person
+        /// </summary>
+        internal Type PersonType
+        {
+            get { return this._type; }
+            set { this._type = value; }
+        }
+        #endregion
+        #endregion
+
         #region Construction
         /// <summary>
-        /// Creates a new player.
+        /// Creates a new Person.
         /// </summary>
-        internal Player()
-        { // Defaults
+        internal Person()
+            : this(ConsoleTools.BufferWidth / 2, ConsoleTools.BufferHeight / 2, Type.Dummy)
+        {
             this.CharacterChar = '@';
-            this._posx = ConsoleTools.BufferWidth / 2;
-            this._posy = ConsoleTools.BufferHeight / 2;
             this._hp = 10;
         }
 
         /// <summary>
-        /// Creates a new player with specific coords.
+        /// Creates a new Person with specific coords.
         /// </summary>
         /// <param name="X">Left value.</param>
         /// <param name="Y">Top value.</param>
-        internal Player(int X, int Y)
+        internal Person(int X, int Y)
+            : this(X, Y, Type.Dummy)
         {
             this.CharacterChar = '@';
+            this._hp = 10;
+        }
+
+        /// <summary>
+        /// Creates a new Person with specific coords and type.
+        /// </summary>
+        /// <param name="X">Left value.</param>
+        /// <param name="Y">Top value.</param>
+        /// <param name="pPersonType">Type of the person.</param>
+        internal Person(int X, int Y, Type pPersonType)
+        {
+            this.CharacterChar = '@';
+            this._hp = 10;
             this._posx = X;
             this._posy = Y;
-            this._hp = 10;
+            this._type = pPersonType;
         }
         #endregion
 
         #region Init
         /// <summary>
-        /// Places the Player on screen.
+        /// Places the Person on screen.
         /// </summary>
         internal void Initialize()
         {
@@ -191,11 +240,55 @@ namespace fwod
         }
         #endregion
 
+        #region Bubble
+        // Avoiding heavy usage of parameters
+        int _startX;
+        int _startY;
+        int _lenW;
+        int _lenH;
+
+        void GenerateBubble()
+        {
+            Game.GenerateBox(Core.Layer.None, 
+                Game.TypeOfLine.Single,
+                this._startX - BUBBLE_PADDING_X,
+                this._startY - BUBBLE_PADDING_Y,
+                this._lenW + (BUBBLE_PADDING_X * 2),
+                this._lenH + (BUBBLE_PADDING_Y * 2));
+
+            // Bubble chat "connector"
+            if (_startY < this.PosY) // Over Person
+            {
+                Console.SetCursorPosition(this.PosX, this.PosY - 2);
+                Console.Write(Game.Graphics.Lines.SingleConnector[2]);
+            }
+            else // Under Person
+            {
+                Console.SetCursorPosition(this.PosX, this.PosY + 2);
+                Console.Write(Game.Graphics.Lines.SingleConnector[1]);
+            }
+
+            // Prepare to insert text
+            Console.SetCursorPosition(this._startX + 1, this._startY + 1);
+        }
+
+        void ClearBubble()
+        {
+            for (int row = this._startY; row < this._lenH + this._startY; row++)
+            {
+                for (int col = this._startX; col < this._lenW + this._startX; col++)
+                {
+                    Core.Write(Core.Layer.Game, Core.GetCharAt(Core.Layer.Game, col, row), col, row);
+                }
+            }
+        }
+        #endregion
+
         #region Conversation
         /// <summary>
         /// Makes the character talk.
         /// </summary>
-        /// <param name="pText">Text!</param>
+        /// <param name="pText">Dialog</param>
         internal void Say(string pText)
         {
             Say(pText, true);
@@ -209,15 +302,16 @@ namespace fwod
         internal void Say(string pText, bool pWait)
         {
             string[] Lines = new string[] { pText }; // In case of multiline scenario
-            int ci = 0; // Multiline scenario row index
-            int start = 0; // Multiline cutting index
 
-            // This block seperates the input into 25 characters each lines equaly.
-            if (pText.Length != 0)
+            if (pText.Length > 0)
             {
                 if (pText.Length > 25)
                 {
+                    int ci = 0; // Multiline scenario row index
+                    int start = 0; // Multiline cutting index
                     Lines = new string[(pText.Length / 26) + 1];
+                    
+                    // This block seperates the input into 25 characters each lines equally.
                     do
                     {
                         if (start + 25 > pText.Length)
@@ -229,92 +323,80 @@ namespace fwod
                     } while (start < pText.Length);
                 }
             }
-            // Minimum text so the bubble doesn't look too thin
-            else Lines = new string[] { " " };
+            else Lines = new string[] { "..." };
 
             // X/Left bubble starting position
-            int StartX = this.PosX - (Lines[0].Length / 2) - 1;
+            this._startX = this.PosX - (Lines[0].Length / 2) - 1;
             // Re-places StartX if it goes further than the display buffer
-            if (StartX + (Lines[0].Length + 2) > ConsoleTools.BufferWidth)
+            if (_startX + (Lines[0].Length + 2) > ConsoleTools.BufferWidth)
             {
-                StartX = ConsoleTools.BufferWidth - (Lines[0].Length + 2);
+                _startX = ConsoleTools.BufferWidth - (Lines[0].Length + 2);
             }
-
-            if (StartX < 0)
+            else if (_startX < 0)
             {
-                StartX = 0;
+                _startX = 0;
             }
 
             // Y/Top bubble starting position
-            int StartY = this.PosY - (Lines.Length) - 3;
+            this._startY = this.PosY - (Lines.Length) - 3;
             // Re-places StartY if it goes further than the display buffer
-            if (StartY > ConsoleTools.BufferWidth)
+            if (_startY > ConsoleTools.BufferWidth)
             {
-                StartY = ConsoleTools.BufferWidth - (Lines[0].Length - 2);
+                _startY = ConsoleTools.BufferWidth - (Lines[0].Length - 2);
+            }
+            else if (_startY < 0)
+            {
+                _startY = 3;
             }
 
-            if (StartY < 0)
-            {
-                StartY = 3;
-            }
-
-            // Define the position of the text
-            int TextStartX = StartX + 1;
-            int TextStartY = StartY + 1;
+            this._lenW = Lines[0].Length + BUBBLE_PADDING_X + 2;
+            this._lenH = Lines.Length + BUBBLE_PADDING_Y + 2;
 
             // Generate the bubble
-            GenerateBubble(Lines[0].Length, Lines.Length, StartX, StartY);
+            GenerateBubble();
 
             // Insert Text
             for (int i = 0; i < Lines.Length; i++)
-                Core.Write(Core.Layer.Bubble, Lines[i], TextStartX, TextStartY + i); 
-
-            // Waiting for keypress
-            if (pWait) Console.ReadKey(true);
-
-            // Clear bubble
-            int lenH = StartX + Lines[0].Length + 2;
-            int lenV = StartY + Lines.Length + 2;
-            for (int row = StartY; row < lenV; row++)
             {
-                for (int col = StartX; col < lenH; col++)
-                {
-                    // Write back what was at Game layer before
-                    Core.Write(Core.Layer.Game, Core.GetCharAt(Core.Layer.Game, col, row), col, row);
-                }
+                Console.SetCursorPosition(this._startX + 1, this._startY + i + 1);
+                Console.Write(Lines[i]);
+            }
+            
+            if (pWait)
+            {
+                Console.ReadKey(true);
+                ClearBubble();
+            }
+            else
+            {
+                // Prepare for text
+                Console.SetCursorPosition(this._startX + 1, this._startY + 1);
             }
         }
 
         /// <summary>
-        /// Get input from Player.
+        /// Get input from the Person.
         /// </summary>
         /// <returns>Answer</returns>
         internal string GetAnswer()
         {
-            // Generates temporary text for spacer
-            string tmp = ConsoleTools.RepeatChar(' ', 25);
+            return GetAnswer(25);
+        }
 
-            // Determine the starting position of the bubble
-            int StartX = this.PosX - (tmp.Length / 2) - 1;
-            int StartY = this.PosY - 4;
+        /// <summary>
+        /// Get input from the Person.
+        /// </summary>
+        /// <param name="pLimit">Limit in characters.</param>
+        /// <returns>Answer</returns>
+        internal string GetAnswer(int pLimit)
+        {
+            Say(new string(' ', pLimit), false);
 
-            // Generate the bubble
-            GenerateBubble(tmp.Length, 1, StartX, StartY);
-
-            // Read input from player
-            string Out = ConsoleTools.ReadLine(25);
+            // Read input from this Person
+            string Out = ConsoleTools.ReadLine(pLimit);
 
             // Clear bubble
-            int lenH = StartX + tmp.Length + 2;
-            int lenV = StartY + 3;
-            for (int row = StartY; row < lenV; row++)
-            {
-                for (int col = StartX; col < lenH; col++)
-                {
-                    // Write back what was at Game layer before
-                    Core.Write(Core.Layer.Game, Core.GetCharAt(Core.Layer.Game, col, row), col, row);
-                }
-            }
+            ClearBubble();
 
             return Out;
         }
@@ -354,44 +436,24 @@ namespace fwod
         }
         #endregion
 
-        #region Bubble
-        /// <summary>
-        /// Generates the bubble for a player.
-        /// </summary>
-        /// <param name="pPlayer">Player</param>
-        /// <param name="pTextLength">Lenght of the text (Width)</param>
-        /// <param name="pLines">Length of the text (Height)</param>
-        /// <param name="pPosX">Top position</param>
-        /// <param name="pPosY">Left position</param>
-        void GenerateBubble(int pTextLength, int pLines, int pPosX, int pPosY)
-        {
-            Game.GenerateBox(Core.Layer.Bubble, Game.TypeOfLine.Single, pPosX, pPosY, pTextLength + 2, pLines + 2);
-
-            // Bubble chat "connector"
-            if (pPosY < this.PosY) // Over player
-            {
-                Console.SetCursorPosition(this.PosX, this.PosY - 2);
-                Core.Write(Core.Layer.Bubble, Game.Graphics.Lines.SingleConnector[2]);
-            }
-            else // Under player
-            {
-                Console.SetCursorPosition(this.PosX, this.PosY + 2);
-                Core.Write(Core.Layer.Bubble, Game.Graphics.Lines.SingleConnector[1]);
-            }
-
-            // Prepare to insert text
-            Console.SetCursorPosition(pPosX + 1, pPosY + 1);
-        }
-        #endregion
-
         #region Destroy
         /// <summary>
-        /// Remove completely from game.
-        /// Not to use with the MainPlayer!
+        /// Remove completely the Person from game.
         /// </summary>
         internal void Destroy()
         {
-            Game.EnemyList.Remove(this);
+            if (this == Game.MainPlayer)
+            {
+                //TODO: GAME OVER MANG
+
+            }
+            else
+            {
+                Console.SetCursorPosition(this.PosX, this.PosY);
+                Console.Write(' ');
+                Game.DisplayEvent("You killed a(n) " + this.PersonType + "!");
+                Game.EnemyList.Remove(this);
+            }
         }
         #endregion
     }

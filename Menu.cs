@@ -274,7 +274,7 @@ namespace fwod
             }
 
             // Place enemies and player back on screen
-            foreach (Player enemy in Game.EnemyList)
+            foreach (Person enemy in Game.EnemyList)
             {
                 enemy.Initialize();
             }

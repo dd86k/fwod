@@ -36,12 +36,12 @@ You can always send me an email at devddstuff@gmail.com or open a ticket/issue. 
 - [x] Multi-layer buffers
 - [x] Collision system
 - [x] Menu
-- [ ] Attack system
+- [x] Attack system
+- [ ] Enemy AI
+- [ ] Random chamber generator
 - [ ] Items
 - [ ] Inventory system
-- [ ] Enemy AI
 - [ ] Floor system
-- [ ] Random chamber generator
 - [ ] Leveling system
 - [ ] Bosses (Optional)
 - [ ] Final bug fixing and optimization round

@@ -18,12 +18,12 @@ namespace fwod
         /// <summary>
         /// List of the enemies.
         /// </summary>
-        internal static List<Player> EnemyList = new List<Player>();
+        internal static List<Person> EnemyList = new List<Person>();
 
         /// <summary>
         /// Main player
         /// </summary>
-        internal static Player MainPlayer = new Player();
+        internal static Person MainPlayer = new Person();
 
         /// <summary>
         /// Determine the Player with position
@@ -31,9 +31,9 @@ namespace fwod
         /// <param name="pFutureX">Future left position</param>
         /// <param name="pFutureY">Future top position</param>
         /// <returns>Enemy, null if no found</returns>
-        internal static Player GetEnemyObjectAt(int pFutureX, int pFutureY)
+        internal static Person GetEnemyObjectAt(int pFutureX, int pFutureY)
         {
-            foreach (Player Enemy in Game.EnemyList)
+            foreach (Person Enemy in Game.EnemyList)
             {
                 if (Enemy.PosX == pFutureX && Enemy.PosY == pFutureY)
                     return Enemy;
@@ -109,18 +109,16 @@ namespace fwod
             {
                 pPosX = 0;
             }
-
-            if (pPosX + pWidth > ConsoleTools.BufferWidth)
+            else if (pPosX + pWidth > ConsoleTools.BufferWidth)
             {
                 pPosX = ConsoleTools.BufferWidth - pWidth;
             }
-
+            
             if (pPosY < 0)
             {
                 pPosY = 0;
             }
-
-            if (pPosY + pHeight > ConsoleTools.BufferWidth)
+            else if (pPosY + pHeight > ConsoleTools.BufferWidth)
             {
                 pPosY = ConsoleTools.BufferWidth - pHeight;
             }
@@ -180,7 +178,7 @@ namespace fwod
         /// Display what's going on.
         /// </summary>
         /// <param name="pText">Event entry.</param>
-        internal static void Display(string pText)
+        internal static void DisplayEvent(string pText)
         {
             Console.SetCursorPosition(1, ConsoleTools.BufferHeight - 2);
             Console.Write(new string(' ', ConsoleTools.BufferWidth - 2));
