@@ -19,7 +19,6 @@ namespace fwod
         #endregion
 
         #region Properties
-        static readonly string nl = System.Environment.NewLine;
         static readonly string ProjectVersion =
                 string.Format("{0}",
                 System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
@@ -31,7 +30,7 @@ namespace fwod
             // Default values
             string bosstext = string.Empty;
             char Pchar = '@';
-            string Pname = "Player";
+            string Pname = "Player ";
             bool SkipIntro = false;
 
             for (int i = 0; i < args.Length; i++)
@@ -64,7 +63,7 @@ namespace fwod
                         SkipIntro = true;
                         break;
 
-                    #if DEBUG
+#if DEBUG
                     case "--showmeme":
                         Misc.ShowMeme(); // :^)
                         return 0;
@@ -81,102 +80,106 @@ namespace fwod
                             return 0;
                         }
                         else return 1;
-                    #endif
+#endif
                 }
             }
 
             // -- Before the game --
 
-            Console.Clear();
-            Console.Title = ProjectName + " " + ProjectVersion;
+            if (!SkipIntro)
+            {
+                Console.Clear();
+                Console.Title = ProjectName + " " + ProjectVersion;
 
-            string BannerText = "* Welcome to " + ProjectName + " *";
-            string BannerOutline = ConsoleTools.RepeatChar('*', BannerText.Length);
+                string BannerText = "* Welcome to " + ProjectName + " *";
+                string BannerOutline = ConsoleTools.RepeatChar('*', BannerText.Length);
 
-            ConsoleTools.WriteLineAndCenter(BannerOutline);
-            ConsoleTools.WriteLineAndCenter(BannerText);
-            ConsoleTools.WriteLineAndCenter(BannerOutline);
-            Console.WriteLine();
+                ConsoleTools.WriteLineAndCenter(BannerOutline);
+                ConsoleTools.WriteLineAndCenter(BannerText);
+                ConsoleTools.WriteLineAndCenter(BannerOutline);
+                Console.WriteLine();
+                Console.WriteLine("Watch your keystrokes!");
 
-            #if DEBUG
+#if DEBUG
+                Console.WriteLine();
                 Console.WriteLine("This is a development build, so expect bugs and crashes!");
-            #endif
+#endif
 
-            Console.WriteLine();
-            Console.Write("Press a key to start!");
+                Console.WriteLine();
+                Console.Write("Press a key to start!");
 
-            Console.ReadKey(true);
-            Console.Clear();
+                Console.ReadKey(true);
+                Console.Clear();
+            }
 
             // -- Game starts here --
 
             // Add player and first enemy in game
-            Game.MainPlayer = new Person((ConsoleTools.BufferWidth / 4) + (ConsoleTools.BufferWidth / 2), 
+            Game.MainPlayer = new Person((ConsoleTools.BufferWidth / 4) + (ConsoleTools.BufferWidth / 2),
                 ConsoleTools.BufferHeight / 2);
             Game.EnemyList.Add(new Person(ConsoleTools.BufferWidth / 4, ConsoleTools.BufferHeight / 2));
 
             // Generate the 'main' box
-            Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Double, 1, 1, ConsoleTools.BufferWidth - 2, ConsoleTools.BufferHeight - 3);
+            Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Double, 1, 1,
+                ConsoleTools.BufferWidth - 2, ConsoleTools.BufferHeight - 3);
+
+            Console.SetCursorPosition(27, 0);
+            Console.Write("|");
 
             // Set player stuff
             Game.MainPlayer.CharacterName = Pname;
             Game.MainPlayer.CharacterChar = Pchar;
             Game.MainPlayer.PersonType = Person.Type.Player;
             Game.MainPlayer.Initialize();
+
             Game.EnemyList[0].CharacterChar = '#';
             Game.EnemyList[0].HP = 1;
             Game.EnemyList[0].PersonType = Person.Type.MysteriousStranger;
             Game.EnemyList[0].Initialize();
-
-            Game.DisplayEvent("You wake up in a strange place");
 
             #region Intro
             if (!SkipIntro)
             {
                 Game.MainPlayer.Say("Ah! Where am I?");
 
-                Game.EnemyList[0].Say("Oh, you're awake...");
-                Game.EnemyList[0].Say("What is your name?");
+                Game.EnemyList[0].Say("Oh, you're awake... What is your name?");
 
-                if (Pname == "Player")
+                if (Pname == "Player ")
                 {
-                    string tmp_name = string.Empty;
+                    string tmp_name = null;
 
-                    do
+                    while (tmp_name == null)
                     {
                         tmp_name = Game.MainPlayer.GetAnswer();
 
-                        // If the player entered at least something and not too long
-                        if (tmp_name.Length == 0)
-                            Game.EnemyList[0].Say("Say something!");
-
-                    } while (tmp_name.Length == 0);
+                        Game.EnemyList[0].Say("Say something!");
+                    }
 
                     Game.MainPlayer.CharacterName = tmp_name;
                 }
 
                 Game.MainPlayer.Say("It's " + Game.MainPlayer.CharacterName + ".");
 
-                Game.EnemyList[0].Say("So, welcome to The Dungeon.");
-                Game.MainPlayer.HP--;
+                Game.EnemyList[0].Say("So, welcome to " + ProjectName + ".");
+                Game.MainPlayer.HP = 10;
                 Game.EnemyList[0].Say("Here's your HP meter.");
 
-                Game.MainPlayer.Say("My HP...?");
+                Game.MainPlayer.Say("My HP?");
 
-                Game.EnemyList[0].Say("Health Points, boy.");
+                Game.EnemyList[0].Say("Health Points, yo.");
 
                 Game.MainPlayer.Say("Um.. Okay?");
 
                 if (bosstext.Length > 0)
                     Game.EnemyList[0].Say(bosstext);
                 else
-                    Game.EnemyList[0].Say("I'll be back for you, " + Game.MainPlayer.CharacterName + "!");
+                    Game.EnemyList[0].Say("I'll be back for you anyway, " + Game.MainPlayer.CharacterName + ".");
 
                 Game.MainPlayer.Say("Wait!");
 
-                //TODO: Make enemy walk to next floor and disapear
+                //TODO: Make enemy walk to next floor and disapear (AI Path?)
 
-                Game.MainPlayer.Say("Oh, alright.. Time to get out.");
+                //Game.MainPlayer.Say("Oh, alright.. Time to get out.");
             }
             #endregion
 
@@ -245,10 +248,10 @@ namespace fwod
 
         static void ShowVersion()
         {
-            Console.WriteLine(ProjectName + " - " + ProjectVersion );
+            Console.WriteLine(ProjectName + " - " + ProjectVersion);
             Console.WriteLine("Copyright (c) 2015 DD~!/guitarxhero");
             Console.WriteLine("License: MIT License <http://opensource.org/licenses/MIT>");
-            Console.WriteLine("Project page: https://github.com/guitarxhero/fwod");
+            Console.WriteLine("Project page: <https://github.com/guitarxhero/fwod>");
             Console.WriteLine();
             Console.WriteLine(" -- Credits --");
             Console.WriteLine("DD~! (guitarxhero) - Original author");

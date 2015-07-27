@@ -218,29 +218,36 @@ namespace fwod
         /// <returns>User's input</returns>
         internal static string ReadLine(int pLimit)
         {
+            return ReadLine(pLimit, false);
+        }
+
+        /// <summary>
+        /// Readline with a maximum length plus optional password mode.
+        /// </summary>
+        /// <param name="pLimit">Character limit</param>
+        /// <param name="pPassword">Is password</param>
+        /// <returns>User's input</returns>
+        internal static string ReadLine(int pLimit, bool pPassword)
+        {
             System.Text.StringBuilder _out = new System.Text.StringBuilder();
             int _index = 0;
             bool _get = true;
             int OrigninalLeft = Console.CursorLeft;
 
-            const char Enter = (char)ConsoleKey.Enter;
-            const char Backspace = (char)ConsoleKey.Backspace;
-            const char Tab = (char)ConsoleKey.Tab;
-
             while (_get)
             {
-                char c = Console.ReadKey(true).KeyChar;
+                ConsoleKeyInfo c = Console.ReadKey(true);
 
-                switch (c)
+                switch (c.Key)
                 {
-                    case '\0':
-                    case Tab:
+                    case ConsoleKey.Tab:
                         break;
 
-                    case Enter:
+                    case ConsoleKey.Enter:
                         _get = false;
                         break;
-                    case Backspace:
+
+                    case ConsoleKey.Backspace:
                         if (_index > 0)
                         {
                             _out = _out.Remove(_out.Length - 1, 1);
@@ -250,12 +257,17 @@ namespace fwod
                             Console.SetCursorPosition(OrigninalLeft + _index, Console.CursorTop);
                         }
                         break;
+
                     default:
                         if (_index < pLimit)
                         {
-                            _out.Append(c);
+                            _out.Append(c.KeyChar);
                             _index++;
-                            Console.Write(c);
+
+                            if (pPassword)
+                                Console.Write('*');
+                            else
+                                Console.Write(c.KeyChar);
                         }
                         break;
                 }

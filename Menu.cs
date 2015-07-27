@@ -6,7 +6,7 @@
 
 namespace fwod
 {
-    internal class Menu
+    class Menu
     {
         #region Constants
         /// <summary>

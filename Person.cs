@@ -10,7 +10,7 @@ namespace fwod
     {
         #region Consts
         const int BUBBLE_PADDING_X = 0;
-        const int BUBBLE_PADDING_Y = 0; // Not ready
+        const int BUBBLE_PADDING_Y = 0; // Not ready, but also no thanks
         #endregion
 
         #region Object properties
@@ -46,10 +46,11 @@ namespace fwod
 
                         // Place old char
                         Console.SetCursorPosition(this.PosX, this.PosY);
-                        Console.Write(pastchar);
+                        Console.Write(pastchar == '\0' ? ' ' : pastchar);
 
                         // Update event
-                        Game.DisplayEvent("Player moved " + (this._posx > value ? "left" : "right"));
+                        if (this._posx != value)
+                            Game.DisplayEvent("Player moved " + (this._posx > value ? "left" : "right"));
 
                         // Update value
                         this._posx = value;
@@ -79,7 +80,7 @@ namespace fwod
                     if (futrIsEnemy)
                     {
                         Person Enemy = Game.GetEnemyObjectAt(this.PosX, value);
-                        
+
                         if (Enemy != null && Enemy != this)
                         {
                             Enemy.HP--;
@@ -92,10 +93,11 @@ namespace fwod
 
                         // Place old char
                         Console.SetCursorPosition(this.PosX, this.PosY);
-                        Console.Write(pastchar);
+                        Console.Write(pastchar == '\0' ? ' ' : pastchar);
 
                         // Update event
-                        Game.DisplayEvent("Player moved " + (this._posy > value ? "up" : "down"));
+                        if (this._posy != value)
+                            Game.DisplayEvent("Player moved " + (this._posy > value ? "up" : "down"));
 
                         // Update value
                         this._posy = value;
@@ -122,10 +124,10 @@ namespace fwod
 
                 if (Game.MainPlayer == this)
                 {
-                    Console.SetCursorPosition(ConsoleTools.BufferWidth / 2, 0);
+                    Console.SetCursorPosition(29, 0);
                     Console.Write(new string(' ', 7));
-                    Console.SetCursorPosition(ConsoleTools.BufferWidth / 2, 0);
-                    Console.Write(string.Format("HP: {0,3}", this.HP));
+                    Console.SetCursorPosition(29, 0);
+                    Console.Write(string.Format("HP: {0:000}", this.HP));
                 }
 
                 if (value <= 0)
@@ -148,7 +150,7 @@ namespace fwod
                 _characterName = value;
                 // Clear name and redraw it (in case of shorter name)
                 Console.SetCursorPosition(1, 0);
-                Console.Write(ConsoleTools.RepeatChar(' ', (ConsoleTools.BufferWidth / 2) - 1));
+                Console.Write(ConsoleTools.RepeatChar(' ', 25));
                 Console.SetCursorPosition(1, 0);
                 Console.Write(_characterName);
             }
@@ -249,7 +251,7 @@ namespace fwod
 
         void GenerateBubble()
         {
-            Game.GenerateBox(Core.Layer.None, 
+            Game.GenerateBox(Core.Layer.None,
                 Game.TypeOfLine.Single,
                 this._startX - BUBBLE_PADDING_X,
                 this._startY - BUBBLE_PADDING_Y,
@@ -274,11 +276,14 @@ namespace fwod
 
         void ClearBubble()
         {
+            char c;
             for (int row = this._startY; row < this._lenH + this._startY; row++)
             {
                 for (int col = this._startX; col < this._lenW + this._startX; col++)
                 {
-                    Core.Write(Core.Layer.Game, Core.GetCharAt(Core.Layer.Game, col, row), col, row);
+                    Console.SetCursorPosition(col, row);
+                    c = Core.GetCharAt(Core.Layer.Game, col, row);
+                    Console.Write(c == '\0' ? ' ' : c);
                 }
             }
         }
@@ -310,14 +315,14 @@ namespace fwod
                     int ci = 0; // Multiline scenario row index
                     int start = 0; // Multiline cutting index
                     Lines = new string[(pText.Length / 26) + 1];
-                    
+
                     // This block seperates the input into 25 characters each lines equally.
                     do
                     {
                         if (start + 25 > pText.Length)
-                            Lines[ci] = pText.Substring(start, pText.Length - start);
+                            Lines[ci] = pText.Substring(start, pText.Length - start).Trim();
                         else
-                            Lines[ci] = pText.Substring(start, 25);
+                            Lines[ci] = pText.Substring(start, 25).Trim();
                         ci++;
                         start += 25;
                     } while (start < pText.Length);
@@ -361,7 +366,7 @@ namespace fwod
                 Console.SetCursorPosition(this._startX + 1, this._startY + i + 1);
                 Console.Write(Lines[i]);
             }
-            
+
             if (pWait)
             {
                 Console.ReadKey(true);
@@ -451,7 +456,7 @@ namespace fwod
             {
                 Console.SetCursorPosition(this.PosX, this.PosY);
                 Console.Write(' ');
-                Game.DisplayEvent("You killed a(n) " + this.PersonType + "!");
+                Game.DisplayEvent(Game.MainPlayer.CharacterName + " killed " + this.PersonType + "!");
                 Game.EnemyList.Remove(this);
             }
         }

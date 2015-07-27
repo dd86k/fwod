@@ -180,10 +180,42 @@ namespace fwod
         /// <param name="pText">Event entry.</param>
         internal static void DisplayEvent(string pText)
         {
-            Console.SetCursorPosition(1, ConsoleTools.BufferHeight - 2);
-            Console.Write(new string(' ', ConsoleTools.BufferWidth - 2));
-            Console.SetCursorPosition(1, ConsoleTools.BufferHeight - 2);
-            Console.Write(pText);
+            string[] Lines = new string[] { pText };
+            int MaxLength = ConsoleTools.BufferWidth - 2;
+            string MoreText = " -- More --";
+
+            if (pText.Length > MaxLength)
+            {
+                int ci = 0;
+                int start = 0;
+                Lines = new string[pText.Length / (MaxLength - MoreText.Length) + 1];
+
+                do
+                {
+                    if (start + MaxLength > pText.Length)
+                    {
+                        Lines[ci] = pText.Substring(start, pText.Length - start);
+                        start += MaxLength;
+                    }
+                    else
+                    {
+                        Lines[ci] = pText.Substring(start, MaxLength - MoreText.Length) + MoreText;
+                        start += MaxLength - MoreText.Length;
+                    }
+                    ci++;
+                } while (start < pText.Length);
+            }
+
+            for (int i = 0; i < Lines.Length; i++)
+            {
+                Console.SetCursorPosition(1, ConsoleTools.BufferHeight - 2);
+                Console.Write(new string(' ', MaxLength));
+                Console.SetCursorPosition(1, ConsoleTools.BufferHeight - 2);
+                Console.Write(Lines[i]);
+
+                if (i < Lines.Length - 1)
+                    Console.ReadKey(true);
+            }
         }
         #endregion
 
