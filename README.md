@@ -11,10 +11,6 @@ Hello! This is a little something I'd like to show you, it's simply a console ap
 
 fwod would play like [NetHack](https://en.wikipedia.org/wiki/NetHack), a roguelike, turn-based game (well it's instantaneous), dungeon crawling game.
 
-Reason I'm doing this is to expand my knowledge about C# even further and learn more about game development. In a way. Next might be with the UnityAPI, who knows?
-
-It's an open personal project, so no rushing here.
-
 You can always send me an email at devddstuff@gmail.com or open a ticket/issue. (I won't bite!)
 
 ### Notes
@@ -25,36 +21,36 @@ You can always send me an email at devddstuff@gmail.com or open a ticket/issue. 
 - Mono doesn't like `{string}.ToString()`, using `string.Format("{0}", object)` is prefered.
 - A _Release_ will be made when I reach 5000 tweets.
 - Official "GameServer" planned.
-  - It's already set up, I just wish I could host it elsewhere than on my own network and server.
-  - Play the game via SSH.
-    - Telnet is considered.
+  - Already have one set up, I just wish I could host it elsewhere than on my own network and server.
+  - Play the game via SSH or telnet.
 - Using the `Release` compile config trims ~9.5KB compared to `Debug`
 - Console is damaged-based, meaning I only update what I need on screen.
+- Bubbles are directly printed on screen.
 
 ### Progress
 
 - [x] Multi-layer buffers
 - [x] Collision system
 - [x] Menu
-- [x] Attack system
-- [ ] Enemy AI
-- [ ] Random chamber generator
-- [ ] Items
-- [ ] Inventory system
-- [ ] Floor system
-- [ ] Leveling system
-- [ ] Bosses (Optional)
+- [x] Hit system
+- [ ] Items (Items.cs)
+- [ ] Attack system (Attack.cs)
+- [ ] Floor system (Floor.cs)
+- [ ] Random chamber generator (Floor.cs)
+- [ ] Enemy AI (Game.cs)
+- [ ] Inventory system (Person.cs)
+- [ ] Level system (Person.cs)
+- [ ] Bosses (Optional) (Bosses.cs)
 - [ ] Final bug fixing and optimization round
 - [ ] Wiki (Optional)
-- [ ] Official Release (Release)
+- [ ] Official Release (1.0.0.0)
   - [ ] Celebrate!
 
 ### Builds
-Builds will be available on my [website](http://www.wilomgfx.net/didier/pages/fwod.html).
+Builds will be available on the [Releases](https://github.com/guitarxhero/fwod/releases) tab.
 
 ### Contributing
 You are free to fork my project in order to provide bug correcting suggestions.
-I try to be open ears most of the time.
 
 ### Installing
 You only need Visual Studio 2012+, MonoDevelop, or Xamarin Studio, and you're good to go!
