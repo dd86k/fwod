@@ -33,7 +33,7 @@ namespace fwod
         /// </summary>
         /// <param name="pChar">Char</param>
         /// <returns>True if player</returns>
-        internal static bool IsEnemyObject(this char pChar)
+        internal static bool IsPersonObject(this char pChar)
         {
             foreach (Person Enemy in Game.EnemyList)
             {

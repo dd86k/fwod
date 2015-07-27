@@ -1,11 +1,13 @@
 ﻿using System;
 
 /*
-    A Person, whenever it be a player, enemy, etc.
+    A Person.
+    Can be a Player, Enemy, etc.
 */
 
 namespace fwod
 {
+    #region Person
     internal class Person
     {
         #region Consts
@@ -25,38 +27,23 @@ namespace fwod
             set
             {
                 char futrG = Core.GetCharAt(Core.Layer.Game, value, this.PosY);
-                char futrP = Core.GetCharAt(Core.Layer.Person, value, this.PosY);
+                char futrP = Core.GetCharAt(Core.Layer.People, value, this.PosY);
                 bool futrIsSolid = futrG.IsSolidObject();
-                bool futrIsEnemy = futrP.IsEnemyObject();
+                bool futrIsSomeone = futrP.IsPersonObject();
                 if (!futrIsSolid)
                 {
-                    if (futrIsEnemy)
+                    if (futrIsSomeone)
                     {
-                        Person Enemy = Game.GetEnemyObjectAt(value, this.PosY);
+                        Person futrPerson = Game.GetPersonObjectAt(value, this.PosY);
 
-                        if (Enemy != null && Enemy != this)
+                        if (futrPerson != null && futrPerson != this && futrPerson is Enemy)
                         {
-                            Enemy.HP--;
+                            this.Attack(futrPerson);
                         }
                     }
                     else
                     {
-                        // Get old char
-                        char pastchar = Core.GetCharAt(Core.Layer.Game, this.PosX, this.PosY);
-
-                        // Place old char
-                        Console.SetCursorPosition(this.PosX, this.PosY);
-                        Console.Write(pastchar == '\0' ? ' ' : pastchar);
-
-                        // Update event
-                        if (this._posx != value)
-                            Game.DisplayEvent("Player moved " + (this._posx > value ? "left" : "right"));
-
-                        // Update value
-                        this._posx = value;
-
-                        // Move player
-                        Core.Write(Core.Layer.Person, this.CharacterChar, value, this.PosY);
+                        Move(this.PosX, this.PosY, value, this.PosY);
                     }
                 }
             }
@@ -72,41 +59,43 @@ namespace fwod
             set
             {
                 char futrG = Core.GetCharAt(Core.Layer.Game, this.PosX, value);
-                char futrP = Core.GetCharAt(Core.Layer.Person, this.PosX, value);
+                char futrP = Core.GetCharAt(Core.Layer.People, this.PosX, value);
                 bool futrIsSolid = futrG.IsSolidObject();
-                bool futrIsEnemy = futrP.IsEnemyObject();
+                bool futrIsEnemy = futrP.IsPersonObject();
                 if (!futrIsSolid)
                 {
                     if (futrIsEnemy)
                     {
-                        Person Enemy = Game.GetEnemyObjectAt(this.PosX, value);
+                        Person Enemy = Game.GetPersonObjectAt(this.PosX, value);
 
                         if (Enemy != null && Enemy != this)
                         {
-                            Enemy.HP--;
+                            this.Attack(Enemy);
                         }
                     }
                     else
                     {
-                        // Get old char
-                        char pastchar = Core.GetCharAt(Core.Layer.Game, this.PosX, this.PosY);
-
-                        // Place old char
-                        Console.SetCursorPosition(this.PosX, this.PosY);
-                        Console.Write(pastchar == '\0' ? ' ' : pastchar);
-
-                        // Update event
-                        if (this._posy != value)
-                            Game.DisplayEvent("Player moved " + (this._posy > value ? "up" : "down"));
-
-                        // Update value
-                        this._posy = value;
-
-                        // Move player
-                        Core.Write(Core.Layer.Person, this.CharacterChar, this.PosX, value);
+                        Move(this.PosX, this.PosY, this.PosX, value);
                     }
                 }
             }
+        }
+
+        void Move(int pastX, int pastY, int newX, int newY)
+        {
+            // Get old char
+            char pastchar = Core.GetCharAt(Core.Layer.Game, pastX, pastY);
+
+            // Place old char
+            Console.SetCursorPosition(pastX, pastY);
+            Console.Write(pastchar == '\0' ? ' ' : pastchar);
+
+            // Update values
+            _posy = newY;
+            _posx = newX;
+
+            // Move player
+            Core.Write(Core.Layer.People, this.CharacterChar, newX, newY);
         }
         #endregion
 
@@ -122,7 +111,7 @@ namespace fwod
             {
                 _hp = value;
 
-                if (Game.MainPlayer == this)
+                if (this is Player)
                 {
                     Console.SetCursorPosition(29, 0);
                     Console.Write(new string(' ', 7));
@@ -130,8 +119,8 @@ namespace fwod
                     Console.Write(string.Format("HP: {0:000}", this.HP));
                 }
 
-                if (value <= 0)
-                    this.Destroy();
+                if (_hp <= 0)
+                    Destroy();
             }
         }
         #endregion
@@ -162,72 +151,128 @@ namespace fwod
         internal char CharacterChar;
         #endregion
 
-        #region Type
+        #region Stats
+        int _s1;
         /// <summary>
-        /// Types of Person
+        /// Strength
         /// </summary>
-        internal enum Type
+        internal int S1
         {
-            // Player
-            Player,
-            // Neutral
-            MysteriousStranger,
-            // Enemies
-            Rat,
-            // NPCs
-            Seller,
-            // Misc
-            Dummy
+            get { return _s1; }
+            set
+            {
+                if (value <= 10 && value >= 0)
+                    _s1 = value;
+            }
         }
 
-        Type _type;
+        int _s2;
         /// <summary>
-        /// Gets or sets the type of the Person
+        /// 
         /// </summary>
-        internal Type PersonType
+        internal int S2
         {
-            get { return this._type; }
-            set { this._type = value; }
+            get { return _s2; }
+            set
+            {
+                if (value <= 10 && value >= 0)
+                    _s2 = value;
+            }
+        }
+
+        int _s3;
+        /// <summary>
+        /// 
+        /// </summary>
+        internal int S3
+        {
+            get { return _s3; }
+            set
+            {
+                if (value <= 10 && value >= 0)
+                    _s3 = value;
+            }
+        }
+
+        int _s4;
+        /// <summary>
+        /// 
+        /// </summary>
+        internal int S4
+        {
+            get { return _s4; }
+            set
+            {
+                if (value <= 10 && value >= 0)
+                    _s4 = value;
+            }
+            
+        }
+
+        int _s5;
+        /// <summary>
+        /// 
+        /// </summary>
+        internal int S5
+        {
+            get { return _s5; }
+            set
+            {
+                if (value <= 10 && value >= 0)
+                    _s5 = value;
+            }
+        }
+
+        int _s6;
+        /// <summary>
+        /// 
+        /// </summary>
+        internal int S6
+        {
+            get { return _s6; }
+            set
+            {
+                if (value <= 10 && value >= 0)
+                    _s6 = value;
+            }
+        }
+
+        int _s7;
+        /// <summary>
+        /// 
+        /// </summary>
+        internal int S7
+        {
+            get { return _s7; }
+            set
+            {
+                if (value <= 10 && value >= 0)
+                    _s7 = value;
+            }
         }
         #endregion
         #endregion
 
         #region Construction
-        /// <summary>
-        /// Creates a new Person.
-        /// </summary>
         internal Person()
-            : this(ConsoleTools.BufferWidth / 2, ConsoleTools.BufferHeight / 2, Type.Dummy)
+            : this(ConsoleTools.BufferWidth / 2, ConsoleTools.BufferHeight / 2)
         {
-            this.CharacterChar = '@';
-            this._hp = 10;
+
         }
 
-        /// <summary>
-        /// Creates a new Person with specific coords.
-        /// </summary>
-        /// <param name="X">Left value.</param>
-        /// <param name="Y">Top value.</param>
         internal Person(int X, int Y)
-            : this(X, Y, Type.Dummy)
         {
-            this.CharacterChar = '@';
-            this._hp = 10;
-        }
-
-        /// <summary>
-        /// Creates a new Person with specific coords and type.
-        /// </summary>
-        /// <param name="X">Left value.</param>
-        /// <param name="Y">Top value.</param>
-        /// <param name="pPersonType">Type of the person.</param>
-        internal Person(int X, int Y, Type pPersonType)
-        {
-            this.CharacterChar = '@';
-            this._hp = 10;
-            this._posx = X;
-            this._posy = Y;
-            this._type = pPersonType;
+            CharacterChar = 'P';
+            _hp = 10;
+            _posx = X;
+            _posy = Y;
+            _s1 = 5;
+            _s2 = 5;
+            _s3 = 5;
+            _s4 = 5;
+            _s5 = 5;
+            _s6 = 5;
+            _s7 = 5;
         }
         #endregion
 
@@ -320,9 +365,9 @@ namespace fwod
                     do
                     {
                         if (start + 25 > pText.Length)
-                            Lines[ci] = pText.Substring(start, pText.Length - start).Trim();
+                            Lines[ci] = pText.Substring(start, pText.Length - start);
                         else
-                            Lines[ci] = pText.Substring(start, 25).Trim();
+                            Lines[ci] = pText.Substring(start, 25);
                         ci++;
                         start += 25;
                     } while (start < pText.Length);
@@ -441,25 +486,88 @@ namespace fwod
         }
         #endregion
 
+        #region Attack
+        internal void Attack(Person pPerson)
+        {
+            //TODO: Attack algorithm
+            int AttackPoints = this.S1 /* * this.Weapon.BaseDamage*/;
+
+            pPerson.HP -= AttackPoints;
+
+            if (pPerson is Enemy)
+                Game.DisplayEvent(((Enemy)pPerson).eType + " -= " + AttackPoints + " HP! (HP:" + pPerson.HP + ")");
+            else
+                Game.DisplayEvent(pPerson.GetType() + " -= " + AttackPoints + " HP! (HP:" + pPerson.HP + ")");
+        }
+        #endregion
+
         #region Destroy
         /// <summary>
         /// Remove completely the Person from game.
         /// </summary>
         internal void Destroy()
         {
-            if (this == Game.MainPlayer)
+            Console.SetCursorPosition(this.PosX, this.PosY);
+            Console.Write(' ');
+            if (this is Enemy)
             {
-                //TODO: GAME OVER MANG
+                Enemy e = (Enemy)this;
+                Game.EnemyList.Remove(e);
+                Game.DisplayEvent(Game.MainPlayer.CharacterName + " killed " + e.eType + "!");
+            }
+            else if (this is Player)
+            { // Game over
+                //TODO: Game over
 
             }
             else
             {
-                Console.SetCursorPosition(this.PosX, this.PosY);
-                Console.Write(' ');
-                Game.DisplayEvent(Game.MainPlayer.CharacterName + " killed " + this.PersonType + "!");
-                Game.EnemyList.Remove(this);
+                Game.PeopleList.Remove(this);
+                Game.DisplayEvent(Game.MainPlayer.CharacterName + " killed " + this.GetType() + "!");
             }
         }
         #endregion
     }
+    #endregion
+
+    #region Player
+    class Player : Person
+    {
+        internal Player()
+            : base(ConsoleTools.BufferWidth / 2, ConsoleTools.BufferHeight / 2)
+        {
+
+        }
+
+        internal Player(int X, int Y)
+            : base(X, Y)
+        {
+            this.CharacterChar = '@';
+        }
+    }
+    #endregion
+
+    #region Enemy
+    class Enemy : Person
+    {
+        internal Enemy(int X, int Y, EnemyType pEnemyType, int pHp)
+            : base(X, Y)
+        {
+            this.HP = pHp;
+            this.CharacterChar = 'E';
+        }
+
+        internal enum EnemyType
+        {
+            Rat
+        }
+
+        EnemyType _type;
+        internal EnemyType eType
+        {
+            get { return _type; }
+            set { _type = value; }
+        }
+    }
+    #endregion
 }

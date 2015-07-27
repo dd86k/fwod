@@ -14,16 +14,21 @@ namespace fwod
         const string ScreenshotFileNamePrefix = "screenshot-";
         #endregion
 
-        #region Players
+        #region People
         /// <summary>
         /// List of the enemies.
         /// </summary>
-        internal static List<Person> EnemyList = new List<Person>();
+        internal static List<Enemy> EnemyList = new List<Enemy>();
+
+        /// <summary>
+        /// List of non-enemy people.
+        /// </summary>
+        internal static List<Person> PeopleList = new List<Person>();
 
         /// <summary>
         /// Main player
         /// </summary>
-        internal static Person MainPlayer = new Person();
+        internal static Player MainPlayer = new Player();
 
         /// <summary>
         /// Determine the Player with position
@@ -31,12 +36,12 @@ namespace fwod
         /// <param name="pFutureX">Future left position</param>
         /// <param name="pFutureY">Future top position</param>
         /// <returns>Enemy, null if no found</returns>
-        internal static Person GetEnemyObjectAt(int pFutureX, int pFutureY)
+        internal static Person GetPersonObjectAt(int pFutureX, int pFutureY)
         {
-            foreach (Person Enemy in Game.EnemyList)
+            foreach (Person P in EnemyList)
             {
-                if (Enemy.PosX == pFutureX && Enemy.PosY == pFutureY)
-                    return Enemy;
+                if (P.PosX == pFutureX && P.PosY == pFutureY)
+                    return P;
             }
 
             return null;
@@ -51,33 +56,33 @@ namespace fwod
         {
             internal struct Tiles
             {
-                internal static char[] Grades = {'░', '▒', '▓', '█'};
-                internal static char[] Half = {'▄', '▌', '▐', '▀'};
+                internal readonly static char[] Grades = { '░', '▒', '▓', '█' };
+                internal readonly static char[] Half = { '▄', '▌', '▐', '▀' };
             }
             internal struct Lines
             {
-                internal static char[] Single = {'│', '─'};
-                internal static char[] SingleCorner = {'┌', '┐', '┘', '└'};
-                internal static char[] SingleConnector = {'┤', '┴', '┬', '├', '┼'};
+                internal readonly static char[] Single = { '│', '─' };
+                internal readonly static char[] SingleCorner = { '┌', '┐', '┘', '└' };
+                internal readonly static char[] SingleConnector = { '┤', '┴', '┬', '├', '┼' };
 
-                internal static char[] Double = {'║', '═'};
-                internal static char[] DoubleCorner = {'╔', '╗', '╝', '╚'};
-                internal static char[] DoubleConnector = {'╣', '╩', '╦', '╠', '╬'};
+                internal readonly static char[] Double = { '║', '═' };
+                internal readonly static char[] DoubleCorner = { '╔', '╗', '╝', '╚' };
+                internal readonly static char[] DoubleConnector = { '╣', '╩', '╦', '╠', '╬' };
 
-                internal static char[] DoubleVerticalCorner = { '╓', '╖', '╜', '╙' };
-                internal static char[] DoubleVerticalConnector = { '╢', '╨', '╥', '╟', '╫' };
+                internal readonly static char[] DoubleVerticalCorner = { '╓', '╖', '╜', '╙' };
+                internal readonly static char[] DoubleVerticalConnector = { '╢', '╨', '╥', '╟', '╫' };
 
-                internal static char[] DoubleHorizontalCorner = {'╕', '╛', '╘', '╒'};
-                internal static char[] DoubleHorizontalConnector = { '╡', '╧', '╤', '╞', '╪' };
+                internal readonly static char[] DoubleHorizontalCorner = { '╕', '╛', '╘', '╒' };
+                internal readonly static char[] DoubleHorizontalConnector = { '╡', '╧', '╤', '╞', '╪' };
             }
-            /*
             internal struct Objects
             {
-                internal static char StairsUp = '';
-                internal static char StairsDown = '';
-                internal static char Grass = '.';
+                internal const char StairsUp = '^';
+                internal const char StairsDown = 'v';
+                internal const char Grass = '.';
+                internal const char Shelf = 'H';
+                internal const char Chest = 'm';
             }
-            */
         }
         #endregion
 

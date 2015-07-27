@@ -95,7 +95,7 @@ namespace fwod
 
                 p.Initialize(); // Pause() clears the buffer
 
-                ConsoleTools.WriteAndCenter(Core.Layer.Person, "What is your favorite food?", p.PosY - 5);
+                ConsoleTools.WriteAndCenter(Core.Layer.People, "What is your favorite food?", p.PosY - 5);
 
                 string tt = p.GetAnswer();
 

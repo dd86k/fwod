@@ -52,10 +52,16 @@ namespace fwod
                             bosstext = args[i + 1];
                         break;
 
-                    case "-C":
+                    case "-Pc":
                     case "--playerchar":
                         if (args[i + 1] != null)
                             Pchar = args[i + 1][0];
+                        break;
+
+                    case "-Pn":
+                    case "--playername":
+                        if (args[i + 1] != null)
+                            Pname = args[i + 1];
                         break;
 
                     case "-S":
@@ -98,6 +104,21 @@ namespace fwod
                 ConsoleTools.WriteLineAndCenter(BannerText);
                 ConsoleTools.WriteLineAndCenter(BannerOutline);
                 Console.WriteLine();
+
+                Console.WriteLine("YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE");
+                Console.WriteLine("YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE");
+                Console.WriteLine("YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE");
+                Console.WriteLine("YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE");
+                Console.WriteLine("YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE");
+                Console.WriteLine("YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE");
+                Console.WriteLine("YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE");
+                Console.WriteLine("YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE");
+                Console.WriteLine("YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE");
+                Console.WriteLine("YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE");
+                Console.WriteLine("YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE");
+                Console.WriteLine("YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE");
+
+                Console.WriteLine();
                 Console.WriteLine("Watch your keystrokes!");
 
 #if DEBUG
@@ -115,9 +136,10 @@ namespace fwod
             // -- Game starts here --
 
             // Add player and first enemy in game
-            Game.MainPlayer = new Person((ConsoleTools.BufferWidth / 4) + (ConsoleTools.BufferWidth / 2),
+            Game.MainPlayer = new Player((ConsoleTools.BufferWidth / 4) + (ConsoleTools.BufferWidth / 2),
                 ConsoleTools.BufferHeight / 2);
-            Game.EnemyList.Add(new Person(ConsoleTools.BufferWidth / 4, ConsoleTools.BufferHeight / 2));
+            Person Stranger = new Person(ConsoleTools.BufferWidth / 4, ConsoleTools.BufferHeight / 2);
+            Game.PeopleList.Add(Stranger);
 
             // Generate the 'main' box
             Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Double, 1, 1,
@@ -129,20 +151,23 @@ namespace fwod
             // Set player stuff
             Game.MainPlayer.CharacterName = Pname;
             Game.MainPlayer.CharacterChar = Pchar;
-            Game.MainPlayer.PersonType = Person.Type.Player;
             Game.MainPlayer.Initialize();
 
-            Game.EnemyList[0].CharacterChar = '#';
-            Game.EnemyList[0].HP = 1;
-            Game.EnemyList[0].PersonType = Person.Type.MysteriousStranger;
-            Game.EnemyList[0].Initialize();
+            Stranger.CharacterChar = 'S';
+            Stranger.HP = 125;
+            Stranger.Initialize();
+
+#warning Test
+            Enemy TestRat = new Enemy(5, 5, Enemy.EnemyType.Rat, 24);
+            Game.EnemyList.Add(TestRat);
+            TestRat.Initialize();
 
             #region Intro
             if (!SkipIntro)
             {
                 Game.MainPlayer.Say("Ah! Where am I?");
 
-                Game.EnemyList[0].Say("Oh, you're awake... What is your name?");
+                Stranger.Say("Oh, you're awake... What is your name?");
 
                 if (Pname == "Player ")
                 {
@@ -152,28 +177,28 @@ namespace fwod
                     {
                         tmp_name = Game.MainPlayer.GetAnswer();
 
-                        Game.EnemyList[0].Say("Say something!");
+                        Stranger.Say("Say something!");
                     }
 
                     Game.MainPlayer.CharacterName = tmp_name;
                 }
 
-                Game.MainPlayer.Say("It's " + Game.MainPlayer.CharacterName + ".");
+                Game.MainPlayer.Say("It's " + Game.MainPlayer.CharacterName + ". Jeez, calm down.");
 
-                Game.EnemyList[0].Say("So, welcome to " + ProjectName + ".");
+                Stranger.Say("So, welcome to " + ProjectName + ".");
                 Game.MainPlayer.HP = 10;
-                Game.EnemyList[0].Say("Here's your HP meter.");
+                Stranger.Say("Here's your HP meter.");
 
                 Game.MainPlayer.Say("My HP?");
 
-                Game.EnemyList[0].Say("Health Points, yo.");
+                Stranger.Say("Health Points, yo.");
 
                 Game.MainPlayer.Say("Um.. Okay?");
 
                 if (bosstext.Length > 0)
-                    Game.EnemyList[0].Say(bosstext);
+                    Stranger.Say(bosstext);
                 else
-                    Game.EnemyList[0].Say("I'll be back for you anyway, " + Game.MainPlayer.CharacterName + ".");
+                    Stranger.Say("I'll be back for you anyway, " + Game.MainPlayer.CharacterName + ".");
 
                 Game.MainPlayer.Say("Wait!");
 
@@ -236,9 +261,10 @@ namespace fwod
             Console.WriteLine(" Usage:");
             Console.WriteLine("  fwod [options]");
             Console.WriteLine();
-            Console.WriteLine("  -B --bosssays     Custom text from the Boss");
-            Console.WriteLine("  -C --playerchar   Sets the player's character");
-            Console.WriteLine("  -S --skipintro    Skip intro and use defaults");
+            Console.WriteLine("  -B,  --bosssays     Custom text from the Boss.");
+            Console.WriteLine("  -Pc, --playerchar   Sets the player's character.");
+            Console.WriteLine("  -Pn, --playername   Sets the player's name.");
+            Console.WriteLine("  -S,  --skipintro    Skip intro and use defaults.");
             Console.WriteLine();
             Console.WriteLine("  --help, /?      Shows this screen");
             Console.WriteLine("  --version       Shows version");
