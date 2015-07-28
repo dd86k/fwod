@@ -1,4 +1,4 @@
-﻿//using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace fwod
 {
@@ -30,10 +30,10 @@ namespace fwod
                 new Sword("LOL DEV OP PLS NERF", 9001)
             };
 
-            //ItemsList.AddRange(items);
+            ItemsList.AddRange(items);
         }
 
-        //internal static List<Item> ItemsList = new List<Item>();
+        internal static List<Item> ItemsList = new List<Item>();
     }
 
     class Sword : Item

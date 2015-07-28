@@ -36,7 +36,7 @@ namespace fwod
                     {
                         Person futrPerson = Game.GetPersonObjectAt(value, this.PosY);
 
-                        if (futrPerson != null && futrPerson != this && futrPerson is Enemy)
+                        if (futrPerson != this && futrPerson is Enemy)
                         {
                             this.Attack(futrPerson);
                         }
@@ -66,11 +66,11 @@ namespace fwod
                 {
                     if (futrIsEnemy)
                     {
-                        Person Enemy = Game.GetPersonObjectAt(this.PosX, value);
+                        Person futrPerson = Game.GetPersonObjectAt(this.PosX, value);
 
-                        if (Enemy != null && Enemy != this)
+                        if (futrPerson != this && futrPerson is Enemy)
                         {
-                            this.Attack(Enemy);
+                            this.Attack(futrPerson);
                         }
                     }
                     else
