@@ -14,6 +14,25 @@ namespace fwod
         const string ScreenshotFileNamePrefix = "screenshot-";
         #endregion
 
+        #region Properties
+        static internal bool isPlaying = true;
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// Places Player stuff on screen.
+        /// </summary>
+        internal static void QuickSetup()
+        {
+            Console.SetCursorPosition(27, 0);
+            Console.Write("|");
+            Game.MainPlayer.HP = 10;
+            Console.SetCursorPosition(41, 0);
+            Console.Write("|");
+            Game.MainPlayer.Money = 12;
+        }
+        #endregion
+
         #region People
         /// <summary>
         /// List of the enemies.
@@ -82,6 +101,7 @@ namespace fwod
                 internal const char Grass = '.';
                 internal const char Shelf = 'H';
                 internal const char Chest = 'm';
+                internal const char Terminal = '#';
             }
         }
         #endregion

@@ -22,7 +22,6 @@ namespace fwod
         static readonly string ProjectVersion =
                 string.Format("{0}",
                 System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
-        static internal bool isPlaying = true;
         #endregion
 
         internal static int Main(string[] args)
@@ -32,6 +31,10 @@ namespace fwod
             char Pchar = '@';
             string Pname = "Player ";
             bool SkipIntro = false;
+
+            // Linux specific
+            Console.ForegroundColor = ConsoleTools.OriginalForegroundColor;
+            Console.BackgroundColor = ConsoleTools.OriginalBackgroundColor;
 
             for (int i = 0; i < args.Length; i++)
             {
@@ -95,7 +98,7 @@ namespace fwod
             if (!SkipIntro)
             {
                 Console.Clear();
-                Console.Title = ProjectName + " " + ProjectVersion;
+                Console.Title = "fwod " + ProjectVersion;
 
                 string BannerText = "* Welcome to " + ProjectName + " *";
                 string BannerOutline = ConsoleTools.RepeatChar('*', BannerText.Length);
@@ -105,21 +108,10 @@ namespace fwod
                 ConsoleTools.WriteLineAndCenter(BannerOutline);
                 Console.WriteLine();
 
-                Console.WriteLine("YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE");
-                Console.WriteLine("YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE");
-                Console.WriteLine("YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE");
-                Console.WriteLine("YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE");
-                Console.WriteLine("YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE");
-                Console.WriteLine("YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE");
-                Console.WriteLine("YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE");
-                Console.WriteLine("YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE");
-                Console.WriteLine("YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE");
-                Console.WriteLine("YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE");
-                Console.WriteLine("YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE");
-                Console.WriteLine("YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE YOU'RE WAKING UP INSIDE");
+                Console.WriteLine("[Insert shitty lore here]");
 
                 Console.WriteLine();
-                Console.WriteLine("Watch your keystrokes!");
+                Console.WriteLine("Every keystroke counts!");
 
 #if DEBUG
                 Console.WriteLine();
@@ -145,16 +137,12 @@ namespace fwod
             Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Double, 1, 1,
                 ConsoleTools.BufferWidth - 2, ConsoleTools.BufferHeight - 3);
 
-            Console.SetCursorPosition(27, 0);
-            Console.Write("|");
-
             // Set player stuff
             Game.MainPlayer.CharacterName = Pname;
             Game.MainPlayer.CharacterChar = Pchar;
             Game.MainPlayer.Initialize();
 
             Stranger.CharacterChar = 'S';
-            Stranger.HP = 125;
             Stranger.Initialize();
 
 #warning Test
@@ -186,7 +174,11 @@ namespace fwod
                 Game.MainPlayer.Say("It's " + Game.MainPlayer.CharacterName + ". Jeez, calm down.");
 
                 Stranger.Say("So, welcome to " + ProjectName + ".");
+
+                Console.SetCursorPosition(27, 0);
+                Console.Write("|");
                 Game.MainPlayer.HP = 10;
+
                 Stranger.Say("Here's your HP meter.");
 
                 Game.MainPlayer.Say("My HP?");
@@ -195,6 +187,14 @@ namespace fwod
 
                 Game.MainPlayer.Say("Um.. Okay?");
 
+                Console.SetCursorPosition(41, 0);
+                Console.Write("|");
+                Game.MainPlayer.Money = 12;
+
+                Stranger.Say("And your money.");
+
+                Game.MainPlayer.Say("Oh yeah, I forgot I have that much.");
+
                 if (bosstext.Length > 0)
                     Stranger.Say(bosstext);
                 else
@@ -202,16 +202,22 @@ namespace fwod
 
                 Game.MainPlayer.Say("Wait!");
 
-                //TODO: Make enemy walk to next floor and disapear (AI Path?)
+                Stranger.Say("Time for me to go!");
+                Stranger.Say("[POOF]");
+                Stranger.Destroy();
 
-                //Game.MainPlayer.Say("Oh, alright.. Time to get out.");
+                Game.MainPlayer.Say("I guess there's no helping him... Better get moving.");
+            }
+            else
+            {
+                Game.QuickSetup();
             }
             #endregion
 
             do
             {
                 Entry();
-            } while (isPlaying);
+            } while (Game.isPlaying);
 
             // -- The user is leaving the game --
 

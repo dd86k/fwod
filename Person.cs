@@ -26,24 +26,27 @@ namespace fwod
             get { return _posx; }
             set
             {
-                char futrG = Core.GetCharAt(Core.Layer.Game, value, this.PosY);
-                char futrP = Core.GetCharAt(Core.Layer.People, value, this.PosY);
-                bool futrIsSolid = futrG.IsSolidObject();
-                bool futrIsSomeone = futrP.IsPersonObject();
-                if (!futrIsSolid)
+                if (value != _posx)
                 {
-                    if (futrIsSomeone)
+                    char futrG = Core.GetCharAt(Core.Layer.Game, value, PosY);
+                    char futrP = Core.GetCharAt(Core.Layer.People, value, PosY);
+                    bool futrIsSolid = futrG.IsSolidObject();
+                    bool futrIsSomeone = futrP.IsPersonObject();
+                    if (!futrIsSolid)
                     {
-                        Person futrPerson = Game.GetPersonObjectAt(value, this.PosY);
-
-                        if (futrPerson != this && futrPerson is Enemy)
+                        if (futrIsSomeone)
                         {
-                            this.Attack(futrPerson);
+                            Person futrPerson = Game.GetPersonObjectAt(value, PosY);
+
+                            if (futrPerson != this && futrPerson is Enemy)
+                            {
+                                Attack(futrPerson);
+                            }
                         }
-                    }
-                    else
-                    {
-                        Move(this.PosX, this.PosY, value, this.PosY);
+                        else
+                        {
+                            Move(PosX, PosY, value, PosY);
+                        }
                     }
                 }
             }
@@ -58,24 +61,27 @@ namespace fwod
             get { return _posy; }
             set
             {
-                char futrG = Core.GetCharAt(Core.Layer.Game, this.PosX, value);
-                char futrP = Core.GetCharAt(Core.Layer.People, this.PosX, value);
-                bool futrIsSolid = futrG.IsSolidObject();
-                bool futrIsEnemy = futrP.IsPersonObject();
-                if (!futrIsSolid)
+                if (value != _posy)
                 {
-                    if (futrIsEnemy)
+                    char futrG = Core.GetCharAt(Core.Layer.Game, PosX, value);
+                    char futrP = Core.GetCharAt(Core.Layer.People, PosX, value);
+                    bool futrIsSolid = futrG.IsSolidObject();
+                    bool futrIsEnemy = futrP.IsPersonObject();
+                    if (!futrIsSolid)
                     {
-                        Person futrPerson = Game.GetPersonObjectAt(this.PosX, value);
-
-                        if (futrPerson != this && futrPerson is Enemy)
+                        if (futrIsEnemy)
                         {
-                            this.Attack(futrPerson);
+                            Person futrPerson = Game.GetPersonObjectAt(PosX, value);
+
+                            if (futrPerson != this && futrPerson is Enemy)
+                            {
+                                Attack(futrPerson);
+                            }
                         }
-                    }
-                    else
-                    {
-                        Move(this.PosX, this.PosY, this.PosX, value);
+                        else
+                        {
+                            Move(PosX, PosY, PosX, value);
+                        }
                     }
                 }
             }
@@ -95,7 +101,7 @@ namespace fwod
             _posx = newX;
 
             // Move player
-            Core.Write(Core.Layer.People, this.CharacterChar, newX, newY);
+            Core.Write(Core.Layer.People, CharacterChar, newX, newY);
         }
         #endregion
 
@@ -109,18 +115,34 @@ namespace fwod
             get { return _hp; }
             set
             {
-                _hp = value;
+                if (value > _maxhp)
+                    _hp = _maxhp;
+                else
+                    _hp = value;
 
                 if (this is Player)
                 {
                     Console.SetCursorPosition(29, 0);
-                    Console.Write(new string(' ', 7));
-                    Console.SetCursorPosition(29, 0);
-                    Console.Write(string.Format("HP: {0:000}", this.HP));
+                    Console.Write(new string(' ', 11));
+                    Console.SetCursorPosition(29, 0); //HP: 000/000 | 
+                    Console.Write(string.Format("HP: {0:000}/{1:000}", new object[] { _hp, _maxhp }));
                 }
 
                 if (_hp <= 0)
                     Destroy();
+            }
+        }
+
+        int _maxhp;
+        internal int MaxHP
+        {
+            get { return _maxhp; }
+            set
+            {
+                if (value < _hp)
+                    _maxhp = _hp;
+                else
+                    _maxhp = value;
             }
         }
         #endregion
@@ -129,7 +151,6 @@ namespace fwod
         string _characterName;
         /// <summary>
         /// Gets or sets the name of the character.
-        /// Not to use with an enemy!
         /// </summary>
         internal string CharacterName
         {
@@ -137,11 +158,15 @@ namespace fwod
             set
             {
                 _characterName = value;
-                // Clear name and redraw it (in case of shorter name)
-                Console.SetCursorPosition(1, 0);
-                Console.Write(ConsoleTools.RepeatChar(' ', 25));
-                Console.SetCursorPosition(1, 0);
-                Console.Write(_characterName);
+
+                if (this is Player)
+                {
+                    // Clear name and redraw it (in case of shorter name)
+                    Console.SetCursorPosition(1, 0);
+                    Console.Write(ConsoleTools.RepeatChar(' ', 25));
+                    Console.SetCursorPosition(1, 0);
+                    Console.Write(_characterName);
+                }
             }
         }
 
@@ -158,38 +183,44 @@ namespace fwod
         /// </summary>
         internal int S1
         {
-            get { return _s1; }
+            get { return _s1 ; }
             set
             {
-                if (value <= 10 && value >= 0)
+                if (value > 10)
+                    _s1 = 10;
+                else if (value >= 0)
                     _s1 = value;
             }
         }
 
         int _s2;
         /// <summary>
-        /// 
+        /// Dexterity
         /// </summary>
         internal int S2
         {
             get { return _s2; }
             set
             {
-                if (value <= 10 && value >= 0)
+                if (value > 10)
+                    _s2 = 10;
+                else if (value >= 0)
                     _s2 = value;
             }
         }
 
         int _s3;
         /// <summary>
-        /// 
+        /// Agility
         /// </summary>
         internal int S3
         {
             get { return _s3; }
             set
             {
-                if (value <= 10 && value >= 0)
+                if (value > 10)
+                    _s3 = 10;
+                else if (value >= 0)
                     _s3 = value;
             }
         }
@@ -203,7 +234,9 @@ namespace fwod
             get { return _s4; }
             set
             {
-                if (value <= 10 && value >= 0)
+                if (value > 10)
+                    _s4 = 10;
+                else if (value >= 0)
                     _s4 = value;
             }
             
@@ -218,7 +251,9 @@ namespace fwod
             get { return _s5; }
             set
             {
-                if (value <= 10 && value >= 0)
+                if (value > 10)
+                    _s5 = 10;
+                else if (value >= 0)
                     _s5 = value;
             }
         }
@@ -232,7 +267,9 @@ namespace fwod
             get { return _s6; }
             set
             {
-                if (value <= 10 && value >= 0)
+                if (value > 10)
+                    _s6 = 10;
+                else if (value >= 0)
                     _s6 = value;
             }
         }
@@ -246,8 +283,55 @@ namespace fwod
             get { return _s7; }
             set
             {
-                if (value <= 10 && value >= 0)
+                if (value > 10)
+                    _s7 = 10;
+                else if (value >= 0)
                     _s7 = value;
+            }
+        }
+        #endregion
+
+        #region Weapon
+        /// <summary>
+        /// Current EquipedWeapon in this Person.
+        /// </summary>
+        internal Weapon EquipedWeapon
+        {
+            get; set;
+        }
+        #endregion
+
+        #region Armor
+        /// <summary>
+        /// Current EquipedArmor in this Person.
+        /// </summary>
+        internal Armor EquipedArmor
+        {
+            get; set;
+        }
+        #endregion
+
+        #region Money
+        int _money;
+        /// <summary>
+        /// Current sum of money in this Person.
+        /// The sum is display via the inventory.
+        /// </summary>
+        internal int Money
+        { //TODO: Find better property name than "Money"
+            get { return _money; }
+            set
+            {
+                if (value < 1000000)
+                    _money = value;
+
+                if (this is Player)
+                {
+                    Console.SetCursorPosition(43, 0);
+                    Console.Write(new string(' ', 8)); //1'000'000$
+                    Console.SetCursorPosition(43, 0);  //0'000'000$
+                    Console.Write(string.Format("{0:0000000}$", _money));
+                }
             }
         }
         #endregion
@@ -260,19 +344,29 @@ namespace fwod
 
         }
 
-        internal Person(int X, int Y)
+        internal Person(int pX, int pY)
+            : this(pX, pY, 10)
         {
+
+        }
+
+        internal Person(int pX, int pY, int pHP)
+        {
+            _hp = pHP;
+            _maxhp = _hp;
+            _money = (int)(pHP * 0.5);
+            _posx = pX;
+            _posy = pY;
+            _s1 = 1;
+            _s2 = 1;
+            _s3 = 1;
+            _s4 = 1;
+            _s5 = 1;
+            _s6 = 1;
+            _s7 = 1;
             CharacterChar = 'P';
-            _hp = 10;
-            _posx = X;
-            _posy = Y;
-            _s1 = 5;
-            _s2 = 5;
-            _s3 = 5;
-            _s4 = 5;
-            _s5 = 5;
-            _s6 = 5;
-            _s7 = 5;
+            EquipedWeapon = new Weapon("None", 0);
+            EquipedArmor = new Armor("None", 0);
         }
         #endregion
 
@@ -282,8 +376,7 @@ namespace fwod
         /// </summary>
         internal void Initialize()
         {
-            this.PosX = this._posx;
-            this.PosY = this._posy;
+            Core.Write(Core.Layer.People, CharacterChar, _posx, _posy);
         }
         #endregion
 
@@ -298,33 +391,33 @@ namespace fwod
         {
             Game.GenerateBox(Core.Layer.None,
                 Game.TypeOfLine.Single,
-                this._startX - BUBBLE_PADDING_X,
-                this._startY - BUBBLE_PADDING_Y,
-                this._lenW + (BUBBLE_PADDING_X * 2),
-                this._lenH + (BUBBLE_PADDING_Y * 2));
+                _startX - BUBBLE_PADDING_X,
+                _startY - BUBBLE_PADDING_Y,
+                _lenW + (BUBBLE_PADDING_X * 2),
+                _lenH + (BUBBLE_PADDING_Y * 2));
 
             // Bubble chat "connector"
-            if (_startY < this.PosY) // Over Person
+            if (_startY < PosY) // Over Person
             {
-                Console.SetCursorPosition(this.PosX, this.PosY - 2);
+                Console.SetCursorPosition(PosX, PosY - 2);
                 Console.Write(Game.Graphics.Lines.SingleConnector[2]);
             }
             else // Under Person
             {
-                Console.SetCursorPosition(this.PosX, this.PosY + 2);
+                Console.SetCursorPosition(PosX, PosY + 2);
                 Console.Write(Game.Graphics.Lines.SingleConnector[1]);
             }
 
             // Prepare to insert text
-            Console.SetCursorPosition(this._startX + 1, this._startY + 1);
+            Console.SetCursorPosition(_startX + 1, _startY + 1);
         }
 
         void ClearBubble()
         {
             char c;
-            for (int row = this._startY; row < this._lenH + this._startY; row++)
+            for (int row = _startY; row < _lenH + _startY; row++)
             {
-                for (int col = this._startX; col < this._lenW + this._startX; col++)
+                for (int col = _startX; col < _lenW + _startX; col++)
                 {
                     Console.SetCursorPosition(col, row);
                     c = Core.GetCharAt(Core.Layer.Game, col, row);
@@ -376,7 +469,7 @@ namespace fwod
             else Lines = new string[] { "..." };
 
             // X/Left bubble starting position
-            this._startX = this.PosX - (Lines[0].Length / 2) - 1;
+            _startX = PosX - (Lines[0].Length / 2) - 1;
             // Re-places StartX if it goes further than the display buffer
             if (_startX + (Lines[0].Length + 2) > ConsoleTools.BufferWidth)
             {
@@ -388,7 +481,7 @@ namespace fwod
             }
 
             // Y/Top bubble starting position
-            this._startY = this.PosY - (Lines.Length) - 3;
+            _startY = PosY - (Lines.Length) - 3;
             // Re-places StartY if it goes further than the display buffer
             if (_startY > ConsoleTools.BufferWidth)
             {
@@ -399,8 +492,8 @@ namespace fwod
                 _startY = 3;
             }
 
-            this._lenW = Lines[0].Length + BUBBLE_PADDING_X + 2;
-            this._lenH = Lines.Length + BUBBLE_PADDING_Y + 2;
+            _lenW = Lines[0].Length + BUBBLE_PADDING_X + 2;
+            _lenH = Lines.Length + BUBBLE_PADDING_Y + 2;
 
             // Generate the bubble
             GenerateBubble();
@@ -408,7 +501,7 @@ namespace fwod
             // Insert Text
             for (int i = 0; i < Lines.Length; i++)
             {
-                Console.SetCursorPosition(this._startX + 1, this._startY + i + 1);
+                Console.SetCursorPosition(_startX + 1, _startY + i + 1);
                 Console.Write(Lines[i]);
             }
 
@@ -420,7 +513,7 @@ namespace fwod
             else
             {
                 // Prepare for text
-                Console.SetCursorPosition(this._startX + 1, this._startY + 1);
+                Console.SetCursorPosition(_startX + 1, _startY + 1);
             }
         }
 
@@ -458,7 +551,7 @@ namespace fwod
         /// </summary>
         internal void MoveUp()
         {
-            this.PosY--;
+            PosY--;
         }
 
         /// <summary>
@@ -466,7 +559,7 @@ namespace fwod
         /// </summary>
         internal void MoveDown()
         {
-            this.PosY++;
+            PosY++;
         }
 
         /// <summary>
@@ -474,7 +567,7 @@ namespace fwod
         /// </summary>
         internal void MoveLeft()
         {
-            this.PosX--;
+            PosX--;
         }
 
         /// <summary>
@@ -482,7 +575,7 @@ namespace fwod
         /// </summary>
         internal void MoveRight()
         {
-            this.PosX++;
+            PosX++;
         }
         #endregion
 
@@ -490,14 +583,16 @@ namespace fwod
         internal void Attack(Person pPerson)
         {
             //TODO: Attack algorithm
-            int AttackPoints = this.S1 /* * this.Weapon.BaseDamage*/;
+            int AttackPoints = (int)((S1 + EquipedWeapon.BaseDamage) - EquipedArmor.ArmorPoints);
 
             pPerson.HP -= AttackPoints;
 
+            string atk = " -> " + AttackPoints + " = " + pPerson.HP + "!" + (pPerson.HP <= 0 ? " *DEAD*" : string.Empty);
+
             if (pPerson is Enemy)
-                Game.DisplayEvent(((Enemy)pPerson).eType + " -= " + AttackPoints + " HP! (HP:" + pPerson.HP + ")");
+                Game.DisplayEvent(((Enemy)pPerson).eType + atk);
             else
-                Game.DisplayEvent(pPerson.GetType() + " -= " + AttackPoints + " HP! (HP:" + pPerson.HP + ")");
+                Game.DisplayEvent(pPerson.GetType() + atk);
         }
         #endregion
 
@@ -507,13 +602,12 @@ namespace fwod
         /// </summary>
         internal void Destroy()
         {
-            Console.SetCursorPosition(this.PosX, this.PosY);
+            Console.SetCursorPosition(PosX, PosY);
             Console.Write(' ');
             if (this is Enemy)
             {
-                Enemy e = (Enemy)this;
-                Game.EnemyList.Remove(e);
-                Game.DisplayEvent(Game.MainPlayer.CharacterName + " killed " + e.eType + "!");
+                Game.MainPlayer.Money += this.Money;
+                Game.EnemyList.Remove((Enemy)this);
             }
             else if (this is Player)
             { // Game over
@@ -523,7 +617,6 @@ namespace fwod
             else
             {
                 Game.PeopleList.Remove(this);
-                Game.DisplayEvent(Game.MainPlayer.CharacterName + " killed " + this.GetType() + "!");
             }
         }
         #endregion
@@ -542,7 +635,7 @@ namespace fwod
         internal Player(int X, int Y)
             : base(X, Y)
         {
-            this.CharacterChar = '@';
+            CharacterChar = '@';
         }
     }
     #endregion
@@ -553,8 +646,8 @@ namespace fwod
         internal Enemy(int X, int Y, EnemyType pEnemyType, int pHp)
             : base(X, Y)
         {
-            this.HP = pHp;
-            this.CharacterChar = 'E';
+            HP = pHp;
+            CharacterChar = 'E';
         }
 
         internal enum EnemyType

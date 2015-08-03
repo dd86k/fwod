@@ -4,9 +4,11 @@
     Menu system
 */
 
+//TODO: Redo Menu as object instead
+
 namespace fwod
 {
-    class Menu
+    static class Menu
     {
         #region Constants
         /// <summary>
@@ -27,9 +29,11 @@ namespace fwod
         /// <summary>
         /// Menu items
         /// </summary>
-        static readonly MenuItem[] MenuItems =
+        static readonly MenuItem[] MainMenuItems =
         {
             new MenuItem("Return", MenuItemAction.Return),
+            new MenuItem(MENU_SEPERATOR),
+            new MenuItem("Statistics"/*, MenuItemAction.ShowStats*/),
             new MenuItem(MENU_SEPERATOR),
             new MenuItem("Load", MenuItemAction.Load),
             new MenuItem("Save", MenuItemAction.Save),
@@ -57,10 +61,11 @@ namespace fwod
         enum MenuItemAction
         {
             None,
-            Load,
-            Quit,
             Return,
+            ShowStats,
+            Load,
             Save,
+            Quit,
         }
 
         /// <summary>
@@ -88,19 +93,19 @@ namespace fwod
 
             // Generate menu
             ConsoleTools.WriteAndCenter(Core.Layer.Menu, top, MENU_STARTTOP - 1);
-            for (int i = 0; i < MenuItems.Length; i++)
+            for (int i = 0; i < MainMenuItems.Length; i++)
             {
                 // Get the item if..
-                string item = (MenuItems[i].Text == MENU_SEPERATOR ?
+                string item = (MainMenuItems[i].Text == MENU_SEPERATOR ?
                     // ..it's a MENU_SEPERATOR item
                     Game.Graphics.Lines.SingleConnector[3] + new string(Game.Graphics.Lines.Single[1], MENU_WIDTH - 2) + Game.Graphics.Lines.SingleConnector[0] :
                     // ..or just a regular item
-                    Game.Graphics.Lines.Single[0] + ConsoleTools.CenterString(MenuItems[i].Text, MENU_WIDTH - 2) + Game.Graphics.Lines.Single[0]);
+                    Game.Graphics.Lines.Single[0] + ConsoleTools.CenterString(MainMenuItems[i].Text, MENU_WIDTH - 2) + Game.Graphics.Lines.Single[0]);
 
                 // Print item
                 ConsoleTools.WriteAndCenter(Core.Layer.Menu, item, MENU_STARTTOP + i);
             }
-            ConsoleTools.WriteAndCenter(Core.Layer.Menu, bottom, MENU_STARTTOP + MenuItems.Length);
+            ConsoleTools.WriteAndCenter(Core.Layer.Menu, bottom, MENU_STARTTOP + MainMenuItems.Length);
 
             // "Select" item
             UpdateMenuOnScreen();
@@ -160,13 +165,13 @@ namespace fwod
             {
                 MenuIndex++;
 
-                if (MenuIndex >= MenuItems.Length)
+                if (MenuIndex >= MainMenuItems.Length)
                 {
                     MenuIndex = 0;
                     found = true;
                 }
 
-                if (MenuItems[MenuIndex].Text != MENU_SEPERATOR)
+                if (MainMenuItems[MenuIndex].Text != MENU_SEPERATOR)
                     found = true;
             }
 
@@ -189,11 +194,11 @@ namespace fwod
 
                 if (MenuIndex < 0)
                 {
-                    MenuIndex = MenuItems.Length - 1;
+                    MenuIndex = MainMenuItems.Length - 1;
                     found = true;
                 }
 
-                if (MenuItems[MenuIndex].Text != MENU_SEPERATOR)
+                if (MainMenuItems[MenuIndex].Text != MENU_SEPERATOR)
                     found = true;
             }
 
@@ -206,8 +211,12 @@ namespace fwod
         /// </summary>
         static void Select()
         {
-            switch (MenuItems[MenuIndex].Action)
+            switch (MainMenuItems[MenuIndex].Action)
             {
+                case MenuItemAction.Return:
+                    inMenu = false;
+                    break;
+
                 case MenuItemAction.Save:
                     break;
 
@@ -216,11 +225,7 @@ namespace fwod
 
                 case MenuItemAction.Quit:
                     inMenu = false;
-                    MainClass.isPlaying = false;
-                    break;
-
-                case MenuItemAction.Return:
-                    inMenu = false;
+                    Game.isPlaying = false;
                     break;
             }
         }
@@ -228,7 +233,7 @@ namespace fwod
 
         #region Update
         /// <summary>
-        /// Update menu on screen
+        /// Update menu on screen (Main)
         /// </summary>
         static void UpdateMenuOnScreen()
         {
@@ -239,13 +244,13 @@ namespace fwod
 
             // Deselect old item
             Console.SetCursorPosition(MenuItemLeft + 1, MenuItemTopPast);
-            Console.Write(ConsoleTools.CenterString(MenuItems[PastMenuIndex].Text, MENU_WIDTH - 2));
+            Console.Write(ConsoleTools.CenterString(MainMenuItems[PastMenuIndex].Text, MENU_WIDTH - 2));
 
-            // Apply new item's style
+            // Apply new item's colors
             Console.ForegroundColor = ConsoleColor.Black;
             Console.BackgroundColor = ConsoleColor.White;
             Console.SetCursorPosition(MenuItemLeft + 1, MenuItemTop);
-            Console.Write(ConsoleTools.CenterString(MenuItems[MenuIndex].Text, MENU_WIDTH - 2));
+            Console.Write(ConsoleTools.CenterString(MainMenuItems[MenuIndex].Text, MENU_WIDTH - 2));
 
             // Revert to original colors
             Console.ForegroundColor = ConsoleTools.OriginalForegroundColor;
@@ -261,7 +266,7 @@ namespace fwod
         {
             int startY = MENU_STARTTOP - 1;
             int startX = (ConsoleTools.BufferWidth / 2) - (MENU_WIDTH / 2);
-            int lengthY = MenuItems.Length + 5; // Yeah I know it's that odd
+            int lengthY = MainMenuItems.Length + 5; // Yeah I know it's that odd
             int gamelayer = (int)Core.Layer.Game;
 
             for (int row = startY; row < lengthY; row++)
@@ -269,7 +274,7 @@ namespace fwod
                 for (int col = startX; col < ConsoleTools.BufferWidth; col++)
                 {
                     Console.SetCursorPosition(col, row); // Safety measure
-                    Console.Write(Core.Layers[gamelayer][row, col]);
+                    Console.Write(Core.Layers[gamelayer][row, col] == '\0' ? ' ' : Core.Layers[gamelayer][row, col]);
                 }
             }
 
