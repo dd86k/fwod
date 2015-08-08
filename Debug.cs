@@ -1,5 +1,6 @@
 ﻿#if DEBUG
 using System;
+using System.Diagnostics;
 
 /*
     Used for debugging purposes.
@@ -271,8 +272,26 @@ namespace fwod
         {
             Console.Clear();
             Person p = new Person(ConsoleTools.BufferWidth / 2, ConsoleTools.BufferHeight - 3);
+            p.CharacterChar = '@';
             p.Initialize();
             p.Say(pText);
+            Console.Clear();
+        }
+
+        static internal void SpeedTalkTest()
+        {
+            Stopwatch sw = new Stopwatch();
+            Console.Clear();
+            Person p = new Person(ConsoleTools.BufferWidth / 2, ConsoleTools.BufferHeight - 3);
+            p.CharacterChar = '@';
+            p.Initialize();
+            sw.Start();
+            for (int i = 0; i < 25000; i++)
+            {
+                p.Say(string.Format("{0}", i), false);
+            }
+            sw.Stop();
+            p.Say(string.Format("{0}", sw.Elapsed));
             Console.Clear();
         }
     }

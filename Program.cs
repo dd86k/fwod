@@ -1,7 +1,7 @@
 ﻿using System;
 
 /*
-    This is the entry point of the program.
+    Entry point of the program.
 */
 
 #if DEBUG
@@ -32,7 +32,7 @@ namespace fwod
             string Pname = "Player ";
             bool SkipIntro = false;
 
-            // Linux specific
+            // Applying CMD-like colors so it won't look weird later.
             Console.ForegroundColor = ConsoleTools.OriginalForegroundColor;
             Console.BackgroundColor = ConsoleTools.OriginalBackgroundColor;
 
@@ -89,6 +89,10 @@ namespace fwod
                             return 0;
                         }
                         else return 1;
+
+                    case "--speedtalktest":
+                        Debug.SpeedTalkTest();
+                        return 0;
 #endif
                 }
             }
@@ -153,6 +157,8 @@ namespace fwod
             #region Intro
             if (!SkipIntro)
             {
+                Game.DisplayEvent("Dialog...");
+
                 Game.MainPlayer.Say("Ah! Where am I?");
 
                 Stranger.Say("Oh, you're awake... What is your name?");

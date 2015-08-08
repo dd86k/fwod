@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-namespace fwod
+﻿namespace fwod
 {
     #region Item base class
     class Item
@@ -30,7 +29,6 @@ namespace fwod
         {
 
         }
-
 
         internal Weapon(string pName, int pBaseDamage, Prefix pWeaponPrefix)
             : base(pName)
@@ -79,7 +77,7 @@ namespace fwod
 
     class Sword : Weapon
     {
-        #region Construstion
+        #region Construction
         internal Sword(string pName, int pBaseDamage)
             : base(pName, pBaseDamage)
         {

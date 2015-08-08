@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 /*
     A Person.
@@ -318,7 +319,7 @@ namespace fwod
         /// The sum is display via the inventory.
         /// </summary>
         internal int Money
-        { //TODO: Find better property name than "Money"
+        {
             get { return _money; }
             set
             {
@@ -328,12 +329,16 @@ namespace fwod
                 if (this is Player)
                 {
                     Console.SetCursorPosition(43, 0);
-                    Console.Write(new string(' ', 8)); //1'000'000$
-                    Console.SetCursorPosition(43, 0);  //0'000'000$
+                    Console.Write(new string(' ', 8));
+                    Console.SetCursorPosition(43, 0); //0'000'000$
                     Console.Write(string.Format("{0:0000000}$", _money));
                 }
             }
         }
+        #endregion
+
+        #region Inventory
+        List<Item> Inventory = new List<Item>();
         #endregion
         #endregion
 
@@ -440,69 +445,65 @@ namespace fwod
         /// <summary>
         /// Makes the character talk.
         /// </summary>
-        /// <param name="pText">Text!</param>
-        /// <param name="pWait">Wait for keydown?</param>
+        /// <param name="pText">Dialog</param>
+        /// <param name="pWait">Wait for keydown</param>
         internal void Say(string pText, bool pWait)
         {
             string[] Lines = new string[] { pText }; // In case of multiline scenario
 
-            if (pText.Length > 0)
+            if (pText.Length > 25)
             {
-                if (pText.Length > 25)
+                int ci = 0; // Multiline scenario row index
+                int start = 0; // Multiline cutting index
+                Lines = new string[(pText.Length / 26) + 1];
+
+                // This block seperates the input into 25 characters each lines equally.
+                do
                 {
-                    int ci = 0; // Multiline scenario row index
-                    int start = 0; // Multiline cutting index
-                    Lines = new string[(pText.Length / 26) + 1];
-
-                    // This block seperates the input into 25 characters each lines equally.
-                    do
-                    {
-                        if (start + 25 > pText.Length)
-                            Lines[ci] = pText.Substring(start, pText.Length - start);
-                        else
-                            Lines[ci] = pText.Substring(start, 25);
-                        ci++;
-                        start += 25;
-                    } while (start < pText.Length);
-                }
+                    if (start + 25 > pText.Length)
+                        Lines[ci] = pText.Substring(start, pText.Length - start);
+                    else
+                        Lines[ci] = pText.Substring(start, 25);
+                    ci++;
+                    start += 25;
+                } while (start < pText.Length);
             }
-            else Lines = new string[] { "..." };
+            
+            Say(Lines, pWait);
+        }
 
+        internal void Say(string[] pLines, bool pWait)
+        {
             // X/Left bubble starting position
-            _startX = PosX - (Lines[0].Length / 2) - 1;
+            _startX = PosX - (pLines[0].Length / 2) - 1;
             // Re-places StartX if it goes further than the display buffer
-            if (_startX + (Lines[0].Length + 2) > ConsoleTools.BufferWidth)
-            {
-                _startX = ConsoleTools.BufferWidth - (Lines[0].Length + 2);
-            }
+            if (_startX + (pLines[0].Length + 2) > ConsoleTools.BufferWidth)
+                _startX = ConsoleTools.BufferWidth - (pLines[0].Length + 2);
             else if (_startX < 0)
-            {
                 _startX = 0;
-            }
 
             // Y/Top bubble starting position
-            _startY = PosY - (Lines.Length) - 3;
+            _startY = PosY - (pLines.Length) - 3;
             // Re-places StartY if it goes further than the display buffer
             if (_startY > ConsoleTools.BufferWidth)
-            {
-                _startY = ConsoleTools.BufferWidth - (Lines[0].Length - 2);
-            }
+                _startY = ConsoleTools.BufferWidth - (pLines[0].Length - 2);
             else if (_startY < 0)
-            {
                 _startY = 3;
-            }
 
-            _lenW = Lines[0].Length + BUBBLE_PADDING_X + 2;
-            _lenH = Lines.Length + BUBBLE_PADDING_Y + 2;
+            _lenW = pLines[0].Length + BUBBLE_PADDING_X + 2;
+            _lenH = pLines.Length + BUBBLE_PADDING_Y + 2;
 
             // Generate the bubble
             GenerateBubble();
 
+            int TextStartX = _startX + 1;
+            int TextStartY = _startY + 1;
+
             // Insert Text
-            for (int i = 0; i < Lines.Length; i++)
+            for (int i = 0; i < pLines.Length; i++)
             {
-                Console.SetCursorPosition(_startX + 1, _startY + i + 1);
-                Console.Write(Lines[i]);
+                Console.SetCursorPosition(TextStartX, TextStartY + i);
+                Console.Write(pLines[i]);
             }
 
             if (pWait)
@@ -587,7 +588,8 @@ namespace fwod
 
             pPerson.HP -= AttackPoints;
 
-            string atk = " -> " + AttackPoints + " = " + pPerson.HP + "!" + (pPerson.HP <= 0 ? " *DEAD*" : string.Empty);
+            string atk = " -> " + AttackPoints + " = " + pPerson.HP + "!" +
+                (pPerson.HP <= 0 ? " +" + pPerson.Money + "$ *DEAD*" : string.Empty);
 
             if (pPerson is Enemy)
                 Game.DisplayEvent(((Enemy)pPerson).eType + atk);

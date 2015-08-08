@@ -22,6 +22,7 @@ Anyway, fwod would play like [NetHack](https://en.wikipedia.org/wiki/NetHack), a
 You can always send me an email at devddstuff@gmail.com or open a ticket/issue. (I won't bite!)
 
 ### Notes
+
 - Code reorganization/restructures/cleanups are made from time to time
 - The game will change dramatically often during development process
 - Fixed 80x24 resolution for **maximum** compatiblity (ISO/ANSI screen size)
@@ -43,16 +44,16 @@ You can always send me an email at devddstuff@gmail.com or open a ticket/issue. 
 - [x] Menu
 - [x] Hit system
 - [ ] Person.cs
-  - [ ] Player stats [WIP]
+  - [ ] Player stats *
   - [ ] Inventory system
   - [ ] Leveling system
-  - [ ] Attack system [WIP]
+  - [ ] Attack system *
 - [ ] Item.cs
-  - [ ] Weapons [WIP]
+  - [ ] Weapons *
     - [ ] Sword
 	- [ ] Gun
-  - [ ] Food and Drinks
-  - [ ] Armors
+  - [ ] Food and Drinks *
+  - [ ] Armors *
 - [ ] Game.cs
   - [ ] Turns
   - [ ] Enemy AI
@@ -68,6 +69,7 @@ You can always send me an email at devddstuff@gmail.com or open a ticket/issue. 
     - [ ] Mono
   - [ ] Optimization
     - [ ] Change types (e.g. int to byte for Damage)
+	- [ ] Less calls
 - [ ] Wiki (Optional)
 - [ ] Official Release (1.0.0.0)
   - [ ] Celebrate! (PARTY HARD)
