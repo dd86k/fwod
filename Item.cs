@@ -23,7 +23,7 @@
     #region Weapons
     class Weapon : Item
     {
-        #region Construstion
+        #region Construction
         internal Weapon(string pName, int pBaseDamage)
             : this(pName, pBaseDamage, Prefix.Normal)
         {

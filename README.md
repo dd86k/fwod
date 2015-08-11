@@ -43,8 +43,8 @@ You can always send me an email at devddstuff@gmail.com or open a ticket/issue. 
 - [x] Collision system
 - [x] Menu
 - [x] Hit system
+- [x] Statistics
 - [ ] Person.cs
-  - [ ] Player stats *
   - [ ] Inventory system
   - [ ] Leveling system
   - [ ] Attack system *
@@ -70,6 +70,12 @@ You can always send me an email at devddstuff@gmail.com or open a ticket/issue. 
   - [ ] Optimization
     - [ ] Change types (e.g. int to byte for Damage)
 	- [ ] Less calls
+- [ ] Multiplayer
+  - Lobby
+- [ ] Gamemodes
+  - [ ] Story *
+  - [ ] Survive
+  - [ ] Duel (Multiplayer)
 - [ ] Wiki (Optional)
 - [ ] Official Release (1.0.0.0)
   - [ ] Celebrate! (PARTY HARD)
@@ -85,9 +91,9 @@ You only need Visual Studio 2012+, MonoDevelop, or Xamarin Studio, and you're go
 
 On MonoDevelop and Xamarin Studio, you will need to change one project setting.
 
-Right click on the fwod Solution; Options; Under Execute; General: Run on external console.
+Right click on the fwod Solution; Options; Under Execute; General: Run on external console. Good to go!
 
-I'm currently using **VS2012**.
+I'm currently using **Visual Studio 2012**.
 
 ### License
 This project uses the MIT license, which you can read from the LICENSE file.

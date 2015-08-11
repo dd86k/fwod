@@ -4,108 +4,116 @@
     Menu system
 */
 
-//TODO: Redo Menu as object instead
-
 namespace fwod
 {
-    static class Menu
+    static class DisplayMenu
     {
+        /// <summary>
+        /// Main menu items
+        /// </summary>
+        internal static readonly MenuItem[] MainMenuItems =
+        {
+            new MenuItem("Return", MenuItem.MenuItemType.Return),
+            new MenuItem(),
+            new MenuItem("Statistics", MenuItem.MenuItemType.ShowStats),
+            new MenuItem(),
+            new MenuItem("Load", MenuItem.MenuItemType.Load),
+            new MenuItem("Save", MenuItem.MenuItemType.Save),
+            new MenuItem(),
+            new MenuItem("Quit", MenuItem.MenuItemType.Quit),
+        };
+
+        internal static void Show(MenuItem[] pItems)
+        {
+            Menu m = new Menu(pItems);
+            m.Show();
+        }
+    }
+
+    class Menu
+    {
+        internal Menu(MenuItem[] pItems)
+        {
+            CurrentMenu = pItems;
+        }
+
         #region Constants
         /// <summary>
         /// Width of the menu
         /// </summary>
-        const int MENU_WIDTH = 40;
+        const int MENU_WIDTH = 30;
         /// <summary>
         /// Starting top position
         /// </summary>
-        const int MENU_STARTTOP = 4;
-        /// <summary>
-        /// Menu seperator item
-        /// </summary>
-        const string MENU_SEPERATOR = "--";
+        const int MENU_TOP = 4;
         #endregion
 
         #region Properties
-        /// <summary>
-        /// Menu items
-        /// </summary>
-        static readonly MenuItem[] MainMenuItems =
-        {
-            new MenuItem("Return", MenuItemAction.Return),
-            new MenuItem(MENU_SEPERATOR),
-            new MenuItem("Statistics"/*, MenuItemAction.ShowStats*/),
-            new MenuItem(MENU_SEPERATOR),
-            new MenuItem("Load", MenuItemAction.Load),
-            new MenuItem("Save", MenuItemAction.Save),
-            new MenuItem(MENU_SEPERATOR),
-            new MenuItem("Quit", MenuItemAction.Quit),
-        };
-
-        /// <summary>
-        /// MenuItem object
-        /// </summary>
-        class MenuItem
-        {
-            internal string Text;
-            internal MenuItemAction Action;
-
-            internal MenuItem(string pText) : this(pText, MenuItemAction.None) { }
-
-            internal MenuItem(string pText, MenuItemAction pAction)
-            {
-                Text = pText;
-                Action = pAction;
-            }
-        }
-
-        enum MenuItemAction
-        {
-            None,
-            Return,
-            ShowStats,
-            Load,
-            Save,
-            Quit,
-        }
+        static MenuItem[] CurrentMenu;
 
         /// <summary>
         /// Is user in the menu
         /// </summary>
-        static bool inMenu;
+        bool inMenu;
 
         /// <summary>
         /// Present and past menu indexes
         /// </summary>
-        static int PastMenuIndex = 0, MenuIndex = 0;
+        int PastMenuIndex = 0, MenuIndex = 0;
         #endregion
 
         #region Show
         /// <summary>
         /// Show menu
         /// </summary>
-        static internal void Show()
+        internal void Show()
         {
             inMenu = true;
 
             // Generate and print the menu
-            string top = Game.Graphics.Lines.SingleCorner[0] + ConsoleTools.RepeatChar(Game.Graphics.Lines.Single[1], MENU_WIDTH - 2) + Game.Graphics.Lines.SingleCorner[1];
-            string bottom = Game.Graphics.Lines.SingleCorner[3] + ConsoleTools.RepeatChar(Game.Graphics.Lines.Single[1], MENU_WIDTH - 2) + Game.Graphics.Lines.SingleCorner[2];
+            string top = Game.Graphics.Lines.SingleCorner[0] + 
+                new string(Game.Graphics.Lines.Single[1], MENU_WIDTH - 2) + 
+                Game.Graphics.Lines.SingleCorner[1];
+            string bottom = Game.Graphics.Lines.SingleCorner[3] + 
+                new string(Game.Graphics.Lines.Single[1], MENU_WIDTH - 2) + 
+                Game.Graphics.Lines.SingleCorner[2];
 
             // Generate menu
-            ConsoleTools.WriteAndCenter(Core.Layer.Menu, top, MENU_STARTTOP - 1);
-            for (int i = 0; i < MainMenuItems.Length; i++)
+            ConsoleTools.WriteAndCenter(Core.Layer.Menu, top, MENU_TOP - 1);
+            for (int i = 0; i < CurrentMenu.Length; i++)
             {
                 // Get the item if..
-                string item = (MainMenuItems[i].Text == MENU_SEPERATOR ?
+                string item = (CurrentMenu[i].ItemType == MenuItem.MenuItemType.Seperator ?
                     // ..it's a MENU_SEPERATOR item
                     Game.Graphics.Lines.SingleConnector[3] + new string(Game.Graphics.Lines.Single[1], MENU_WIDTH - 2) + Game.Graphics.Lines.SingleConnector[0] :
                     // ..or just a regular item
-                    Game.Graphics.Lines.Single[0] + ConsoleTools.CenterString(MainMenuItems[i].Text, MENU_WIDTH - 2) + Game.Graphics.Lines.Single[0]);
+                    Game.Graphics.Lines.Single[0] + ConsoleTools.CenterString(CurrentMenu[i].Text, MENU_WIDTH - 2) + Game.Graphics.Lines.Single[0]);
 
                 // Print item
-                ConsoleTools.WriteAndCenter(Core.Layer.Menu, item, MENU_STARTTOP + i);
+                ConsoleTools.WriteAndCenter(Core.Layer.Menu, item, MENU_TOP + i);
             }
-            ConsoleTools.WriteAndCenter(Core.Layer.Menu, bottom, MENU_STARTTOP + MainMenuItems.Length);
+            ConsoleTools.WriteAndCenter(Core.Layer.Menu, bottom, MENU_TOP + CurrentMenu.Length);
+
+            // Select good starting index
+            bool found = false;
+            MenuIndex = -1;
+            while (!found)
+            {
+                MenuIndex++;
+
+                if (MenuIndex > CurrentMenu.Length - 1)
+                    MenuIndex = 0;
+
+                switch (CurrentMenu[MenuIndex].ItemType)
+                {
+                    case MenuItem.MenuItemType.Info:
+                    case MenuItem.MenuItemType.Seperator:
+                        break;
+                    default:
+                        found = true;
+                        break;
+                }
+            }
 
             // "Select" item
             UpdateMenuOnScreen();
@@ -125,7 +133,7 @@ namespace fwod
         /// <summary>
         /// Entry point for menu
         /// </summary>
-        static internal void Entry()
+        internal void Entry()
         {
             ConsoleKeyInfo cki = Console.ReadKey(true);
 
@@ -155,7 +163,7 @@ namespace fwod
         /// <summary>
         /// Goes to the next control
         /// </summary>
-        static void NextControl()
+        internal void NextControl()
         {
             bool found = false;
             PastMenuIndex = MenuIndex;
@@ -165,14 +173,18 @@ namespace fwod
             {
                 MenuIndex++;
 
-                if (MenuIndex >= MainMenuItems.Length)
-                {
+                if (MenuIndex > CurrentMenu.Length - 1)
                     MenuIndex = 0;
-                    found = true;
-                }
 
-                if (MainMenuItems[MenuIndex].Text != MENU_SEPERATOR)
-                    found = true;
+                switch (CurrentMenu[MenuIndex].ItemType)
+                {
+                    case MenuItem.MenuItemType.Info:
+                    case MenuItem.MenuItemType.Seperator:
+                        break;
+                    default:
+                        found = true;
+                        break;
+                }
             }
 
             // Update screen
@@ -182,7 +194,7 @@ namespace fwod
         /// <summary>
         /// Goes to the previous control
         /// </summary>
-        static void PreviousControl()
+        internal void PreviousControl()
         {
             bool found = false;
             PastMenuIndex = MenuIndex;
@@ -193,13 +205,17 @@ namespace fwod
                 MenuIndex--;
 
                 if (MenuIndex < 0)
-                {
-                    MenuIndex = MainMenuItems.Length - 1;
-                    found = true;
-                }
+                    MenuIndex = CurrentMenu.Length - 1;
 
-                if (MainMenuItems[MenuIndex].Text != MENU_SEPERATOR)
-                    found = true;
+                switch (CurrentMenu[MenuIndex].ItemType)
+                {
+                    case MenuItem.MenuItemType.Info:
+                    case MenuItem.MenuItemType.Seperator:
+                        break;
+                    default:
+                        found = true;
+                        break;
+                }
             }
 
             // Update screen
@@ -209,21 +225,44 @@ namespace fwod
         /// <summary>
         /// Selects the item in the menu
         /// </summary>
-        static void Select()
+        internal void Select()
         {
-            switch (MainMenuItems[MenuIndex].Action)
+            switch (CurrentMenu[MenuIndex].ItemType)
             {
-                case MenuItemAction.Return:
+                case MenuItem.MenuItemType.Return:
                     inMenu = false;
                     break;
 
-                case MenuItemAction.Save:
+                case MenuItem.MenuItemType.ShowStats:
+                    MenuItem[] StatisticsMenuItems = 
+                    {
+                        new MenuItem("Steps taken", MenuItem.MenuItemType.Info),
+                        new MenuItem(string.Format("{0}", Game.StatStepsTaken), MenuItem.MenuItemType.Info),
+                        new MenuItem("Monsters killed", MenuItem.MenuItemType.Info),
+                        new MenuItem(string.Format("{0}", Game.StatEnemiesKilled), MenuItem.MenuItemType.Info),
+                        new MenuItem("Damage dealt", MenuItem.MenuItemType.Info),
+                        new MenuItem(string.Format("{0}", Game.StatDamageDealt), MenuItem.MenuItemType.Info),
+                        new MenuItem("Damage received", MenuItem.MenuItemType.Info),
+                        new MenuItem(string.Format("{0}", Game.StatDamageReceived), MenuItem.MenuItemType.Info),
+                        new MenuItem("Money gain", MenuItem.MenuItemType.Info),
+                        new MenuItem(string.Format("{0}$", Game.StatMoneyGained), MenuItem.MenuItemType.Info),
+                        new MenuItem(),
+                        //new MenuItem("Back", MenuItem.MenuItemType.Return),
+                        new MenuItem("Return", MenuItem.MenuItemType.Return)
+                    };
+                    Menu s = new Menu(StatisticsMenuItems);
+                    s.Show();
+                    s.inMenu = false;
+                    inMenu = false;
                     break;
 
-                case MenuItemAction.Load:
+                case MenuItem.MenuItemType.Save:
                     break;
 
-                case MenuItemAction.Quit:
+                case MenuItem.MenuItemType.Load:
+                    break;
+
+                case MenuItem.MenuItemType.Quit:
                     inMenu = false;
                     Game.isPlaying = false;
                     break;
@@ -235,22 +274,25 @@ namespace fwod
         /// <summary>
         /// Update menu on screen (Main)
         /// </summary>
-        static void UpdateMenuOnScreen()
+        void UpdateMenuOnScreen()
         {
             // Get coords
-            int MenuItemTop = MENU_STARTTOP + MenuIndex;
-            int MenuItemTopPast = MENU_STARTTOP + PastMenuIndex;
+            int MenuItemTop = MENU_TOP + MenuIndex;
+            int MenuItemTopPast = MENU_TOP + PastMenuIndex;
             int MenuItemLeft = (ConsoleTools.BufferWidth / 2) - (MENU_WIDTH / 2);
 
             // Deselect old item
-            Console.SetCursorPosition(MenuItemLeft + 1, MenuItemTopPast);
-            Console.Write(ConsoleTools.CenterString(MainMenuItems[PastMenuIndex].Text, MENU_WIDTH - 2));
+            if (MenuIndex != PastMenuIndex)
+            {
+                Console.SetCursorPosition(MenuItemLeft + 1, MenuItemTopPast);
+                Console.Write(ConsoleTools.CenterString(CurrentMenu[PastMenuIndex].Text, MENU_WIDTH - 2));
+            }
 
             // Apply new item's colors
             Console.ForegroundColor = ConsoleColor.Black;
             Console.BackgroundColor = ConsoleColor.White;
             Console.SetCursorPosition(MenuItemLeft + 1, MenuItemTop);
-            Console.Write(ConsoleTools.CenterString(MainMenuItems[MenuIndex].Text, MENU_WIDTH - 2));
+            Console.Write(ConsoleTools.CenterString(CurrentMenu[MenuIndex].Text, MENU_WIDTH - 2));
 
             // Revert to original colors
             Console.ForegroundColor = ConsoleTools.OriginalForegroundColor;
@@ -262,11 +304,11 @@ namespace fwod
         /// <summary>
         /// Clears the menu and places things back on screen.
         /// </summary>
-        static void ClearMenu()
+        internal void ClearMenu()
         {
-            int startY = MENU_STARTTOP - 1;
+            int startY = MENU_TOP - 1;
             int startX = (ConsoleTools.BufferWidth / 2) - (MENU_WIDTH / 2);
-            int lengthY = MainMenuItems.Length + 5; // Yeah I know it's that odd
+            int lengthY = CurrentMenu.Length + 5; // Yeah I know it's that odd
             int gamelayer = (int)Core.Layer.Game;
 
             for (int row = startY; row < lengthY; row++)
@@ -274,18 +316,49 @@ namespace fwod
                 for (int col = startX; col < ConsoleTools.BufferWidth; col++)
                 {
                     Console.SetCursorPosition(col, row); // Safety measure
-                    Console.Write(Core.Layers[gamelayer][row, col] == '\0' ? ' ' : Core.Layers[gamelayer][row, col]);
+                    Console.Write(Core.Layers[gamelayer][row, col] == '\0' ?
+                        ' ' : Core.Layers[gamelayer][row, col]);
                 }
             }
 
-            // Place enemies and player back on screen
+            // Place PEEPs back on screen
             foreach (Person enemy in Game.EnemyList)
-            {
                 enemy.Initialize();
-            }
+
+            foreach (Person p in Game.PeopleList)
+                p.Initialize();
 
             Game.MainPlayer.Initialize();
         }
         #endregion
+    }
+    
+    class MenuItem
+    {
+        internal string Text;
+        internal MenuItemType ItemType;
+
+        internal MenuItem()
+            : this("", MenuItemType.Seperator)
+        {
+
+        }
+
+        internal MenuItem(string pText, MenuItemType pAction)
+        {
+            Text = pText;
+            ItemType = pAction;
+        }
+
+        internal enum MenuItemType
+        {
+            Info,
+            Seperator,
+            Return,
+            ShowStats,
+            Load,
+            Save,
+            Quit,
+        }
     }
 }

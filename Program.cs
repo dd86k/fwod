@@ -12,6 +12,9 @@
 
 namespace fwod
 {
+    /// <summary>
+    /// Program entry point
+    /// </summary>
     class MainClass
     {
         #region Constants
@@ -31,6 +34,10 @@ namespace fwod
             char Pchar = '@';
             string Pname = "Player ";
             bool SkipIntro = false;
+
+#if DEBUG
+            args = new string[] { "-S" };
+#endif
 
             // Applying CMD-like colors so it won't look weird later.
             Console.ForegroundColor = ConsoleTools.OriginalForegroundColor;
@@ -77,12 +84,12 @@ namespace fwod
                         Misc.ShowMeme(); // :^)
                         return 0;
 
-                    case "--debug":
+                    case "--runtests":
                         int returnint = 0;
                         Debug.StartTests(ref returnint);
                         return returnint;
 
-                    case "--debugsay":
+                    case "--say":
                         if (args[i + 1] != null)
                         {
                             Debug.TalkTest(args[i + 1]);
@@ -105,7 +112,7 @@ namespace fwod
                 Console.Title = "fwod " + ProjectVersion;
 
                 string BannerText = "* Welcome to " + ProjectName + " *";
-                string BannerOutline = ConsoleTools.RepeatChar('*', BannerText.Length);
+                string BannerOutline = new string('*', BannerText.Length);
 
                 ConsoleTools.WriteLineAndCenter(BannerOutline);
                 ConsoleTools.WriteLineAndCenter(BannerText);
@@ -167,12 +174,12 @@ namespace fwod
                 {
                     string tmp_name = null;
 
-                    while (tmp_name == null)
+                    do
                     {
                         tmp_name = Game.MainPlayer.GetAnswer();
 
                         Stranger.Say("Say something!");
-                    }
+                    } while (tmp_name == null);
 
                     Game.MainPlayer.CharacterName = tmp_name;
                 }
@@ -216,6 +223,7 @@ namespace fwod
             }
             else
             {
+                Stranger.Destroy();
                 Game.QuickSetup();
             }
             #endregion
@@ -260,7 +268,7 @@ namespace fwod
 
                 // Menu button
                 case ConsoleKey.Escape:
-                    Menu.Show();
+                    DisplayMenu.Show(DisplayMenu.MainMenuItems);
                     break;
             }
 
@@ -277,6 +285,11 @@ namespace fwod
             Console.WriteLine("  -Pc, --playerchar   Sets the player's character.");
             Console.WriteLine("  -Pn, --playername   Sets the player's name.");
             Console.WriteLine("  -S,  --skipintro    Skip intro and use defaults.");
+#if DEBUG
+            Console.WriteLine("  --runtests          Run debugging tests.");
+            Console.WriteLine("  -Pn, --playername   Sets the player's name.");
+            Console.WriteLine("  -S,  --skipintro    Skip intro and use defaults.");
+#endif
             Console.WriteLine();
             Console.WriteLine("  --help, /?      Shows this screen");
             Console.WriteLine("  --version       Shows version");

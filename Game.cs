@@ -9,13 +9,16 @@ namespace fwod
 {
     static class Game
     {
-        #region Constants
-        const string SaveFilenameModel = "fwod@.sg";
-        const string ScreenshotFileNamePrefix = "screenshot-";
+        #region Properties
+        internal static bool isPlaying = true;
         #endregion
 
-        #region Properties
-        static internal bool isPlaying = true;
+        #region Statistics
+        internal static uint StatEnemiesKilled = 0;
+        internal static uint StatStepsTaken = 0;
+        internal static uint StatMoneyGained = 0;
+        internal static uint StatDamageDealt = 0;
+        internal static uint StatDamageReceived = 0;
         #endregion
 
         #region Methods
@@ -96,12 +99,10 @@ namespace fwod
             }
             internal struct Objects
             {
-                internal const char StairsUp = '^';
-                internal const char StairsDown = 'v';
                 internal const char Grass = '.';
-                internal const char Shelf = 'H';
+                internal const char Ladder = 'H';
                 internal const char Chest = 'm';
-                internal const char Terminal = '#';
+                internal const char Terminal = 'T';
             }
         }
         #endregion
@@ -125,29 +126,6 @@ namespace fwod
         /// <param name="pHeight">Height.</param>
         static internal void GenerateBox(Core.Layer pLayer, TypeOfLine pType, int pPosX, int pPosY, int pWidth, int pHeight)
         {
-            // Minimum value must be at least 2
-            pWidth = pWidth < 2 ? 1 : pWidth - 2;
-            pHeight = pHeight < 2 ? 1 : pHeight - 1;
-
-            // Verify that values are within bounds
-            if (pPosX < 0)
-            {
-                pPosX = 0;
-            }
-            else if (pPosX + pWidth > ConsoleTools.BufferWidth)
-            {
-                pPosX = ConsoleTools.BufferWidth - pWidth;
-            }
-            
-            if (pPosY < 0)
-            {
-                pPosY = 0;
-            }
-            else if (pPosY + pHeight > ConsoleTools.BufferWidth)
-            {
-                pPosY = ConsoleTools.BufferWidth - pHeight;
-            }
-
             // Default is single lines
             char CornerTLChar = Graphics.Lines.SingleCorner[0]; // Top Left
             char CornerTRChar = Graphics.Lines.SingleCorner[1]; // Top Right
@@ -170,20 +148,20 @@ namespace fwod
 
             // Top wall
             Core.Write(pLayer, CornerTLChar, pPosX, pPosY);
-            ConsoleTools.GenerateHorizontalLine(pLayer, HorizontalChar, pWidth);
+            ConsoleTools.GenerateHorizontalLine(pLayer, HorizontalChar, pWidth - 2);
             Core.Write(pLayer, CornerTRChar);
 
             // Side walls
             Console.SetCursorPosition(pPosX, pPosY + 1);
-            ConsoleTools.GenerateVerticalLine(pLayer, VerticalChar, pHeight);
+            ConsoleTools.GenerateVerticalLine(pLayer, VerticalChar, pHeight - 1);
 
-            Console.SetCursorPosition(pPosX + pWidth + 1, pPosY + 1);
-            ConsoleTools.GenerateVerticalLine(pLayer, VerticalChar, pHeight);
+            Console.SetCursorPosition(pPosX + (pWidth - 1), pPosY + 1);
+            ConsoleTools.GenerateVerticalLine(pLayer, VerticalChar, pHeight - 1);
 
             // Bottom wall
-            Console.SetCursorPosition(pPosX, pPosY + pHeight);
+            Console.SetCursorPosition(pPosX, pPosY + (pHeight - 1));
             Core.Write(pLayer, CornerBLChar);
-            ConsoleTools.GenerateHorizontalLine(pLayer, HorizontalChar, pWidth);
+            ConsoleTools.GenerateHorizontalLine(pLayer, HorizontalChar, pWidth - 2);
             Core.Write(pLayer, CornerBRChar);
         }
         #endregion

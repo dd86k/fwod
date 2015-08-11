@@ -11,9 +11,9 @@ namespace fwod
     #region Person
     internal class Person
     {
-        #region Consts
+        #region Constants
         const int BUBBLE_PADDING_X = 0;
-        const int BUBBLE_PADDING_Y = 0; // Not ready, but also no thanks
+        const int BUBBLE_TEXTMAXLEN = 25;
         #endregion
 
         #region Object properties
@@ -103,6 +103,9 @@ namespace fwod
 
             // Move player
             Core.Write(Core.Layer.People, CharacterChar, newX, newY);
+
+            if (this is Player)
+                Game.StatStepsTaken++;
         }
         #endregion
 
@@ -116,6 +119,10 @@ namespace fwod
             get { return _hp; }
             set
             {
+                //TODO: Check if correct algorithm
+                if (this is Player)
+                    Game.StatDamageReceived += value > _hp ? (uint)(_hp - value) : 0;
+
                 if (value > _maxhp)
                     _hp = _maxhp;
                 else
@@ -125,7 +132,7 @@ namespace fwod
                 {
                     Console.SetCursorPosition(29, 0);
                     Console.Write(new string(' ', 11));
-                    Console.SetCursorPosition(29, 0); //HP: 000/000 | 
+                    Console.SetCursorPosition(29, 0); //HP: 000/000
                     Console.Write(string.Format("HP: {0:000}/{1:000}", new object[] { _hp, _maxhp }));
                 }
 
@@ -164,7 +171,7 @@ namespace fwod
                 {
                     // Clear name and redraw it (in case of shorter name)
                     Console.SetCursorPosition(1, 0);
-                    Console.Write(ConsoleTools.RepeatChar(' ', 25));
+                    Console.Write(new string(' ', 25));
                     Console.SetCursorPosition(1, 0);
                     Console.Write(_characterName);
                 }
@@ -316,7 +323,7 @@ namespace fwod
         int _money;
         /// <summary>
         /// Current sum of money in this Person.
-        /// The sum is display via the inventory.
+        /// The sum is display via the inventory for Player.
         /// </summary>
         internal int Money
         {
@@ -386,23 +393,21 @@ namespace fwod
         #endregion
 
         #region Bubble
-        // Avoiding heavy usage of parameters
-        int _startX;
-        int _startY;
-        int _lenW;
-        int _lenH;
-
-        void GenerateBubble()
+        /// <summary>
+        /// Generates a bubble for this Person.
+        /// </summary>
+        /// <param name="pStartX">Top starting position</param>
+        /// <param name="pStartY">Left starting position</param>
+        /// <param name="pWidth">Bubble width</param>
+        /// <param name="pHeight">Bubble height</param>
+        void GenerateBubble(int pStartX, int pStartY, int pWidth, int pHeight)
         {
             Game.GenerateBox(Core.Layer.None,
                 Game.TypeOfLine.Single,
-                _startX - BUBBLE_PADDING_X,
-                _startY - BUBBLE_PADDING_Y,
-                _lenW + (BUBBLE_PADDING_X * 2),
-                _lenH + (BUBBLE_PADDING_Y * 2));
+                pStartX, pStartY, pWidth, pHeight);
 
             // Bubble chat "connector"
-            if (_startY < PosY) // Over Person
+            if (pStartY < PosY) // Over Person
             {
                 Console.SetCursorPosition(PosX, PosY - 2);
                 Console.Write(Game.Graphics.Lines.SingleConnector[2]);
@@ -412,17 +417,38 @@ namespace fwod
                 Console.SetCursorPosition(PosX, PosY + 2);
                 Console.Write(Game.Graphics.Lines.SingleConnector[1]);
             }
-
-            // Prepare to insert text
-            Console.SetCursorPosition(_startX + 1, _startY + 1);
         }
 
-        void ClearBubble()
+        /// <summary>
+        /// Clear the past bubble and reprint chars from game layer.
+        /// Assumes it's over-the-head (for now)
+        /// TODO: Fix assuming
+        /// </summary>
+        /// <param name="pLength">Length of the string</param>
+        void ClearBubble(int pLength)
+        {
+            int height = (pLength / (BUBBLE_TEXTMAXLEN + 1)) + 3;
+            int width = pLength + (BUBBLE_PADDING_X * 2) + 2;
+            int startx = PosX - ((pLength / 2) + BUBBLE_PADDING_X + 1);
+            int starty = PosY - (pLength / BUBBLE_TEXTMAXLEN) - 3;
+            ClearBubble(startx, starty, width, height);
+        }
+
+        /// <summary>
+        /// Clear the past bubble and reprint chars from game layer.
+        /// </summary>
+        /// <param name="pStartX">Top starting position</param>
+        /// <param name="pStartY">Left starting position</param>
+        /// <param name="pWidth">Bubble width</param>
+        /// <param name="pHeight">Bubble height</param>
+        void ClearBubble(int pStartX, int pStartY, int pWidth, int pHeight)
         {
             char c;
-            for (int row = _startY; row < _lenH + _startY; row++)
+            int colmax = pWidth + pStartX;
+            int rowmax = pHeight + pStartY;
+            for (int row = pStartY; row < rowmax; row++)
             {
-                for (int col = _startX; col < _lenW + _startX; col++)
+                for (int col = pStartX; col < colmax; col++)
                 {
                     Console.SetCursorPosition(col, row);
                     c = Core.GetCharAt(Core.Layer.Game, col, row);
@@ -443,64 +469,70 @@ namespace fwod
         }
 
         /// <summary>
-        /// Makes the character talk.
+        /// Makes the Person talk.
         /// </summary>
         /// <param name="pText">Dialog</param>
         /// <param name="pWait">Wait for keydown</param>
         internal void Say(string pText, bool pWait)
         {
-            string[] Lines = new string[] { pText }; // In case of multiline scenario
+            string[] Lines = new string[] { pText };
 
-            if (pText.Length > 25)
+            if (pText.Length > BUBBLE_TEXTMAXLEN)
             {
                 int ci = 0; // Multiline scenario row index
                 int start = 0; // Multiline cutting index
-                Lines = new string[(pText.Length / 26) + 1];
+                Lines = new string[(pText.Length / (BUBBLE_TEXTMAXLEN + 1)) + 1];
 
-                // This block seperates the input into 25 characters each lines equally.
+                // This block seperates the input into BUBBLE_MAXLEN characters each lines equally.
                 do
                 {
-                    if (start + 25 > pText.Length)
+                    if (start + BUBBLE_TEXTMAXLEN > pText.Length)
                         Lines[ci] = pText.Substring(start, pText.Length - start);
                     else
-                        Lines[ci] = pText.Substring(start, 25);
+                        Lines[ci] = pText.Substring(start, BUBBLE_TEXTMAXLEN);
                     ci++;
-                    start += 25;
+                    start += BUBBLE_TEXTMAXLEN;
                 } while (start < pText.Length);
             }
             
             Say(Lines, pWait);
         }
 
+        /// <summary>
+        /// Makes the Person say a few lines.
+        /// </summary>
+        /// <param name="pLines">Lines of dialog</param>
+        /// <param name="pWait">Wait for keydown</param>
         internal void Say(string[] pLines, bool pWait)
         {
-            // X/Left bubble starting position
-            _startX = PosX - (pLines[0].Length / 2) - 1;
+            int arrlen = pLines.Length;
+            int strlen = arrlen > 1 ?
+                ConsoleTools.GetLonguestString(pLines) : pLines[0].Length;
+            int width = strlen + (BUBBLE_PADDING_X * 2) + 2;
+            int height = arrlen + 2;
+            int startX = PosX - (strlen / 2) - 1;
+            int startY = PosY - (arrlen) - 3;
+
             // Re-places StartX if it goes further than the display buffer
-            if (_startX + (pLines[0].Length + 2) > ConsoleTools.BufferWidth)
-                _startX = ConsoleTools.BufferWidth - (pLines[0].Length + 2);
-            else if (_startX < 0)
-                _startX = 0;
+            if (startX + width > ConsoleTools.BufferWidth)
+                startX = ConsoleTools.BufferWidth - width;
+            else if (startX < 0)
+                startX = 0;
 
-            // Y/Top bubble starting position
-            _startY = PosY - (pLines.Length) - 3;
             // Re-places StartY if it goes further than the display buffer
-            if (_startY > ConsoleTools.BufferWidth)
-                _startY = ConsoleTools.BufferWidth - (pLines[0].Length - 2);
-            else if (_startY < 0)
-                _startY = 3;
-
-            _lenW = pLines[0].Length + BUBBLE_PADDING_X + 2;
-            _lenH = pLines.Length + BUBBLE_PADDING_Y + 2;
+            if (startY > ConsoleTools.BufferWidth)
+                startY = ConsoleTools.BufferWidth - (arrlen - 2);
+            else if (startY < 3)
+                startY = 3;
 
             // Generate the bubble
-            GenerateBubble();
+            GenerateBubble(startX, startY, width, height);
 
-            int TextStartX = _startX + 1;
-            int TextStartY = _startY + 1;
+            int TextStartX = startX + 1;
+            int TextStartY = startY + 1;
 
             // Insert Text
-            for (int i = 0; i < pLines.Length; i++)
+            for (int i = 0; i < arrlen; i++)
             {
                 Console.SetCursorPosition(TextStartX, TextStartY + i);
                 Console.Write(pLines[i]);
@@ -509,12 +541,12 @@ namespace fwod
             if (pWait)
             {
                 Console.ReadKey(true);
-                ClearBubble();
+                ClearBubble(startX, startY, width, height);
             }
             else
             {
                 // Prepare for text
-                Console.SetCursorPosition(_startX + 1, _startY + 1);
+                Console.SetCursorPosition(TextStartX, TextStartY);
             }
         }
 
@@ -524,7 +556,7 @@ namespace fwod
         /// <returns>Answer</returns>
         internal string GetAnswer()
         {
-            return GetAnswer(25);
+            return GetAnswer(BUBBLE_TEXTMAXLEN);
         }
 
         /// <summary>
@@ -540,7 +572,7 @@ namespace fwod
             string Out = ConsoleTools.ReadLine(pLimit);
 
             // Clear bubble
-            ClearBubble();
+            ClearBubble(pLimit);
 
             return Out;
         }
@@ -591,6 +623,13 @@ namespace fwod
             string atk = " -> " + AttackPoints + " = " + pPerson.HP + "!" +
                 (pPerson.HP <= 0 ? " +" + pPerson.Money + "$ *DEAD*" : string.Empty);
 
+            if (pPerson.HP <= 0)
+            {
+                Game.StatMoneyGained += (uint)pPerson.Money;
+            }
+
+            Game.StatDamageDealt += (uint)AttackPoints;
+
             if (pPerson is Enemy)
                 Game.DisplayEvent(((Enemy)pPerson).eType + atk);
             else
@@ -610,6 +649,7 @@ namespace fwod
             {
                 Game.MainPlayer.Money += this.Money;
                 Game.EnemyList.Remove((Enemy)this);
+                Game.StatEnemiesKilled++;
             }
             else if (this is Player)
             { // Game over
@@ -629,7 +669,7 @@ namespace fwod
     class Player : Person
     {
         internal Player()
-            : base(ConsoleTools.BufferWidth / 2, ConsoleTools.BufferHeight / 2)
+            : this(ConsoleTools.BufferWidth / 2, ConsoleTools.BufferHeight / 2)
         {
 
         }
@@ -639,6 +679,8 @@ namespace fwod
         {
             CharacterChar = '@';
         }
+
+        
     }
     #endregion
 

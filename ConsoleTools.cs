@@ -174,26 +174,16 @@ namespace fwod
         static internal void GenerateVerticalLine(Core.Layer pLayer, char pChar, int pPosX, int pPosY, int pLenght)
         {
             Console.SetCursorPosition(pPosX, pPosY);
-            for (int i = 0; i < pLenght; i++)
+            int len = pPosY + pLenght;
+            for (int i = pPosY; i < len; i++)
             {
                 Core.Write(pLayer, pChar);
-                Console.SetCursorPosition(pPosX, pPosY++);
+                Console.SetCursorPosition(pPosX, i);
             }
         }
         #endregion
 
-        #region Repetition
-        /// <summary>
-        /// Generates a string out of a character
-        /// </summary>
-        /// <param name="pChar">Input char</param>
-        /// <param name="pLenght">Output string</param>
-        /// <returns>Text</returns>
-        static internal string RepeatChar(char pChar, int pLenght)
-        {
-            return new string(pChar, pLenght);
-        }
-
+        #region String
         /// <summary>
         /// Generates a string with margins.
         /// </summary>
@@ -207,6 +197,17 @@ namespace fwod
             stmp = stmp.Insert(start, pText);
             stmp = stmp.Remove(start + pText.Length, pText.Length);
             return stmp;
+        }
+
+        static internal int GetLonguestString(string[] pArray)
+        {
+            int max = 0;
+            for (int i = 0; i < pArray.Length; i++)
+            {
+                if (pArray[i].Length > max)
+                    max = pArray[i].Length;
+            }
+            return max;
         }
         #endregion
 
