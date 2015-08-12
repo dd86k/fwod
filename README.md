@@ -29,7 +29,7 @@ You can always send me an email at devddstuff@gmail.com or open a ticket/issue. 
 - Colors are planned
 - Mono doesn't like `{string}.ToString()`, using `string.Format("{0}", object)` is prefered.
   - Except for StringBuilder objects. (MAGIC)
-- A _Release_ will be made when I reach 5000 tweets.
+- A _Release_ will be made a week after once I reach 5000 tweets.
 - Official "GameServer" planned.
   - Already have one set up, I just wish I could host it elsewhere than on my own network and server.
   - Play the game via SSH or telnet.
@@ -87,11 +87,13 @@ Builds will be available on the [Releases](https://github.com/guitarxhero/fwod/r
 You are free to fork my project in order to provide bug correcting suggestions.
 
 ### Installing
-You only need Visual Studio 2012+, MonoDevelop, or Xamarin Studio, and you're good to go!
+You only need Visual Studio 2012+, Visual Studio Code (Mono/Linux-only), MonoDevelop, or Xamarin Studio, and you're good to go!
 
 On MonoDevelop and Xamarin Studio, you will need to change one project setting.
 
 Right click on the fwod Solution; Options; Under Execute; General: Run on external console. Good to go!
+
+On Visual Studio Code, you will need the extra manual setup (like manually compiling the project) in order to get things running.
 
 I'm currently using **Visual Studio 2012**.
 
