@@ -72,7 +72,7 @@ namespace fwod
                 /* ==== 6 ===== */
                 Console.Write("Test #" + testnum + ": Create Player with custom position");
 
-                Player p = new Player(ConsoleTools.BufferWidth / 2, ConsoleTools.BufferHeight - 3);
+                Player p = new Player(ConsoleTools.WindowWidth / 2, ConsoleTools.WindowHeight - 3);
 
                 p.Initialize();
 
@@ -152,7 +152,7 @@ namespace fwod
                 /* ==== 13 ===== */
                 Console.Write("Test #" + testnum + ": Recreate player at X:3 and make him talk");
 
-                p = new Player(3, ConsoleTools.BufferHeight - 4);
+                p = new Player(3, ConsoleTools.WindowHeight - 4);
 
                 p.Initialize(); // Pause() clears the buffer
 
@@ -174,7 +174,7 @@ namespace fwod
                 /* ==== 15 ===== */
                 Console.Write("Test #" + testnum + ": Recreate player at the right and make him talk");
 
-                p = new Player(ConsoleTools.BufferWidth - 3, ConsoleTools.BufferHeight - 2);
+                p = new Player(ConsoleTools.WindowWidth - 3, ConsoleTools.WindowHeight - 2);
 
                 p.Initialize(); // Pause() clears the buffer
 
@@ -273,7 +273,7 @@ namespace fwod
         static internal void TalkTest(string pText)
         {
             Console.Clear();
-            Person p = new Person(ConsoleTools.BufferWidth / 2, ConsoleTools.BufferHeight - 3);
+            Person p = new Person(ConsoleTools.WindowWidth / 2, ConsoleTools.WindowHeight - 3);
             p.CharacterChar = '@';
             p.Initialize();
             p.Say(pText);
@@ -283,7 +283,7 @@ namespace fwod
         static internal void SpeedTalkTest()
         {
             Console.Clear();
-            Person p = new Person(ConsoleTools.BufferWidth / 2, ConsoleTools.BufferHeight - 3);
+            Person p = new Person(ConsoleTools.WindowWidth / 2, ConsoleTools.WindowHeight - 3);
             p.CharacterChar = '@';
             p.Initialize();
             Stopwatch sw = new Stopwatch();

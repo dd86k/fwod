@@ -351,7 +351,7 @@ namespace fwod
 
         #region Construction
         internal Person()
-            : this(ConsoleTools.BufferWidth / 2, ConsoleTools.BufferHeight / 2)
+            : this(ConsoleTools.WindowWidth / 2, ConsoleTools.WindowHeight / 2)
         {
 
         }
@@ -514,14 +514,14 @@ namespace fwod
             int startY = PosY - (arrlen) - 3;
 
             // Re-places StartX if it goes further than the display buffer
-            if (startX + width > ConsoleTools.BufferWidth)
-                startX = ConsoleTools.BufferWidth - width;
+            if (startX + width > ConsoleTools.WindowWidth)
+                startX = ConsoleTools.WindowWidth - width;
             else if (startX < 0)
                 startX = 0;
 
             // Re-places StartY if it goes further than the display buffer
-            if (startY > ConsoleTools.BufferWidth)
-                startY = ConsoleTools.BufferWidth - (arrlen - 2);
+            if (startY > ConsoleTools.WindowWidth)
+                startY = ConsoleTools.WindowWidth - (arrlen - 2);
             else if (startY < 3)
                 startY = 3;
 
@@ -669,7 +669,7 @@ namespace fwod
     class Player : Person
     {
         internal Player()
-            : this(ConsoleTools.BufferWidth / 2, ConsoleTools.BufferHeight / 2)
+            : this(ConsoleTools.WindowWidth / 2, ConsoleTools.WindowHeight / 2)
         {
 
         }

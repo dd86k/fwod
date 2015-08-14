@@ -15,9 +15,9 @@ namespace fwod
         internal static char[][,] Layers = new char[3][,]
         { // 3 layers of 25 row and 80 rolumns each
           // 2D Arrays work like this: [ROW, COL]
-            new char[ConsoleTools.BufferHeight, ConsoleTools.BufferWidth], // Menu
-            new char[ConsoleTools.BufferHeight, ConsoleTools.BufferWidth], // People
-            new char[ConsoleTools.BufferHeight, ConsoleTools.BufferWidth]  // Game
+            new char[ConsoleTools.WindowHeight, ConsoleTools.WindowWidth], // Menu
+            new char[ConsoleTools.WindowHeight, ConsoleTools.WindowWidth], // People
+            new char[ConsoleTools.WindowHeight, ConsoleTools.WindowWidth]  // Game
         };
 
         /// <summary>
@@ -160,8 +160,8 @@ namespace fwod
         {
             Console.Clear();
             int iLayer = (int)pLayer;
-            for (int w = 0; w < ConsoleTools.BufferWidth; w++)
-            for (int h = 0; h < ConsoleTools.BufferHeight; h++)
+            for (int w = 0; w < ConsoleTools.WindowWidth; w++)
+            for (int h = 0; h < ConsoleTools.WindowHeight; h++)
             {
                 Layers[iLayer][h, w] = pChar;
                 if (PrintToOutput)
@@ -190,9 +190,9 @@ namespace fwod
         /// <param name="PrintToConsole">Update console</param>
         internal static void ClearLayer(Layer pLayer, bool PrintToConsole)
         {
-            for (int h = 0; h < ConsoleTools.BufferHeight; h++)
+            for (int h = 0; h < ConsoleTools.WindowHeight; h++)
             {
-                for (int w = 0; w < ConsoleTools.BufferWidth; w++)
+                for (int w = 0; w < ConsoleTools.WindowWidth; w++)
                 {
                     Layers[(int)pLayer][h, w] = '\0';
                 }
@@ -208,9 +208,9 @@ namespace fwod
         {
             for (int i = 0; i < Layers.Length; i++)
             {
-                for (int h = 0; h < ConsoleTools.BufferHeight; h++)
+                for (int h = 0; h < ConsoleTools.WindowHeight; h++)
                 {
-                    for (int w = 0; w < ConsoleTools.BufferWidth; w++)
+                    for (int w = 0; w < ConsoleTools.WindowWidth; w++)
                     {
                         Layers[i][h, w] = '\0';
                     }

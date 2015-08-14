@@ -1,6 +1,8 @@
 # fwod
 ## Four Walls of Death - A silly roguelike
 
+I recognize this as a _mess_ which will take me some time to re-do stuff.
+
 (Early screenshots)
 
 ![fwod on Windows](http://www.wilomgfx.net/didier/pages/fwod/img1.png)

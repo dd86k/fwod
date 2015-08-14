@@ -184,7 +184,7 @@ namespace fwod
         internal static void DisplayEvent(string pText)
         {
             string[] Lines = new string[] { pText };
-            int MaxLength = ConsoleTools.BufferWidth - 2;
+            int MaxLength = ConsoleTools.WindowWidth - 2;
             string MoreText = " -- More --";
 
             if (pText.Length > MaxLength)
@@ -211,9 +211,9 @@ namespace fwod
 
             for (int i = 0; i < Lines.Length; i++)
             {
-                Console.SetCursorPosition(1, ConsoleTools.BufferHeight - 2);
+                Console.SetCursorPosition(1, ConsoleTools.WindowHeight - 2);
                 Console.Write(new string(' ', MaxLength));
-                Console.SetCursorPosition(1, ConsoleTools.BufferHeight - 2);
+                Console.SetCursorPosition(1, ConsoleTools.WindowHeight - 2);
                 Console.Write(Lines[i]);
 
                 if (i < Lines.Length - 1)

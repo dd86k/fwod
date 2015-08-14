@@ -10,13 +10,13 @@ namespace fwod
     {
         #region Properties
         /// <summary>
-        /// Initial buffer height. ANSI/ISO screen size.
+        /// Initial window height. ANSI/ISO screen size.
         /// </summary>
-        internal const int BufferHeight = 24;
+        internal const int WindowHeight = 24;
         /// <summary>
-        /// Initial buffer width. ANSI/ISO screen size.
+        /// Initial window width. ANSI/ISO screen size.
         /// </summary>
-        internal const int BufferWidth = 80;
+        internal const int WindowWidth = 80;
         /// <summary>
         /// Original foreground color
         /// </summary>
@@ -45,10 +45,10 @@ namespace fwod
         static internal void WriteAndCenter(string pText, int pTopPosition)
         {
             // Calculate the starting position
-            int start = (BufferWidth / 2) - (pText.Length / 2);
+            int start = (WindowWidth / 2) - (pText.Length / 2);
 
             // If the text is longer than the buffer, set it to 0
-            start = start + pText.Length > BufferWidth ? 0 : start;
+            start = start + pText.Length > WindowWidth ? 0 : start;
 
             // Print away at the current cursor height (top)
             Console.SetCursorPosition(start, pTopPosition);
@@ -94,10 +94,10 @@ namespace fwod
         static internal void WriteAndCenter(Core.Layer pLayer, string pText, int pTopPosition)
         {
             // Calculate the starting position
-            int start = (BufferWidth / 2) - (pText.Length / 2);
+            int start = (WindowWidth / 2) - (pText.Length / 2);
 
             // If the text is longer than the buffer, set it to 0
-            start = start + pText.Length > BufferWidth ? 0 : start;
+            start = start + pText.Length > WindowWidth ? 0 : start;
 
             // Print away at the current cursor height (top)
             Console.SetCursorPosition(start, pTopPosition);

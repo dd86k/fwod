@@ -279,7 +279,7 @@ namespace fwod
             // Get coords
             int MenuItemTop = MENU_TOP + MenuIndex;
             int MenuItemTopPast = MENU_TOP + PastMenuIndex;
-            int MenuItemLeft = (ConsoleTools.BufferWidth / 2) - (MENU_WIDTH / 2);
+            int MenuItemLeft = (ConsoleTools.WindowWidth / 2) - (MENU_WIDTH / 2);
 
             // Deselect old item
             if (MenuIndex != PastMenuIndex)
@@ -307,13 +307,13 @@ namespace fwod
         internal void ClearMenu()
         {
             int startY = MENU_TOP - 1;
-            int startX = (ConsoleTools.BufferWidth / 2) - (MENU_WIDTH / 2);
+            int startX = (ConsoleTools.WindowWidth / 2) - (MENU_WIDTH / 2);
             int lengthY = CurrentMenu.Length + 5; // Yeah I know it's that odd
             int gamelayer = (int)Core.Layer.Game;
 
             for (int row = startY; row < lengthY; row++)
             {
-                for (int col = startX; col < ConsoleTools.BufferWidth; col++)
+                for (int col = startX; col < ConsoleTools.WindowWidth; col++)
                 {
                     Console.SetCursorPosition(col, row); // Safety measure
                     Console.Write(Core.Layers[gamelayer][row, col] == '\0' ?

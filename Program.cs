@@ -105,12 +105,11 @@ namespace fwod
             }
 
             // -- Before the game --
+            Console.Clear();
+            Console.Title = "fwod " + ProjectVersion;
 
             if (!SkipIntro)
             {
-                Console.Clear();
-                Console.Title = "fwod " + ProjectVersion;
-
                 string BannerText = "* Welcome to " + ProjectName + " *";
                 string BannerOutline = new string('*', BannerText.Length);
 
@@ -139,14 +138,14 @@ namespace fwod
             // -- Game starts here --
 
             // Add player and first enemy in game
-            Game.MainPlayer = new Player((ConsoleTools.BufferWidth / 4) + (ConsoleTools.BufferWidth / 2),
-                ConsoleTools.BufferHeight / 2);
-            Person Stranger = new Person(ConsoleTools.BufferWidth / 4, ConsoleTools.BufferHeight / 2);
+            Game.MainPlayer = new Player((ConsoleTools.WindowWidth / 4) + (ConsoleTools.WindowWidth / 2),
+                ConsoleTools.WindowHeight / 2);
+            Person Stranger = new Person(ConsoleTools.WindowWidth / 4, ConsoleTools.WindowHeight / 2);
             Game.PeopleList.Add(Stranger);
 
             // Generate the 'main' box
             Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Double, 1, 1,
-                ConsoleTools.BufferWidth - 2, ConsoleTools.BufferHeight - 3);
+                ConsoleTools.WindowWidth - 2, ConsoleTools.WindowHeight - 3);
 
             // Set player stuff
             Game.MainPlayer.CharacterName = Pname;
