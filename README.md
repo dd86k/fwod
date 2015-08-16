@@ -1,7 +1,9 @@
 # fwod
 ## Four Walls of Death - A silly roguelike
 
-I recognize this as a _mess_ which will take me some time to re-do stuff.
+This project has been put on a halt for now.
+
+I'm currently working on something that will greatly help this project.
 
 (Early screenshots)
 

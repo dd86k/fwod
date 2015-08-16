@@ -35,10 +35,6 @@ namespace fwod
             string Pname = "Player ";
             bool SkipIntro = false;
 
-#if DEBUG
-            args = new string[] { "-S" };
-#endif
-
             // Applying CMD-like colors so it won't look weird later.
             Console.ForegroundColor = ConsoleTools.OriginalForegroundColor;
             Console.BackgroundColor = ConsoleTools.OriginalBackgroundColor;
