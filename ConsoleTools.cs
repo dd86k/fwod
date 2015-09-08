@@ -251,11 +251,24 @@ namespace fwod
                     case ConsoleKey.Backspace:
                         if (_index > 0)
                         {
-                            _out = _out.Remove(_out.Length - 1, 1);
-                            _index--;
-                            Console.SetCursorPosition(OrigninalLeft + _index, Console.CursorTop);
-                            Console.Write(' ');
-                            Console.SetCursorPosition(OrigninalLeft + _index, Console.CursorTop);
+                            // Erase whole
+                            //TODO: Erase word
+                            if (c.Modifiers == ConsoleModifiers.Control)
+                            {
+                                _out = new System.Text.StringBuilder();
+                                _index = 0;
+                                Console.SetCursorPosition(OrigninalLeft, Console.CursorTop);
+                                Console.Write(new String(' ', pLimit));
+                                Console.SetCursorPosition(OrigninalLeft, Console.CursorTop);
+                            }
+                            else
+                            { // Erase one character
+                                _out = _out.Remove(_out.Length - 1, 1);
+                                _index--;
+                                Console.SetCursorPosition(OrigninalLeft + _index, Console.CursorTop);
+                                Console.Write(' ');
+                                Console.SetCursorPosition(OrigninalLeft + _index, Console.CursorTop);
+                            }
                         }
                         break;
 

@@ -14,7 +14,14 @@
         string _name;
         internal string Name
         {
-            get; set;
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                _name = value;
+            }
         }
         #endregion
     }

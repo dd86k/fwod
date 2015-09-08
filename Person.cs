@@ -345,7 +345,7 @@ namespace fwod
         #endregion
 
         #region Inventory
-        List<Item> Inventory = new List<Item>();
+        internal List<Item> Inventory = new List<Item>();
         #endregion
         #endregion
 
