@@ -7,9 +7,9 @@ I'm currently working on something that will greatly help this project.
 
 (Early screenshots)
 
-![fwod on Windows](http://www.wilomgfx.net/didier/pages/fwod/img1.png)
+![fwod on Windows](http://didi,wcantin.ca/pages/fwod/img1.png)
 
-![fwod on PuTTY](http://www.wilomgfx.net/didier/pages/fwod/img3.png)
+![fwod on PuTTY](http://didi,wcantin.ca/pages/fwod/img3.png)
 
 Hello! This is a little something I'd like to show you, it's simply a console application game using the .NET framework, while being Mono compatible.
 
