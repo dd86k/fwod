@@ -1,31 +1,55 @@
 ﻿using System;
 
 /*
-    Core system for the multi-layer system.
+    Rendering for the multi-layer system.
 */
 
 namespace fwod
 {
-    static class Core
+    static class Renderer
     {
         #region Layers
         /// <summary>
         /// Multi-layered char buffer
         /// </summary>
+        /// <remarks>
+        /// Default: 3 layers of 24 row x 80 rolumns each
+        /// 2D Arrays work like this: [ROW, COL]
+        /// </remarks>
         internal static char[][,] Layers = new char[3][,]
-        { // 3 layers of 25 row and 80 rolumns each
-          // 2D Arrays work like this: [ROW, COL]
-            new char[ConsoleTools.WindowHeight, ConsoleTools.WindowWidth], // Menu
-            new char[ConsoleTools.WindowHeight, ConsoleTools.WindowWidth], // People
-            new char[ConsoleTools.WindowHeight, ConsoleTools.WindowWidth]  // Game
+        {
+            new char[Utils.WindowHeight, Utils.WindowWidth], // Menu
+            new char[Utils.WindowHeight, Utils.WindowWidth], // People
+            new char[Utils.WindowHeight, Utils.WindowWidth]  // Game
         };
 
         /// <summary>
-        /// Layer to output at. Menu=0 (topmost), etc.
+        /// Layer.
         /// </summary>
-        internal enum Layer
+        /// <remarks>
+        /// The higher the layer in the enumeration,
+        /// the higher it will display on the console.
+        /// e.g. Menu is at layer 0, which is the highest layer.
+        /// People layer will display under menu characters at render
+        /// </remarks>
+        internal enum Layer : byte
         {
-            Menu, People, Game, None
+            /// <summary>
+            /// Menu layer.
+            /// </summary>
+            Menu,
+            /// <summary>
+            /// Players, monsters.
+            /// </summary>
+            People,
+            /// <summary>
+            /// Walls, objects.
+            /// </summary>
+            Game,
+            /// <summary>
+            /// Output to no layers, print on screen only.
+            /// </summary>
+            None
         }
         #endregion
 
@@ -139,40 +163,6 @@ namespace fwod
         }
         #endregion
 
-        #region Fill
-        /// <summary>
-        /// Fill a layer and the screen with a character, shows to console
-        /// </summary>
-        /// <param name="pLayer">Layer</param>
-        /// <param name="pChar">Character to print</param>
-        internal static void FillScreen(Layer pLayer, char pChar)
-        {
-            FillScreen(pLayer, pChar, true);
-        }
-
-        /// <summary>
-        /// Fill a layer and the screen with a character
-        /// </summary>
-        /// <param name="pLayer">Layer</param>
-        /// <param name="pChar">Character to print</param>
-        /// <param name="PrintToOutput">Show in console</param>
-        internal static void FillScreen(Layer pLayer, char pChar, bool PrintToOutput)
-        {
-            Console.Clear();
-            int iLayer = (int)pLayer;
-            for (int w = 0; w < ConsoleTools.WindowWidth; w++)
-            for (int h = 0; h < ConsoleTools.WindowHeight; h++)
-            {
-                Layers[iLayer][h, w] = pChar;
-                if (PrintToOutput)
-                {
-                    Console.SetCursorPosition(w, h);
-                    Console.Write(pChar);
-                }
-            }
-        }
-        #endregion
-
         #region Clear
         /// <summary>
         /// Clears a layer and prints to console
@@ -187,18 +177,19 @@ namespace fwod
         /// Clears a layer
         /// </summary>
         /// <param name="pLayer">Layer to clear</param>
-        /// <param name="PrintToConsole">Update console</param>
-        internal static void ClearLayer(Layer pLayer, bool PrintToConsole)
+        /// <param name="pClearConsole">Update console</param>
+        internal static void ClearLayer(Layer pLayer, bool pClearConsole)
         {
-            for (int h = 0; h < ConsoleTools.WindowHeight; h++)
+            for (int h = 0; h < Utils.WindowHeight; h++)
             {
-                for (int w = 0; w < ConsoleTools.WindowWidth; w++)
+                for (int w = 0; w < Utils.WindowWidth; w++)
                 {
                     Layers[(int)pLayer][h, w] = '\0';
                 }
             }
 
-            if (PrintToConsole) Console.Clear();
+            if (pClearConsole)
+                Console.Clear();
         }
 
         /// <summary>
@@ -208,9 +199,9 @@ namespace fwod
         {
             for (int i = 0; i < Layers.Length; i++)
             {
-                for (int h = 0; h < ConsoleTools.WindowHeight; h++)
+                for (int h = 0; h < Utils.WindowHeight; h++)
                 {
-                    for (int w = 0; w < ConsoleTools.WindowWidth; w++)
+                    for (int w = 0; w < Utils.WindowWidth; w++)
                     {
                         Layers[i][h, w] = '\0';
                     }

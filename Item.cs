@@ -6,22 +6,14 @@
         #region Constructors
         internal Item(string pName)
         {
-            _name = pName;
+            Name = pName;
         }
         #endregion
 
         #region Object properties
-        string _name;
         internal string Name
         {
-            get
-            {
-                return _name;
-            }
-            set
-            {
-                _name = value;
-            }
+            get; private set;
         }
         #endregion
     }
@@ -41,43 +33,56 @@
             : base(pName)
         {
             _basedamage = pBaseDamage;
-            _prefix = pWeaponPrefix;
+            Modifier = pWeaponPrefix;
         }
         #endregion
 
         #region Object properties
+        internal new string Name
+        {
+            get
+            {
+                return $"{Modifier} {base.Name}";
+            }
+        }
+
         int _basedamage;
         internal double BaseDamage
         {
             get
             {
-                switch (_prefix)
+                switch (Modifier)
                 {
                     case Prefix.Broken:
                         return _basedamage * 0.5;
+
                     case Prefix.Rusty:
                         return _basedamage * 0.7;
+
                     case Prefix.Sharp:
                         return _basedamage * 1.2;
+
                     case Prefix.Godly:
-                        return _basedamage * 1.8;
-                    case Prefix.OPPLSNERF:
-                        return _basedamage * 4.5;
-                    default:
+                        return _basedamage * 2.5;
+
+                    case Prefix.OP_AF:
+                        return _basedamage * 10;
+
+                    default: // Normal
                         return _basedamage;
                 }
             }
         }
 
-        internal enum Prefix
+        internal enum Prefix : byte
         {
-            Normal, Broken, Rusty, Sharp, Godly, OPPLSNERF
+            Normal, Broken, Rusty, Sharp, Godly, OP_AF
         }
-
-        Prefix _prefix;
+        
         internal Prefix Modifier
         {
-            get { return _prefix; }
+            get;
+            set;
         }
         #endregion
     }
@@ -101,33 +106,33 @@
         internal Armor(string pName, int pArmorPoints)
             : base(pName)
         {
-            _armorpoints = pArmorPoints;
+            ArmorPoints = pArmorPoints;
         }
         #endregion
 
         #region Properties
-        int _armorpoints;
         internal int ArmorPoints
         {
-            get { return _armorpoints; }
+            get;
+            private set;
         }
         #endregion
     }
     #endregion
 
     #region Drinks
-    class Drink : Item
+    class Food : Item
     {
-        internal Drink(string pName, int pRestorePoints)
+        internal Food(string pName, int pRestorePoints)
             : base(pName)
         {
-            _restorepoints = pRestorePoints;
+            RestorePoints = pRestorePoints;
         }
-
-        int _restorepoints;
+        
         internal int RestorePoints
         {
-            get { return _restorepoints; }
+            get;
+            private set;
         }
     }
     #endregion

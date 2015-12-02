@@ -6,12 +6,12 @@
 
 namespace fwod
 {
-    static class DisplayMenu
+    class Menu
     {
         /// <summary>
         /// Main menu items
         /// </summary>
-        internal static readonly MenuItem[] MainMenuItems =
+        static readonly MenuItem[] MainMenuItems =
         {
             new MenuItem("Return", MenuItem.MenuItemType.Return),
             new MenuItem(),
@@ -23,18 +23,20 @@ namespace fwod
             new MenuItem("Quit", MenuItem.MenuItemType.Quit),
         };
 
-        internal static void Show(MenuItem[] pItems)
+        internal Menu()
         {
-            Menu m = new Menu(pItems);
-            m.Show();
+            CurrentMenu = MainMenuItems;
         }
-    }
 
-    class Menu
-    {
         internal Menu(MenuItem[] pItems)
         {
             CurrentMenu = pItems;
+        }
+
+        static internal void Show()
+        {
+            Menu m = new Menu();
+            m.Display();
         }
 
         #region Constants
@@ -62,11 +64,11 @@ namespace fwod
         int PastMenuIndex = 0, MenuIndex = 0;
         #endregion
 
-        #region Show
+        #region Display on screen
         /// <summary>
         /// Show menu
         /// </summary>
-        internal void Show()
+        internal void Display()
         {
             inMenu = true;
 
@@ -79,7 +81,7 @@ namespace fwod
                 Game.Graphics.Lines.SingleCorner[2];
 
             // Generate menu
-            ConsoleTools.WriteAndCenter(Core.Layer.Menu, top, MENU_TOP - 1);
+            Utils.WriteAndCenter(Renderer.Layer.Menu, top, MENU_TOP - 1);
             for (int i = 0; i < CurrentMenu.Length; i++)
             {
                 // Get the item if..
@@ -87,12 +89,12 @@ namespace fwod
                     // ..it's a MENU_SEPERATOR item
                     Game.Graphics.Lines.SingleConnector[3] + new string(Game.Graphics.Lines.Single[1], MENU_WIDTH - 2) + Game.Graphics.Lines.SingleConnector[0] :
                     // ..or just a regular item
-                    Game.Graphics.Lines.Single[0] + ConsoleTools.CenterString(CurrentMenu[i].Text, MENU_WIDTH - 2) + Game.Graphics.Lines.Single[0]);
+                    Game.Graphics.Lines.Single[0] + Utils.CenterString(CurrentMenu[i].Text, MENU_WIDTH - 2) + Game.Graphics.Lines.Single[0]);
 
                 // Print item
-                ConsoleTools.WriteAndCenter(Core.Layer.Menu, item, MENU_TOP + i);
+                Utils.WriteAndCenter(Renderer.Layer.Menu, item, MENU_TOP + i);
             }
-            ConsoleTools.WriteAndCenter(Core.Layer.Menu, bottom, MENU_TOP + CurrentMenu.Length);
+            Utils.WriteAndCenter(Renderer.Layer.Menu, bottom, MENU_TOP + CurrentMenu.Length);
 
             // Select good starting index
             bool found = false;
@@ -106,7 +108,7 @@ namespace fwod
 
                 switch (CurrentMenu[MenuIndex].ItemType)
                 {
-                    case MenuItem.MenuItemType.Info:
+                    case MenuItem.MenuItemType.Information:
                     case MenuItem.MenuItemType.Seperator:
                         break;
                     default:
@@ -178,7 +180,7 @@ namespace fwod
 
                 switch (CurrentMenu[MenuIndex].ItemType)
                 {
-                    case MenuItem.MenuItemType.Info:
+                    case MenuItem.MenuItemType.Information:
                     case MenuItem.MenuItemType.Seperator:
                         break;
                     default:
@@ -209,7 +211,7 @@ namespace fwod
 
                 switch (CurrentMenu[MenuIndex].ItemType)
                 {
-                    case MenuItem.MenuItemType.Info:
+                    case MenuItem.MenuItemType.Information:
                     case MenuItem.MenuItemType.Seperator:
                         break;
                     default:
@@ -236,22 +238,22 @@ namespace fwod
                 case MenuItem.MenuItemType.ShowStats:
                     MenuItem[] StatisticsMenuItems = 
                     {
-                        new MenuItem("Steps taken", MenuItem.MenuItemType.Info),
-                        new MenuItem(string.Format("{0}", Game.StatStepsTaken), MenuItem.MenuItemType.Info),
-                        new MenuItem("Monsters killed", MenuItem.MenuItemType.Info),
-                        new MenuItem(string.Format("{0}", Game.StatEnemiesKilled), MenuItem.MenuItemType.Info),
-                        new MenuItem("Damage dealt", MenuItem.MenuItemType.Info),
-                        new MenuItem(string.Format("{0}", Game.StatDamageDealt), MenuItem.MenuItemType.Info),
-                        new MenuItem("Damage received", MenuItem.MenuItemType.Info),
-                        new MenuItem(string.Format("{0}", Game.StatDamageReceived), MenuItem.MenuItemType.Info),
-                        new MenuItem("Money gain", MenuItem.MenuItemType.Info),
-                        new MenuItem(string.Format("{0}$", Game.StatMoneyGained), MenuItem.MenuItemType.Info),
+                        new MenuItem("Steps taken", MenuItem.MenuItemType.Information),
+                        new MenuItem(string.Format("{0}", Game.Statistics.StatStepsTaken), MenuItem.MenuItemType.Information),
+                        new MenuItem("Monsters killed", MenuItem.MenuItemType.Information),
+                        new MenuItem(string.Format("{0}", Game.Statistics.StatEnemiesKilled), MenuItem.MenuItemType.Information),
+                        new MenuItem("Damage dealt", MenuItem.MenuItemType.Information),
+                        new MenuItem(string.Format("{0}", Game.Statistics.StatDamageDealt), MenuItem.MenuItemType.Information),
+                        new MenuItem("Damage received", MenuItem.MenuItemType.Information),
+                        new MenuItem(string.Format("{0}", Game.Statistics.StatDamageReceived), MenuItem.MenuItemType.Information),
+                        new MenuItem("Money gain", MenuItem.MenuItemType.Information),
+                        new MenuItem(string.Format("{0}$", Game.Statistics.StatMoneyGained), MenuItem.MenuItemType.Information),
                         new MenuItem(),
                         //new MenuItem("Back", MenuItem.MenuItemType.Return),
                         new MenuItem("Return", MenuItem.MenuItemType.Return)
                     };
                     Menu s = new Menu(StatisticsMenuItems);
-                    s.Show();
+                    s.Display();
                     s.inMenu = false;
                     inMenu = false;
                     break;
@@ -279,24 +281,23 @@ namespace fwod
             // Get coords
             int MenuItemTop = MENU_TOP + MenuIndex;
             int MenuItemTopPast = MENU_TOP + PastMenuIndex;
-            int MenuItemLeft = (ConsoleTools.WindowWidth / 2) - (MENU_WIDTH / 2);
+            int MenuItemLeft = (Utils.WindowWidth / 2) - (MENU_WIDTH / 2);
 
             // Deselect old item
             if (MenuIndex != PastMenuIndex)
             {
                 Console.SetCursorPosition(MenuItemLeft + 1, MenuItemTopPast);
-                Console.Write(ConsoleTools.CenterString(CurrentMenu[PastMenuIndex].Text, MENU_WIDTH - 2));
+                Console.Write(Utils.CenterString(CurrentMenu[PastMenuIndex].Text, MENU_WIDTH - 2));
             }
 
             // Apply new item's colors
             Console.ForegroundColor = ConsoleColor.Black;
             Console.BackgroundColor = ConsoleColor.White;
             Console.SetCursorPosition(MenuItemLeft + 1, MenuItemTop);
-            Console.Write(ConsoleTools.CenterString(CurrentMenu[MenuIndex].Text, MENU_WIDTH - 2));
+            Console.Write(Utils.CenterString(CurrentMenu[MenuIndex].Text, MENU_WIDTH - 2));
 
             // Revert to original colors
-            Console.ForegroundColor = ConsoleTools.OriginalForegroundColor;
-            Console.BackgroundColor = ConsoleTools.OriginalBackgroundColor;
+            Console.ResetColor();
         }
         #endregion
 
@@ -307,17 +308,17 @@ namespace fwod
         internal void ClearMenu()
         {
             int startY = MENU_TOP - 1;
-            int startX = (ConsoleTools.WindowWidth / 2) - (MENU_WIDTH / 2);
+            int startX = (Utils.WindowWidth / 2) - (MENU_WIDTH / 2);
             int lengthY = CurrentMenu.Length + 5; // Yeah I know it's that odd
-            int gamelayer = (int)Core.Layer.Game;
+            int gamelayer = (int)Renderer.Layer.Game;
 
             for (int row = startY; row < lengthY; row++)
             {
-                for (int col = startX; col < ConsoleTools.WindowWidth; col++)
+                for (int col = startX; col < Utils.WindowWidth; col++)
                 {
                     Console.SetCursorPosition(col, row); // Safety measure
-                    Console.Write(Core.Layers[gamelayer][row, col] == '\0' ?
-                        ' ' : Core.Layers[gamelayer][row, col]);
+                    Console.Write(Renderer.Layers[gamelayer][row, col] == '\0' ?
+                        ' ' : Renderer.Layers[gamelayer][row, col]);
                 }
             }
 
@@ -339,7 +340,13 @@ namespace fwod
         internal MenuItemType ItemType;
 
         internal MenuItem()
-            : this("", MenuItemType.Seperator)
+            : this(string.Empty, MenuItemType.Seperator)
+        {
+
+        }
+
+        internal MenuItem(string pText)
+            : this(pText, MenuItemType.Information)
         {
 
         }
@@ -350,9 +357,9 @@ namespace fwod
             ItemType = pAction;
         }
 
-        internal enum MenuItemType
+        internal enum MenuItemType : byte
         {
-            Info,
+            Information,
             Seperator,
             Return,
             ShowStats,

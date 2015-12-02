@@ -4,17 +4,8 @@
     Entry point of the program.
 */
 
-#if DEBUG
-[assembly: System.Reflection.AssemblyVersion("0.3.6.*")]
-#else
-[assembly: System.Reflection.AssemblyVersion("0.3.6.0")]
-#endif
-
 namespace fwod
 {
-    /// <summary>
-    /// Program entry point
-    /// </summary>
     class MainClass
     {
         #region Constants
@@ -23,10 +14,14 @@ namespace fwod
 
         #region Properties
         static readonly string ProjectVersion =
-                string.Format("{0}",
-                System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
+            $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}";
         #endregion
 
+        /// <summary>
+        /// Entry point.
+        /// </summary>
+        /// <param name="args">Arguments.</param>
+        /// <returns>Error.</returns>
         internal static int Main(string[] args)
         {
             // Default values
@@ -35,9 +30,8 @@ namespace fwod
             string Pname = "Player ";
             bool SkipIntro = false;
 
-            // Applying CMD-like colors so it won't look weird later.
-            Console.ForegroundColor = ConsoleTools.OriginalForegroundColor;
-            Console.BackgroundColor = ConsoleTools.OriginalBackgroundColor;
+            // Applying CMD-like colors so it won't look weird later. (Linux)
+            Console.ResetColor();
 
             for (int i = 0; i < args.Length; i++)
             {
@@ -52,26 +46,26 @@ namespace fwod
                         ShowVersion();
                         return 0;
 
-                    case "-B":
-                    case "--bosssays":
+                    case "-Bs":
+                    case "-bosssays":
                         if (args[i + 1] != null)
                             bosstext = args[i + 1];
                         break;
 
                     case "-Pc":
-                    case "--playerchar":
+                    case "-playerchar":
                         if (args[i + 1] != null)
                             Pchar = args[i + 1][0];
                         break;
 
                     case "-Pn":
-                    case "--playername":
+                    case "-playername":
                         if (args[i + 1] != null)
                             Pname = args[i + 1];
                         break;
 
                     case "-S":
-                    case "--skipintro":
+                    case "-skipintro":
                         SkipIntro = true;
                         break;
 
@@ -80,18 +74,18 @@ namespace fwod
                         Misc.ShowMeme(); // :^)
                         return 0;
 
-                    case "--runtests":
-                        int returnint = 0;
-                        Debug.StartTests(ref returnint);
-                        return returnint;
-
-                    case "--say":
+                    case "-say":
                         if (args[i + 1] != null)
                         {
                             Debug.TalkTest(args[i + 1]);
                             return 0;
                         }
                         else return 1;
+
+                    case "--runtests":
+                        int returnint = 0;
+                        Debug.StartTests(ref returnint);
+                        return returnint;
 
                     case "--speedtalktest":
                         Debug.SpeedTalkTest();
@@ -109,9 +103,9 @@ namespace fwod
                 string BannerText = "* Welcome to " + ProjectName + " *";
                 string BannerOutline = new string('*', BannerText.Length);
 
-                ConsoleTools.WriteLineAndCenter(BannerOutline);
-                ConsoleTools.WriteLineAndCenter(BannerText);
-                ConsoleTools.WriteLineAndCenter(BannerOutline);
+                Utils.WriteLineAndCenter(BannerOutline);
+                Utils.WriteLineAndCenter(BannerText);
+                Utils.WriteLineAndCenter(BannerOutline);
                 Console.WriteLine();
 
                 Console.WriteLine("[Insert shitty lore here]");
@@ -134,14 +128,14 @@ namespace fwod
             // -- Game starts here --
 
             // Add player and first enemy in game
-            Game.MainPlayer = new Player((ConsoleTools.WindowWidth / 4) + (ConsoleTools.WindowWidth / 2),
-                ConsoleTools.WindowHeight / 2);
-            Person Stranger = new Person(ConsoleTools.WindowWidth / 4, ConsoleTools.WindowHeight / 2);
+            Game.MainPlayer = new Player((Utils.WindowWidth / 4) + (Utils.WindowWidth / 2),
+                Utils.WindowHeight / 2);
+            Person Stranger = new Person(Utils.WindowWidth / 4, Utils.WindowHeight / 2);
             Game.PeopleList.Add(Stranger);
 
             // Generate the 'main' box
-            Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Double, 1, 1,
-                ConsoleTools.WindowWidth - 2, ConsoleTools.WindowHeight - 3);
+            Game.GenerateBox(Renderer.Layer.Game, Game.TypeOfLine.Double, 1, 1,
+                Utils.WindowWidth - 2, Utils.WindowHeight - 3);
 
             // Set player stuff
             Game.MainPlayer.CharacterName = Pname;
@@ -152,14 +146,14 @@ namespace fwod
             Stranger.Initialize();
 
 #warning Test
-            Enemy TestRat = new Enemy(5, 5, Enemy.EnemyType.Rat, 24);
+            Enemy TestRat = new Enemy(Utils.WindowWidth - 5, 5, Enemy.EnemyType.Rat, 24);
             Game.EnemyList.Add(TestRat);
             TestRat.Initialize();
 
             #region Intro
             if (!SkipIntro)
             {
-                Game.DisplayEvent("Dialog...");
+                Game.UpdateLatestEvent("Dialog...");
 
                 Game.MainPlayer.Say("Ah! Where am I?");
 
@@ -263,7 +257,7 @@ namespace fwod
 
                 // Menu button
                 case ConsoleKey.Escape:
-                    DisplayMenu.Show(DisplayMenu.MainMenuItems);
+                    Menu.Show();
                     break;
             }
 
@@ -276,14 +270,15 @@ namespace fwod
             Console.WriteLine(" Usage:");
             Console.WriteLine("  fwod [options]");
             Console.WriteLine();
-            Console.WriteLine("  -B,  --bosssays     Custom text from the Boss.");
-            Console.WriteLine("  -Pc, --playerchar   Sets the player's character.");
-            Console.WriteLine("  -Pn, --playername   Sets the player's name.");
-            Console.WriteLine("  -S,  --skipintro    Skip intro and use defaults.");
+            Console.WriteLine("  -Bs, -bosssays      Custom text from the Boss.");
+            Console.WriteLine("  -Pc, -playerchar    Sets the player's character.");
+            Console.WriteLine("  -Pn, -playername    Sets the player's name.");
+            Console.WriteLine("  -S,  -skipintro     Skip intro and use defaults.");
 #if DEBUG
             Console.WriteLine("  --runtests          Run debugging tests.");
-            Console.WriteLine("  -Pn, --playername   Sets the player's name.");
-            Console.WriteLine("  -S,  --skipintro    Skip intro and use defaults.");
+            Console.WriteLine("  --speedtalktest     Run a speed dialog test.");
+            Console.WriteLine("  -say                Make the player say something and exit.");
+            Console.WriteLine("  --showmeme          yeah");
 #endif
             Console.WriteLine();
             Console.WriteLine("  --help, /?      Shows this screen");

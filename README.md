@@ -23,23 +23,12 @@ Wonder what else is in this bunker...
 
 Anyway, fwod would play like [NetHack](https://en.wikipedia.org/wiki/NetHack), a roguelike, turn-based game, dungeon crawling game.
 
-You can always send me an email at devddstuff@gmail.com or open a ticket/issue. (I won't bite!)
-
 ### Notes
 
 - Code reorganization/restructures/cleanups are made from time to time
 - The game will change dramatically often during development process
 - Fixed 80x24 resolution for **maximum** compatiblity (ISO/ANSI screen size)
 - Colors are planned
-- Mono doesn't like `{string}.ToString()`, using `string.Format("{0}", object)` is prefered.
-  - Except for StringBuilder objects. (MAGIC)
-- A _Release_ will be made a week after once I reach 5000 tweets.
-- Official "GameServer" planned.
-  - Already have one set up, I just wish I could host it elsewhere than on my own network and server.
-  - Play the game via SSH or telnet.
-- Using the `Release` compile config trims ~9.5KB compared to `Debug`
-- Console is damaged-based, meaning I only update what I need on screen.
-- Bubbles are directly printed on screen.
 
 ### Progress
 
@@ -51,7 +40,7 @@ You can always send me an email at devddstuff@gmail.com or open a ticket/issue. 
 - [ ] Person.cs
   - [ ] Inventory system
   - [ ] Leveling system
-  - [ ] Attack system *
+  - [x] Attack system
 - [ ] Item.cs
   - [ ] Weapons *
     - [ ] Sword
@@ -74,12 +63,6 @@ You can always send me an email at devddstuff@gmail.com or open a ticket/issue. 
   - [ ] Optimization
     - [ ] Change types (e.g. int to byte for Damage)
 	- [ ] Less calls
-- [ ] Multiplayer
-  - Lobby
-- [ ] Gamemodes
-  - [ ] Story *
-  - [ ] Survive
-  - [ ] Duel (Multiplayer)
 - [ ] Wiki (Optional)
 - [ ] Official Release (1.0.0.0)
   - [ ] Celebrate! (PARTY HARD)

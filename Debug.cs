@@ -20,59 +20,59 @@ namespace fwod
                 /* ==== 1 ===== */
 
                 Console.Write("Test #" + testnum + ": Show what's in Graphics");
-                
+
                 Console.WriteLine();
-                Console.WriteLine("Grades                   : " + new string(Game.Graphics.Tiles.Grades));
-                Console.WriteLine("Half                     : " + new string(Game.Graphics.Tiles.Half));
-                Console.WriteLine("Single                   : " + new string(Game.Graphics.Lines.Single));
-                Console.WriteLine("SingleConnector          : " + new string(Game.Graphics.Lines.SingleConnector));
-                Console.WriteLine("SingleCorner             : " + new string(Game.Graphics.Lines.SingleCorner));
-                Console.WriteLine("Double                   : " + new string(Game.Graphics.Lines.Double));
-                Console.WriteLine("DoubleConnector          : " + new string(Game.Graphics.Lines.DoubleConnector));
-                Console.WriteLine("DoubleCorner             : " + new string(Game.Graphics.Lines.DoubleCorner));
-                Console.WriteLine("DoubleHorizontalConnector: " + new string(Game.Graphics.Lines.DoubleHorizontalConnector));
-                Console.WriteLine("DoubleHorizontalCorner   : " + new string(Game.Graphics.Lines.DoubleHorizontalCorner));
-                Console.WriteLine("DoubleVerticalConnector  : " + new string(Game.Graphics.Lines.DoubleVerticalConnector));
-                Console.WriteLine("DoubleVerticalCorner     : " + new string(Game.Graphics.Lines.DoubleVerticalCorner));
+                Console.WriteLine($"Grades                   : {Game.Graphics.Tiles.Grades.GetString()}");
+                Console.WriteLine($"Half                     : {Game.Graphics.Tiles.Half.GetString()}");
+                Console.WriteLine($"Single                   : {Game.Graphics.Lines.Single.GetString()}");
+                Console.WriteLine($"SingleConnector          : {Game.Graphics.Lines.SingleConnector.GetString()}");
+                Console.WriteLine($"SingleCorner             : {Game.Graphics.Lines.SingleCorner.GetString()}");
+                Console.WriteLine($"Double                   : {Game.Graphics.Lines.Double.GetString()}");
+                Console.WriteLine($"DoubleConnector          : {Game.Graphics.Lines.DoubleConnector.GetString()}");
+                Console.WriteLine($"DoubleCorner             : {Game.Graphics.Lines.DoubleCorner.GetString()}");
+                Console.WriteLine($"DoubleHorizontalConnector: {Game.Graphics.Lines.DoubleHorizontalConnector.GetString()}");
+                Console.WriteLine($"DoubleHorizontalCorner   : {Game.Graphics.Lines.DoubleHorizontalCorner.GetString()}");
+                Console.WriteLine($"DoubleVerticalConnector  : {Game.Graphics.Lines.DoubleVerticalConnector.GetString()}");
+                Console.WriteLine($"DoubleVerticalCorner     : {Game.Graphics.Lines.DoubleVerticalCorner.GetString()}");
 
                 Pause(ref testnum);
 
                 /* ==== 2 ===== */
                 Console.Write("Test #" + testnum + ": Generate 2 boxes of 4x4");
 
-                Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Single, 0, 2, 4, 4);
-                Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Double, 5, 2, 4, 4);
+                Game.GenerateBox(Renderer.Layer.None, Game.TypeOfLine.Single, 0, 2, 4, 4);
+                Game.GenerateBox(Renderer.Layer.None, Game.TypeOfLine.Double, 5, 2, 4, 4);
 
                 Pause(ref testnum);
 
                 /* ==== 3 ===== */
                 Console.Write("Test #" + testnum + ": Generate 2 boxes of 3x3");
 
-                Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Single, 0, 2, 3, 3);
-                Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Double, 5, 2, 3, 3);
+                Game.GenerateBox(Renderer.Layer.None, Game.TypeOfLine.Single, 0, 2, 3, 3);
+                Game.GenerateBox(Renderer.Layer.None, Game.TypeOfLine.Double, 5, 2, 3, 3);
 
                 Pause(ref testnum);
 
                 /* ==== 4 ===== */
                 Console.Write("Test #" + testnum + ": Generate 2 boxes of 2x2 (Minimum)");
 
-                Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Single, 0, 2, 2, 2);
-                Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Double, 5, 2, 2, 2);
+                Game.GenerateBox(Renderer.Layer.None, Game.TypeOfLine.Single, 0, 2, 2, 2);
+                Game.GenerateBox(Renderer.Layer.None, Game.TypeOfLine.Double, 5, 2, 2, 2);
 
                 Pause(ref testnum);
 
                 /* ==== 5 ===== */
                 Console.Write("Test #" + testnum + ": Generate 2 boxes inside of each other");
 
-                Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Double, 1, 2, 4, 4);
-                Game.GenerateBox(Core.Layer.Game, Game.TypeOfLine.Single, 2, 3, 2, 2);
+                Game.GenerateBox(Renderer.Layer.None, Game.TypeOfLine.Double, 1, 2, 4, 4);
+                Game.GenerateBox(Renderer.Layer.None, Game.TypeOfLine.Single, 2, 3, 2, 2);
 
                 Pause(ref testnum);
 
                 /* ==== 6 ===== */
                 Console.Write("Test #" + testnum + ": Create Player with custom position");
 
-                Player p = new Player(ConsoleTools.WindowWidth / 2, ConsoleTools.WindowHeight - 3);
+                Player p = new Player(Utils.WindowWidth / 2, Utils.WindowHeight - 3);
 
                 p.Initialize();
 
@@ -83,7 +83,7 @@ namespace fwod
 
                 p.Initialize(); // Pause() clears the buffer
 
-                ConsoleTools.WriteAndCenter(Core.Layer.People, "What is your favorite food?", p.PosY - 5);
+                Utils.WriteAndCenter(Renderer.Layer.None, "What is your favorite food?", p.Y - 5);
 
                 string tt = p.GetAnswer();
 
@@ -124,7 +124,7 @@ namespace fwod
                 p.Say("A constant member is defined at compile time and cannot be changed at runtime.");
 
                 Pause(ref testnum);
-                
+
                 /* ==== 12 ===== */
                 Console.Write("Test #" + testnum + ": Say ascii art");
 
@@ -152,7 +152,7 @@ namespace fwod
                 /* ==== 13 ===== */
                 Console.Write("Test #" + testnum + ": Recreate player at X:3 and make him talk");
 
-                p = new Player(3, ConsoleTools.WindowHeight - 4);
+                p = new Player(3, Utils.WindowHeight - 4);
 
                 p.Initialize(); // Pause() clears the buffer
 
@@ -174,7 +174,7 @@ namespace fwod
                 /* ==== 15 ===== */
                 Console.Write("Test #" + testnum + ": Recreate player at the right and make him talk");
 
-                p = new Player(ConsoleTools.WindowWidth - 3, ConsoleTools.WindowHeight - 2);
+                p = new Player(Utils.WindowWidth - 3, Utils.WindowHeight - 2);
 
                 p.Initialize(); // Pause() clears the buffer
 
@@ -186,7 +186,7 @@ namespace fwod
                 Console.Write("Test #" + testnum + ": Multi-layer test");
 
                 // Write
-                Core.Write(Core.Layer.Game, "Test", 0, 2);
+                Renderer.Write(Renderer.Layer.Game, "Test", 0, 2);
                 // Wait
                 Console.ReadKey(true);
                 // Erase
@@ -198,7 +198,7 @@ namespace fwod
                 string tmp = string.Empty;
                 for (int i = 0; i < 4; i++)
                 {
-                    tmp += Core.GetCharAt(Core.Layer.Game, i, 2);
+                    tmp += Renderer.GetCharAt(Renderer.Layer.Game, i, 2);
                 }
                 // Print back
                 Console.SetCursorPosition(0, 2);
@@ -207,44 +207,12 @@ namespace fwod
                 Pause(ref testnum);
 
                 /* ==== 17 ===== */
-                Console.Write("Test #" + testnum + ": Multi-layer bubble test");
-
-                Console.ReadKey(true);
-                // Fill buffer
-                Core.FillScreen(Core.Layer.Game, '.');
-                // Wait
-                Console.ReadKey(true);
-                // Place player
-
-                p.Initialize();
-                p.Say("Woah!");
-
-                Pause(ref testnum);
-
-                /* ==== 18 ===== */
-                Console.Write("Test #" + testnum + ": Multi-layer player test");
-
-                Console.ReadKey(true);
-
-                Core.FillScreen(Core.Layer.Game, '.');
-
-                p.Initialize();
-
-                bool isTesting = true;
-                do
-                {
-                    fwod.MainClass.Entry();
-                } while (isTesting);
-
-                Pause(ref testnum);
-
-                /* ==== 19 ===== */
                 Console.Write("Test #" + testnum + ": Menu test");
 
-                DisplayMenu.Show(DisplayMenu.MainMenuItems);
+                Menu.Show();
 
                 Pause(ref testnum);
-                
+
                 Console.Write("All tests passed without any exceptions");
 
                 pReturnInt = 0;
@@ -253,9 +221,12 @@ namespace fwod
             {
                 Console.WriteLine();
                 Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.BackgroundColor = ConsoleColor.Red;
                 Console.WriteLine("    !! An error occurred during test #" + testnum + " !!");
-                Console.WriteLine("Exception: " + string.Format("{0}", ex.GetType()) + " - " + string.Format("0x{0:X8}", ex.HResult));
-                Console.WriteLine("Message: " + ex.Message);
+                Console.ResetColor();
+                Console.WriteLine($"Exception: {ex.GetType()} - 0x{ex.HResult:X8}");
+                Console.WriteLine($"Message: {ex.Message}");
                 Console.WriteLine("    -- Stack --");
                 Console.WriteLine(ex.StackTrace);
 
@@ -267,13 +238,13 @@ namespace fwod
         {
             pTestNum++;
             Console.ReadKey(true);
-            Core.ClearAllLayers();
+            Renderer.ClearAllLayers();
         }
 
         static internal void TalkTest(string pText)
         {
             Console.Clear();
-            Person p = new Person(ConsoleTools.WindowWidth / 2, ConsoleTools.WindowHeight - 3);
+            Person p = new Person(Utils.WindowWidth / 2, Utils.WindowHeight - 3);
             p.CharacterChar = '@';
             p.Initialize();
             p.Say(pText);
@@ -283,17 +254,17 @@ namespace fwod
         static internal void SpeedTalkTest()
         {
             Console.Clear();
-            Person p = new Person(ConsoleTools.WindowWidth / 2, ConsoleTools.WindowHeight - 3);
+            Person p = new Person(Utils.WindowWidth / 2, Utils.WindowHeight - 3);
             p.CharacterChar = '@';
             p.Initialize();
             Stopwatch sw = new Stopwatch();
             sw.Start();
             for (int i = 0; i < 25000; i++)
             {
-                p.Say(string.Format("{0:00000}", i), false);
+                p.Say($"{i:00000}", false);
             }
             sw.Stop();
-            p.Say(string.Format("{0}", sw.Elapsed));
+            p.Say($"{sw.Elapsed}");
             Console.Clear();
         }
     }

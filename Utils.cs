@@ -6,7 +6,7 @@
 
 namespace fwod
 {
-    static class ConsoleTools
+    static class Utils
     {
         #region Properties
         /// <summary>
@@ -17,14 +17,6 @@ namespace fwod
         /// Initial window width. ANSI/ISO screen size.
         /// </summary>
         internal const int WindowWidth = 80;
-        /// <summary>
-        /// Original foreground color
-        /// </summary>
-        static internal readonly ConsoleColor OriginalForegroundColor = Console.ForegroundColor;
-        /// <summary>
-        /// Original background color
-        /// </summary>
-        static internal readonly ConsoleColor OriginalBackgroundColor = Console.BackgroundColor;
         #endregion
 
         #region Center text (Normal)
@@ -91,7 +83,7 @@ namespace fwod
         /// </summary>
         /// <param name="pText">Input text</param>
         /// <param name="pTopPosition">Top position</param>
-        static internal void WriteAndCenter(Core.Layer pLayer, string pText, int pTopPosition)
+        static internal void WriteAndCenter(Renderer.Layer pLayer, string pText, int pTopPosition)
         {
             // Calculate the starting position
             int start = (WindowWidth / 2) - (pText.Length / 2);
@@ -101,14 +93,14 @@ namespace fwod
 
             // Print away at the current cursor height (top)
             Console.SetCursorPosition(start, pTopPosition);
-            Core.Write(pLayer, pText);
+            Renderer.Write(pLayer, pText);
         }
 
         /// <summary>
         /// Center text to middle and write, then moves a line foward
         /// </summary>
         /// <param name="pText">Input text</param>
-        static internal void WriteLineAndCenter(Core.Layer pLayer, string pText)
+        static internal void WriteLineAndCenter(Renderer.Layer pLayer, string pText)
         {
             WriteLineAndCenter(pLayer, pText, Console.CursorTop);
         }
@@ -118,7 +110,7 @@ namespace fwod
         /// </summary>
         /// <param name="pText">Input text</param>
         /// <param name="pTopPosition">Top position</param>
-        static internal void WriteLineAndCenter(Core.Layer pLayer, string pText, int pTopPosition)
+        static internal void WriteLineAndCenter(Renderer.Layer pLayer, string pText, int pTopPosition)
         {
             WriteAndCenter(pLayer, pText, pTopPosition);
             Console.SetCursorPosition(0, pTopPosition + 1);
@@ -131,7 +123,7 @@ namespace fwod
         /// </summary>
         /// <param name="pChar">Character to use</param>
         /// <param name="pLenght">Length</param>
-        static internal void GenerateHorizontalLine(Core.Layer pLayer, char pChar, int pLenght)
+        static internal void GenerateHorizontalLine(Renderer.Layer pLayer, char pChar, int pLenght)
         {
             GenerateHorizontalLine(pLayer, pChar, Console.CursorLeft, Console.CursorTop, pLenght);
         }
@@ -143,12 +135,12 @@ namespace fwod
         /// <param name="pPosX">Left position</param>
         /// <param name="pPosY">Top position</param>
         /// <param name="pLenght">Length</param>
-        static internal void GenerateHorizontalLine(Core.Layer pLayer, char pChar, int pPosX, int pPosY, int pLenght)
+        static internal void GenerateHorizontalLine(Renderer.Layer pLayer, char pChar, int pPosX, int pPosY, int pLenght)
         {
             Console.SetCursorPosition(pPosX, pPosY);
             for (int i = 0; i < pLenght; i++)
             {
-                Core.Write(pLayer, pChar);
+                Renderer.Write(pLayer, pChar);
             }
         }
         #endregion
@@ -159,7 +151,7 @@ namespace fwod
         /// </summary>
         /// <param name="pChar">Character to use</param>
         /// <param name="pLenght">Length</param>
-        static internal void GenerateVerticalLine(Core.Layer pLayer, char pChar, int pLenght)
+        static internal void GenerateVerticalLine(Renderer.Layer pLayer, char pChar, int pLenght)
         {
             GenerateVerticalLine(pLayer, pChar, Console.CursorLeft, Console.CursorTop, pLenght);
         }
@@ -171,13 +163,13 @@ namespace fwod
         /// <param name="pPosX">Left position</param>
         /// <param name="pPosY">Top position</param>
         /// <param name="pLenght">Length</param>
-        static internal void GenerateVerticalLine(Core.Layer pLayer, char pChar, int pPosX, int pPosY, int pLenght)
+        static internal void GenerateVerticalLine(Renderer.Layer pLayer, char pChar, int pPosX, int pPosY, int pLenght)
         {
             Console.SetCursorPosition(pPosX, pPosY);
             int len = pPosY + pLenght;
             for (int i = pPosY; i < len; i++)
             {
-                Core.Write(pLayer, pChar);
+                Renderer.Write(pLayer, pChar);
                 Console.SetCursorPosition(pPosX, i);
             }
         }
@@ -197,17 +189,6 @@ namespace fwod
             stmp = stmp.Insert(start, pText);
             stmp = stmp.Remove(start + pText.Length, pText.Length);
             return stmp;
-        }
-
-        static internal int GetLonguestString(string[] pArray)
-        {
-            int max = 0;
-            for (int i = 0; i < pArray.Length; i++)
-            {
-                if (pArray[i].Length > max)
-                    max = pArray[i].Length;
-            }
-            return max;
         }
         #endregion
 
@@ -230,53 +211,60 @@ namespace fwod
         /// <returns>User's input</returns>
         internal static string ReadLine(int pLimit, bool pPassword)
         {
-            System.Text.StringBuilder _out = new System.Text.StringBuilder();
-            int _index = 0;
-            bool _get = true;
+            System.Text.StringBuilder Output = new System.Text.StringBuilder();
+            int CurrentIndex = 0;
+            bool GotAnswer = false;
             int OrigninalLeft = Console.CursorLeft;
 
-            while (_get)
+            while (!GotAnswer)
             {
                 ConsoleKeyInfo c = Console.ReadKey(true);
 
                 switch (c.Key)
                 {
+                    /* Ignored characters */
                     case ConsoleKey.Tab:
+                    case ConsoleKey.LeftArrow:
+                    case ConsoleKey.UpArrow:
+                    case ConsoleKey.RightArrow:
+                    case ConsoleKey.DownArrow:
                         break;
 
                     case ConsoleKey.Enter:
-                        _get = false;
+                        GotAnswer = true;
                         break;
 
                     case ConsoleKey.Backspace:
-                        if (_index > 0)
+                        if (CurrentIndex > 0)
                         {
                             // Erase whole
-                            //TODO: Erase word
                             if (c.Modifiers == ConsoleModifiers.Control)
                             {
-                                _out = new System.Text.StringBuilder();
-                                _index = 0;
+                                //TODO: Erase word
+                                Output.Clear();
+                                CurrentIndex = 0;
                                 Console.SetCursorPosition(OrigninalLeft, Console.CursorTop);
-                                Console.Write(new String(' ', pLimit));
+                                Console.Write(new string(' ', pLimit));
                                 Console.SetCursorPosition(OrigninalLeft, Console.CursorTop);
                             }
+                            // Erase one character
                             else
-                            { // Erase one character
-                                _out = _out.Remove(_out.Length - 1, 1);
-                                _index--;
-                                Console.SetCursorPosition(OrigninalLeft + _index, Console.CursorTop);
+                            {
+                                Output = Output.Remove(Output.Length - 1, 1);
+                                CurrentIndex--;
+                                Console.SetCursorPosition(OrigninalLeft + CurrentIndex, Console.CursorTop);
                                 Console.Write(' ');
-                                Console.SetCursorPosition(OrigninalLeft + _index, Console.CursorTop);
+                                Console.SetCursorPosition(OrigninalLeft + CurrentIndex, Console.CursorTop);
                             }
                         }
                         break;
 
                     default:
-                        if (_index < pLimit)
+                        if (CurrentIndex < pLimit)
                         {
-                            _out.Append(c.KeyChar);
-                            _index++;
+                            Output.Append(c.KeyChar);
+
+                            CurrentIndex++;
 
                             if (pPassword)
                                 Console.Write('*');
@@ -287,7 +275,9 @@ namespace fwod
                 }
             }
 
-            if (_out.Length > 0) return _out.ToString();
+            if (Output.Length > 0)
+                return Output.ToString();
+
             return null;
         }
         #endregion

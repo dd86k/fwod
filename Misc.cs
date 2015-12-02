@@ -13,7 +13,7 @@ namespace fwod
         /// thank you Wunkolo for existing 👌👀
         /// </summary>
         internal static void ShowMeme()
-        { //tip: good shit
+        { // Tip: good shit
             Console.Clear();
             Console.WriteLine("   ###        ###      ###");
             Console.WriteLine("  #   ##     #   #    #   #");

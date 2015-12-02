@@ -14,11 +14,14 @@ namespace fwod
         #endregion
 
         #region Statistics
-        internal static uint StatEnemiesKilled = 0;
-        internal static uint StatStepsTaken = 0;
-        internal static uint StatMoneyGained = 0;
-        internal static uint StatDamageDealt = 0;
-        internal static uint StatDamageReceived = 0;
+        internal struct Statistics
+        {
+            internal static uint StatEnemiesKilled = 0;
+            internal static uint StatStepsTaken = 0;
+            internal static uint StatMoneyGained = 0;
+            internal static uint StatDamageDealt = 0;
+            internal static uint StatDamageReceived = 0;
+        }
         #endregion
 
         #region Methods
@@ -62,7 +65,7 @@ namespace fwod
         {
             foreach (Person P in EnemyList)
             {
-                if (P.PosX == pFutureX && P.PosY == pFutureY)
+                if (P.X == pFutureX && P.Y == pFutureY)
                     return P;
             }
 
@@ -124,7 +127,7 @@ namespace fwod
         /// <param name="pPosY">Left position.</param>
         /// <param name="pWidth">Width.</param>
         /// <param name="pHeight">Height.</param>
-        static internal void GenerateBox(Core.Layer pLayer, TypeOfLine pType, int pPosX, int pPosY, int pWidth, int pHeight)
+        static internal void GenerateBox(Renderer.Layer pLayer, TypeOfLine pType, int pPosX, int pPosY, int pWidth, int pHeight)
         {
             // Default is single lines
             char CornerTLChar = Graphics.Lines.SingleCorner[0]; // Top Left
@@ -147,22 +150,22 @@ namespace fwod
             }
 
             // Top wall
-            Core.Write(pLayer, CornerTLChar, pPosX, pPosY);
-            ConsoleTools.GenerateHorizontalLine(pLayer, HorizontalChar, pWidth - 2);
-            Core.Write(pLayer, CornerTRChar);
+            Renderer.Write(pLayer, CornerTLChar, pPosX, pPosY);
+            Utils.GenerateHorizontalLine(pLayer, HorizontalChar, pWidth - 2);
+            Renderer.Write(pLayer, CornerTRChar);
 
             // Side walls
             Console.SetCursorPosition(pPosX, pPosY + 1);
-            ConsoleTools.GenerateVerticalLine(pLayer, VerticalChar, pHeight - 1);
+            Utils.GenerateVerticalLine(pLayer, VerticalChar, pHeight - 1);
 
             Console.SetCursorPosition(pPosX + (pWidth - 1), pPosY + 1);
-            ConsoleTools.GenerateVerticalLine(pLayer, VerticalChar, pHeight - 1);
+            Utils.GenerateVerticalLine(pLayer, VerticalChar, pHeight - 1);
 
             // Bottom wall
             Console.SetCursorPosition(pPosX, pPosY + (pHeight - 1));
-            Core.Write(pLayer, CornerBLChar);
-            ConsoleTools.GenerateHorizontalLine(pLayer, HorizontalChar, pWidth - 2);
-            Core.Write(pLayer, CornerBRChar);
+            Renderer.Write(pLayer, CornerBLChar);
+            Utils.GenerateHorizontalLine(pLayer, HorizontalChar, pWidth - 2);
+            Renderer.Write(pLayer, CornerBRChar);
         }
         #endregion
 
@@ -181,10 +184,10 @@ namespace fwod
         /// Display what's going on.
         /// </summary>
         /// <param name="pText">Event entry.</param>
-        internal static void DisplayEvent(string pText)
+        internal static void UpdateLatestEvent(string pText)
         {
             string[] Lines = new string[] { pText };
-            int MaxLength = ConsoleTools.WindowWidth - 2;
+            int MaxLength = Utils.WindowWidth - 2;
             string MoreText = " -- More --";
 
             if (pText.Length > MaxLength)
@@ -211,9 +214,9 @@ namespace fwod
 
             for (int i = 0; i < Lines.Length; i++)
             {
-                Console.SetCursorPosition(1, ConsoleTools.WindowHeight - 2);
+                Console.SetCursorPosition(1, Utils.WindowHeight - 2);
                 Console.Write(new string(' ', MaxLength));
-                Console.SetCursorPosition(1, ConsoleTools.WindowHeight - 2);
+                Console.SetCursorPosition(1, Utils.WindowHeight - 2);
                 Console.Write(Lines[i]);
 
                 if (i < Lines.Length - 1)
