@@ -30,7 +30,7 @@ Anyway, fwod would play like [NetHack](https://en.wikipedia.org/wiki/NetHack), a
 - Fixed 80x24 resolution for **maximum** compatiblity (ISO/ANSI screen size)
 - Colors are planned
 
-### Progress
+### Roadmap
 
 - [x] Multi-layer buffers
 - [x] Collision system
@@ -67,25 +67,6 @@ Anyway, fwod would play like [NetHack](https://en.wikipedia.org/wiki/NetHack), a
 - [ ] Official Release (1.0.0.0)
   - [ ] Celebrate! (PARTY HARD)
 
-### Builds
-Builds will be available on the [Releases](https://github.com/guitarxhero/fwod/releases) tab.
-
-### Contributing
-You are free to fork my project in order to provide bug correcting suggestions.
-
-### Installing
-You only need Visual Studio 2012+, Visual Studio Code (Mono/Linux-only), MonoDevelop, or Xamarin Studio, and you're good to go!
-
-On MonoDevelop and Xamarin Studio, you will need to change one project setting.
-
-Right click on the fwod Solution; Options; Under Execute; General: Run on external console. Good to go!
-
-On Visual Studio Code, you will need the extra manual setup (like manually compiling the project) in order to get things running.
-
-I'm currently using **Visual Studio 2012**.
-
 ### License
 This project uses the MIT license, which you can read from the LICENSE file.
-Copyright information is included in the LICENSE file.
-
-pls no bully :ok_hand::eyes::ok_hand::eyes::ok_hand::poop:
+Copyright information is included in the [LICENSE](LICENSE) file.

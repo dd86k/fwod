@@ -6,6 +6,17 @@
 
 namespace fwod
 {
+    internal enum MenuItemType : byte
+    {
+        Information,
+        Seperator,
+        Return,
+        ShowStats,
+        Load,
+        Save,
+        Quit,
+    }
+
     class Menu
     {
         /// <summary>
@@ -13,14 +24,14 @@ namespace fwod
         /// </summary>
         static readonly MenuItem[] MainMenuItems =
         {
-            new MenuItem("Return", MenuItem.MenuItemType.Return),
+            new MenuItem("Return", MenuItemType.Return),
             new MenuItem(),
-            new MenuItem("Statistics", MenuItem.MenuItemType.ShowStats),
+            new MenuItem("Statistics", MenuItemType.ShowStats),
             new MenuItem(),
-            new MenuItem("Load", MenuItem.MenuItemType.Load),
-            new MenuItem("Save", MenuItem.MenuItemType.Save),
+            new MenuItem("Load", MenuItemType.Load),
+            new MenuItem("Save", MenuItemType.Save),
             new MenuItem(),
-            new MenuItem("Quit", MenuItem.MenuItemType.Quit),
+            new MenuItem("Quit", MenuItemType.Quit),
         };
 
         internal Menu()
@@ -35,8 +46,7 @@ namespace fwod
 
         static internal void Show()
         {
-            Menu m = new Menu();
-            m.Display();
+            new Menu().Display();
         }
 
         #region Constants
@@ -85,11 +95,11 @@ namespace fwod
             for (int i = 0; i < CurrentMenu.Length; i++)
             {
                 // Get the item if..
-                string item = (CurrentMenu[i].ItemType == MenuItem.MenuItemType.Seperator ?
+                string item = CurrentMenu[i].ItemType == MenuItemType.Seperator ?
                     // ..it's a MENU_SEPERATOR item
                     Game.Graphics.Lines.SingleConnector[3] + new string(Game.Graphics.Lines.Single[1], MENU_WIDTH - 2) + Game.Graphics.Lines.SingleConnector[0] :
                     // ..or just a regular item
-                    Game.Graphics.Lines.Single[0] + Utils.CenterString(CurrentMenu[i].Text, MENU_WIDTH - 2) + Game.Graphics.Lines.Single[0]);
+                    Game.Graphics.Lines.Single[0] + Utils.CenterString(CurrentMenu[i].Text, MENU_WIDTH - 2) + Game.Graphics.Lines.Single[0];
 
                 // Print item
                 Utils.WriteAndCenter(Renderer.Layer.Menu, item, MENU_TOP + i);
@@ -99,7 +109,7 @@ namespace fwod
             // Select good starting index
             bool found = false;
             MenuIndex = -1;
-            while (!found)
+            while (!found) //TODO: Make this a for(;;) instead
             {
                 MenuIndex++;
 
@@ -108,8 +118,8 @@ namespace fwod
 
                 switch (CurrentMenu[MenuIndex].ItemType)
                 {
-                    case MenuItem.MenuItemType.Information:
-                    case MenuItem.MenuItemType.Seperator:
+                    case MenuItemType.Information:
+                    case MenuItemType.Seperator:
                         break;
                     default:
                         found = true;
@@ -180,8 +190,8 @@ namespace fwod
 
                 switch (CurrentMenu[MenuIndex].ItemType)
                 {
-                    case MenuItem.MenuItemType.Information:
-                    case MenuItem.MenuItemType.Seperator:
+                    case MenuItemType.Information:
+                    case MenuItemType.Seperator:
                         break;
                     default:
                         found = true;
@@ -211,8 +221,8 @@ namespace fwod
 
                 switch (CurrentMenu[MenuIndex].ItemType)
                 {
-                    case MenuItem.MenuItemType.Information:
-                    case MenuItem.MenuItemType.Seperator:
+                    case MenuItemType.Information:
+                    case MenuItemType.Seperator:
                         break;
                     default:
                         found = true;
@@ -231,26 +241,25 @@ namespace fwod
         {
             switch (CurrentMenu[MenuIndex].ItemType)
             {
-                case MenuItem.MenuItemType.Return:
+                case MenuItemType.Return:
                     inMenu = false;
                     break;
 
-                case MenuItem.MenuItemType.ShowStats:
+                case MenuItemType.ShowStats:
                     MenuItem[] StatisticsMenuItems = 
                     {
-                        new MenuItem("Steps taken", MenuItem.MenuItemType.Information),
-                        new MenuItem(string.Format("{0}", Game.Statistics.StatStepsTaken), MenuItem.MenuItemType.Information),
-                        new MenuItem("Monsters killed", MenuItem.MenuItemType.Information),
-                        new MenuItem(string.Format("{0}", Game.Statistics.StatEnemiesKilled), MenuItem.MenuItemType.Information),
-                        new MenuItem("Damage dealt", MenuItem.MenuItemType.Information),
-                        new MenuItem(string.Format("{0}", Game.Statistics.StatDamageDealt), MenuItem.MenuItemType.Information),
-                        new MenuItem("Damage received", MenuItem.MenuItemType.Information),
-                        new MenuItem(string.Format("{0}", Game.Statistics.StatDamageReceived), MenuItem.MenuItemType.Information),
-                        new MenuItem("Money gain", MenuItem.MenuItemType.Information),
-                        new MenuItem(string.Format("{0}$", Game.Statistics.StatMoneyGained), MenuItem.MenuItemType.Information),
+                        new MenuItem("Steps taken", MenuItemType.Information),
+                        new MenuItem(Game.Statistics.StatStepsTaken.ToString(), MenuItemType.Information),
+                        new MenuItem("Monsters killed", MenuItemType.Information),
+                        new MenuItem(Game.Statistics.StatEnemiesKilled.ToString(), MenuItemType.Information),
+                        new MenuItem("Damage dealt", MenuItemType.Information),
+                        new MenuItem(Game.Statistics.StatEnemiesKilled.ToString(), MenuItemType.Information),
+                        new MenuItem("Damage received", MenuItemType.Information),
+                        new MenuItem(Game.Statistics.StatEnemiesKilled.ToString(), MenuItemType.Information),
+                        new MenuItem("Money gain", MenuItemType.Information),
+                        new MenuItem($"{Game.Statistics.StatMoneyGained}$", MenuItemType.Information),
                         new MenuItem(),
-                        //new MenuItem("Back", MenuItem.MenuItemType.Return),
-                        new MenuItem("Return", MenuItem.MenuItemType.Return)
+                        new MenuItem("Return", MenuItemType.Return)
                     };
                     Menu s = new Menu(StatisticsMenuItems);
                     s.Display();
@@ -258,13 +267,13 @@ namespace fwod
                     inMenu = false;
                     break;
 
-                case MenuItem.MenuItemType.Save:
+                case MenuItemType.Save:
                     break;
 
-                case MenuItem.MenuItemType.Load:
+                case MenuItemType.Load:
                     break;
 
-                case MenuItem.MenuItemType.Quit:
+                case MenuItemType.Quit:
                     inMenu = false;
                     Game.isPlaying = false;
                     break;
@@ -355,17 +364,6 @@ namespace fwod
         {
             Text = pText;
             ItemType = pAction;
-        }
-
-        internal enum MenuItemType : byte
-        {
-            Information,
-            Seperator,
-            Return,
-            ShowStats,
-            Load,
-            Save,
-            Quit,
         }
     }
 }

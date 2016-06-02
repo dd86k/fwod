@@ -137,11 +137,7 @@ namespace fwod
         /// <param name="pLenght">Length</param>
         static internal void GenerateHorizontalLine(Renderer.Layer pLayer, char pChar, int pPosX, int pPosY, int pLenght)
         {
-            Console.SetCursorPosition(pPosX, pPosY);
-            for (int i = 0; i < pLenght; i++)
-            {
-                Renderer.Write(pLayer, pChar);
-            }
+            Renderer.Write(pLayer, new string(pChar, pLenght));
         }
         #endregion
 
@@ -165,12 +161,11 @@ namespace fwod
         /// <param name="pLenght">Length</param>
         static internal void GenerateVerticalLine(Renderer.Layer pLayer, char pChar, int pPosX, int pPosY, int pLenght)
         {
-            Console.SetCursorPosition(pPosX, pPosY);
             int len = pPosY + pLenght;
             for (int i = pPosY; i < len; i++)
             {
-                Renderer.Write(pLayer, pChar);
                 Console.SetCursorPosition(pPosX, i);
+                Renderer.Write(pLayer, pChar);
             }
         }
         #endregion
@@ -266,19 +261,13 @@ namespace fwod
 
                             CurrentIndex++;
 
-                            if (pPassword)
-                                Console.Write('*');
-                            else
-                                Console.Write(c.KeyChar);
+                            Console.Write(pPassword ? '*' : c.KeyChar);
                         }
                         break;
                 }
             }
 
-            if (Output.Length > 0)
-                return Output.ToString();
-
-            return null;
+            return Output.Length > 0 ? Output.ToString() : null;
         }
         #endregion
     }

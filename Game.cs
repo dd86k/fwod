@@ -14,7 +14,7 @@ namespace fwod
         #endregion
 
         #region Statistics
-        internal struct Statistics
+        internal class Statistics
         {
             internal static uint StatEnemiesKilled = 0;
             internal static uint StatStepsTaken = 0;
@@ -32,10 +32,10 @@ namespace fwod
         {
             Console.SetCursorPosition(27, 0);
             Console.Write("|");
-            Game.MainPlayer.HP = 10;
+            MainPlayer.HP = 10;
             Console.SetCursorPosition(41, 0);
             Console.Write("|");
-            Game.MainPlayer.Money = 12;
+            MainPlayer.Money = 12;
         }
         #endregion
 
@@ -77,14 +77,14 @@ namespace fwod
         /// <summary>
         /// Graphic characters (char[])
         /// </summary>
-        internal struct Graphics
+        internal class Graphics
         {
-            internal struct Tiles
+            internal class Tiles
             {
                 internal readonly static char[] Grades = { '░', '▒', '▓', '█' };
                 internal readonly static char[] Half = { '▄', '▌', '▐', '▀' };
             }
-            internal struct Lines
+            internal class Lines
             {
                 internal readonly static char[] Single = { '│', '─' };
                 internal readonly static char[] SingleCorner = { '┌', '┐', '┘', '└' };
@@ -100,7 +100,7 @@ namespace fwod
                 internal readonly static char[] DoubleHorizontalCorner = { '╕', '╛', '╘', '╒' };
                 internal readonly static char[] DoubleHorizontalConnector = { '╡', '╧', '╤', '╞', '╪' };
             }
-            internal struct Objects
+            internal class Objects
             {
                 internal const char Grass = '.';
                 internal const char Ladder = 'H';
@@ -129,7 +129,7 @@ namespace fwod
         /// <param name="pHeight">Height.</param>
         static internal void GenerateBox(Renderer.Layer pLayer, TypeOfLine pType, int pPosX, int pPosY, int pWidth, int pHeight)
         {
-            // Default is single lines
+            // Default: TypeOfLine.Single
             char CornerTLChar = Graphics.Lines.SingleCorner[0]; // Top Left
             char CornerTRChar = Graphics.Lines.SingleCorner[1]; // Top Right
             char CornerBLChar = Graphics.Lines.SingleCorner[3]; // Bottom Left
@@ -241,7 +241,7 @@ namespace fwod
             using (TextWriter tw = 
         }*/
 
-        /*static internal <StructOfGameData> LoadProgress()
+        /*static internal <StructOfGameData> LoadGame()
         {
 
         }*/
