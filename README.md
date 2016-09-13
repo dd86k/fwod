@@ -1,10 +1,6 @@
 # fwod
 ## Four Walls of Death - A silly roguelike
 
-This project has been put on a halt for now.
-
-I'm currently working on something that will greatly help this project.
-
 (Early screenshots)
 
 ![fwod on Windows](http://didi.wcantin.ca/pages/fwod/img1.png)
