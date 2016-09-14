@@ -8,8 +8,25 @@ using System.Collections.Generic;
 
 namespace fwod
 {
+    public enum EnemyType
+    {
+        Rat, 
+    }
+
+    static class EnemyTypeHelper
+    {
+        public static float GetModifier(this EnemyType t)
+        {
+            switch (t)
+            {
+                // Common enemies
+                default: return 1.3f;
+            }
+        }
+    }
+
     #region Person
-    internal class Person
+    class Person
     {
         #region Constants
         const int BUBBLE_PADDING_X = 0;
@@ -37,7 +54,8 @@ namespace fwod
                     {
                         if (futrIsSomeone)
                         {
-                            Person futrPerson = Game.GetPersonObjectAt(value, Y);
+                            Person futrPerson =
+                                Game.GetPersonObjectAt(Game.CurrentFloor, value, Y);
 
                             if (futrPerson != this && futrPerson is Enemy)
                             {
@@ -72,7 +90,8 @@ namespace fwod
                     {
                         if (futrIsEnemy)
                         {
-                            Person futrPerson = Game.GetPersonObjectAt(X, value);
+                            Person futrPerson =
+                                Game.GetPersonObjectAt(Game.CurrentFloor, X, value);
 
                             if (futrPerson != this && futrPerson is Enemy)
                             {
@@ -354,7 +373,7 @@ namespace fwod
         #endregion
 
         #region Inventory
-        internal List<Item> Inventory = new List<Item>();
+        public List<Item> Inventory { get; }
         #endregion
         #endregion
 
@@ -371,13 +390,13 @@ namespace fwod
 
         }
 
-        internal Person(int pX, int pY, int pHP)
+        internal Person(int x, int y, int hp)
         {
-            _hp = pHP;
+            _hp = hp;
             _maxhp = _hp;
-            _money = (int)(pHP * 0.5);
-            _x = pX;
-            _y = pY;
+            _money = (int)(hp * 0.5);
+            _x = x;
+            _y = y;
             _s1 = 1;
             _s2 = 1;
             _s3 = 1;
@@ -386,8 +405,9 @@ namespace fwod
             _s6 = 1;
             _s7 = 1;
             CharacterChar = 'P';
-            EquipedWeapon = new Weapon("None", 0);
-            EquipedArmor = new Armor("None", 0);
+            EquipedWeapon = new Weapon("Fists", 0);
+            EquipedArmor = new Armor("Jacket", 0);
+            Inventory = new List<Item>();
         }
         #endregion
 
@@ -411,20 +431,18 @@ namespace fwod
         /// <param name="pHeight">Bubble height</param>
         void GenerateBubble(int pStartX, int pStartY, int pWidth, int pHeight)
         {
-            Game.GenerateBox(Renderer.Layer.None,
-                Game.TypeOfLine.Single,
-                pStartX, pStartY, pWidth, pHeight);
+            Game.GenerateBox(Renderer.Layer.None, pStartX, pStartY, pWidth, pHeight);
 
             // Bubble chat "connector"
             if (pStartY < Y) // Over Person
             {
                 Console.SetCursorPosition(X, Y - 2);
-                Console.Write(Game.Graphics.Lines.SingleConnector[2]);
+                Console.Write('┬');
             }
             else // Under Person
             {
                 Console.SetCursorPosition(X, Y + 2);
-                Console.Write(Game.Graphics.Lines.SingleConnector[1]);
+                Console.Write('┴');
             }
         }
 
@@ -469,54 +487,46 @@ namespace fwod
 
         #region Conversation
         /// <summary>
-        /// Makes the character talk.
-        /// </summary>
-        /// <param name="pText">Dialog</param>
-        internal void Say(string pText)
-        {
-            Say(pText, true);
-        }
-
-        /// <summary>
         /// Makes the Person talk.
         /// </summary>
-        /// <param name="pText">Dialog</param>
-        /// <param name="pWait">Wait for keydown</param>
-        internal void Say(string pText, bool pWait)
+        /// <param name="text">Dialog</param>
+        /// <param name="wait">Wait for keydown</param>
+        internal void Say(string text, bool wait = true)
         {
-            string[] Lines = new string[] { pText };
+            string[] lines = new string[] { text };
 
-            if (pText.Length > BUBBLE_TEXTMAXLEN)
+            if (text.Length > BUBBLE_TEXTMAXLEN)
             {
                 int ci = 0; // Multiline scenario row index
                 int start = 0; // Multiline cutting index
-                Lines = new string[(pText.Length / (BUBBLE_TEXTMAXLEN + 1)) + 1];
+                lines = new string[(text.Length / (BUBBLE_TEXTMAXLEN + 1)) + 1];
 
                 // This block seperates the input into BUBBLE_MAXLEN characters each lines equally.
                 do
                 {
-                    if (start + BUBBLE_TEXTMAXLEN > pText.Length)
-                        Lines[ci] = pText.Substring(start, pText.Length - start);
+                    if (start + BUBBLE_TEXTMAXLEN > text.Length)
+                        lines[ci] = text.Substring(start, text.Length - start);
                     else
-                        Lines[ci] = pText.Substring(start, BUBBLE_TEXTMAXLEN);
+                        lines[ci] = text.Substring(start, BUBBLE_TEXTMAXLEN);
                     ci++;
                     start += BUBBLE_TEXTMAXLEN;
-                } while (start < pText.Length);
+                } while (start < text.Length);
             }
             
-            Say(Lines, pWait);
+            Say(lines, wait);
         }
 
         /// <summary>
         /// Makes the Person say a few lines.
         /// </summary>
-        /// <param name="pLines">Lines of dialog</param>
-        /// <param name="pWait">Wait for keydown</param>
-        internal void Say(string[] pLines, bool pWait)
+        /// <param name="lines">Lines of dialog</param>
+        /// <param name="wait">Wait for keydown</param>
+        internal void Say(string[] lines, bool wait)
         {
-            int arrlen = pLines.Length;
+            //TODO: Clean this clutter.
+            int arrlen = lines.Length;
             int strlen = arrlen > 1 ?
-                pLines.GetLonguestString().Length : pLines[0].Length;
+                lines.GetLonguestStringLength() : lines[0].Length;
             int width = strlen + (BUBBLE_PADDING_X * 2) + 2;
             int height = arrlen + 2;
             int startX = X - (strlen / 2) - 1;
@@ -544,10 +554,10 @@ namespace fwod
             for (int i = 0; i < arrlen; i++)
             {
                 Console.SetCursorPosition(TextStartX, TextStartY + i);
-                Console.Write(pLines[i]);
+                Console.Write(lines[i]);
             }
 
-            if (pWait)
+            if (wait)
             {
                 Console.ReadKey(true);
                 ClearBubble(startX, startY, width, height);
@@ -571,17 +581,17 @@ namespace fwod
         /// <summary>
         /// Get input from the Person.
         /// </summary>
-        /// <param name="pLimit">Limit in characters.</param>
+        /// <param name="limit">Limit in characters.</param>
         /// <returns>Answer</returns>
-        internal string GetAnswer(int pLimit)
+        internal string GetAnswer(int limit)
         {
-            Say(new string(' ', pLimit), false);
+            Say(new string(' ', limit), false);
 
             // Read input from this Person
-            string Out = Utils.ReadLine(pLimit);
+            string Out = Utils.ReadLine(limit);
 
             // Clear bubble
-            ClearBubble(pLimit);
+            ClearBubble(limit);
 
             return Out;
         }
@@ -622,22 +632,22 @@ namespace fwod
         #endregion
 
         #region Attack
-        internal void Attack(Person pPerson)
+        internal void Attack(Person person)
         {
             //TODO: Attack algorithm
-            int AttackPoints = (int)(((S1 * 2) + EquipedWeapon.BaseDamage) - EquipedArmor.ArmorPoints);
+            int AttackPoints = (int)(((S1 * 2) + EquipedWeapon.Damage) - EquipedArmor.ArmorPoints);
 
-            string atk = $": {pPerson.HP} HP - {AttackPoints} AP = {pPerson.HP -= AttackPoints} HP";
+            string atk = $": {person.HP} HP - {AttackPoints} AP = {person.HP -= AttackPoints} HP";
 
-            if (pPerson.HP <= 0)
-                atk += $" -- Dead! You earn {pPerson.Money}$!";
+            if (person.HP <= 0)
+                atk += $" -- Dead! You earn {person.Money}$!";
 
             Game.Statistics.StatDamageDealt += (uint)AttackPoints;
 
-            if (pPerson is Enemy)
-                Game.UpdateLatestEvent(((Enemy)pPerson).Race + atk);
+            if (person is Enemy)
+                Game.Log(((Enemy)person).Race + atk);
             else
-                Game.UpdateLatestEvent(pPerson.GetType() + atk);
+                Game.Log(person.GetType() + atk);
         }
         #endregion
 
@@ -653,7 +663,7 @@ namespace fwod
             {
                 Game.MainPlayer.Money += Money;
                 Game.Statistics.StatMoneyGained += (uint)Money;
-                Game.EnemyList.Remove((Enemy)this);
+                Game.PeopleList[Game.CurrentFloor].Remove((Enemy)this);
                 Game.Statistics.StatEnemiesKilled++;
             }
             else if (this is Player)
@@ -663,7 +673,7 @@ namespace fwod
             }
             else
             {
-                Game.PeopleList.Remove(this);
+                Game.PeopleList[Game.CurrentFloor].Remove(this);
             }
         }
         #endregion
@@ -673,16 +683,20 @@ namespace fwod
     #region Player
     class Player : Person
     {
-        internal Player()
-            : this(Utils.WindowWidth / 2, Utils.WindowHeight / 2)
-        {
+        public Player()
+            : this(Utils.WindowWidth / 2, Utils.WindowHeight / 2) {}
 
-        }
-
-        internal Player(int X, int Y)
+        public Player(int X, int Y)
             : base(X, Y)
         {
             CharacterChar = '@';
+            CharacterName = null;
+        }
+
+        //TODO: ShowInventory(void)
+        public void ShowInventory()
+        {
+
         }
     }
     #endregion
@@ -690,30 +704,14 @@ namespace fwod
     #region Enemy
     class Enemy : Person
     {
-        internal Enemy(int X, int Y, EnemyType pEnemyType, int pLevel)
-            : base(X, Y)
+        public Enemy(int x, int y, EnemyType type, int level)
+            : base(x, y)
         {
-            double mod = 1;
-            switch (pEnemyType)
-            {
-                case EnemyType.Rat:
-                    mod = 2;
-                    break;
-            }
-            HP = MaxHP = (int)(pLevel * mod);
+            HP = MaxHP = (int)(level * type.GetModifier());
             CharacterChar = 'E';
         }
-
-        internal enum EnemyType
-        {
-            Rat,
-
-        }
         
-        internal EnemyType Race
-        {
-            get; set;
-        }
+        public EnemyType Race { get; }
     }
     #endregion
 }

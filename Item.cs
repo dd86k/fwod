@@ -1,19 +1,51 @@
 ﻿namespace fwod
 {
+    public enum WeaponModifier : byte
+    {
+        Normal, Broken, Rusty, Sharp, Godly, PleaseNerf
+    }
+
+    static class ModifierHelper
+    {
+        public static float GetDamage(this WeaponModifier c, int baseDamage)
+        {
+            switch (c)
+            {
+                case WeaponModifier.Broken:
+                    return baseDamage * 0.5f;
+
+                case WeaponModifier.Rusty:
+                    return baseDamage * 0.7f;
+
+                case WeaponModifier.Sharp:
+                    return baseDamage * 1.2f;
+
+                case WeaponModifier.Godly:
+                    return baseDamage * 2.5f;
+
+                case WeaponModifier.PleaseNerf:
+                    return baseDamage * 10;
+
+                default: // Normal
+                    return baseDamage;
+            }
+        }
+    }
+
     #region Item base class
     class Item
     {
         #region Constructors
-        internal Item(string pName)
+        internal Item(string name)
         {
-            Name = pName;
+            Name = name;
         }
         #endregion
 
         #region Object properties
         internal string Name
         {
-            get; private set;
+            get;
         }
         #endregion
     }
@@ -23,75 +55,33 @@
     class Weapon : Item
     {
         #region Construction
-        internal Weapon(string pName, int pBaseDamage)
-            : this(pName, pBaseDamage, Prefix.Normal)
+        internal Weapon(string name, int baseDamage)
+            : this(name, baseDamage, WeaponModifier.Normal)
         {
 
         }
 
-        internal Weapon(string pName, int pBaseDamage, Prefix pWeaponPrefix)
-            : base(pName)
+        internal Weapon(string name, int baseDamage, WeaponModifier weaponmod)
+            : base(name)
         {
-            _basedamage = pBaseDamage;
-            Modifier = pWeaponPrefix;
+            BaseDamage = baseDamage;
+            Enhancement = weaponmod;
         }
         #endregion
 
         #region Object properties
-        internal new string Name
-        {
-            get
-            {
-                return $"{Modifier} {base.Name}";
-            }
-        }
-
-        int _basedamage;
-        internal double BaseDamage
-        {
-            get
-            {
-                switch (Modifier)
-                {
-                    case Prefix.Broken:
-                        return _basedamage * 0.5;
-
-                    case Prefix.Rusty:
-                        return _basedamage * 0.7;
-
-                    case Prefix.Sharp:
-                        return _basedamage * 1.2;
-
-                    case Prefix.Godly:
-                        return _basedamage * 2.5;
-
-                    case Prefix.OP_AF:
-                        return _basedamage * 10;
-
-                    default: // Normal
-                        return _basedamage;
-                }
-            }
-        }
-
-        internal enum Prefix : byte
-        {
-            Normal, Broken, Rusty, Sharp, Godly, OP_AF
-        }
-        
-        internal Prefix Modifier
-        {
-            get;
-            set;
-        }
+        public new string Name => $"{Enhancement} {base.Name}";
+        public int BaseDamage { get; }
+        public float Damage => Enhancement.GetDamage(BaseDamage);
+        public WeaponModifier Enhancement { get; }
         #endregion
     }
 
     class Sword : Weapon
     {
         #region Construction
-        internal Sword(string pName, int pBaseDamage)
-            : base(pName, pBaseDamage)
+        internal Sword(string name, int baseDamage)
+            : base(name, baseDamage)
         {
 
         }
@@ -103,19 +93,16 @@
     class Armor : Item
     {
         #region Construstion
-        internal Armor(string pName, int pArmorPoints)
-            : base(pName)
+        //TODO: Expand armor to include boots, leggings, etc.
+        internal Armor(string name, int armorPoints)
+            : base(name)
         {
-            ArmorPoints = pArmorPoints;
+            ArmorPoints = armorPoints;
         }
         #endregion
 
         #region Properties
-        internal int ArmorPoints
-        {
-            get;
-            private set;
-        }
+        internal int ArmorPoints { get; }
         #endregion
     }
     #endregion
@@ -123,17 +110,13 @@
     #region Drinks
     class Food : Item
     {
-        internal Food(string pName, int pRestorePoints)
-            : base(pName)
+        internal Food(string name, int restorePoints)
+            : base(name)
         {
-            RestorePoints = pRestorePoints;
+            RestorePoints = restorePoints;
         }
         
-        internal int RestorePoints
-        {
-            get;
-            private set;
-        }
+        internal int RestorePoints { get; }
     }
     #endregion
 }

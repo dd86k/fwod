@@ -2,7 +2,7 @@
 using System;
 
 /*
-    Unrelated of the game, for fun.
+    Unrelated of the game, for amusement.
 */
 
 namespace fwod

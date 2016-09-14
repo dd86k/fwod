@@ -4,18 +4,16 @@
     Entry point of the program.
 */
 
+//TODO: Error enumeration?
+
 namespace fwod
 {
     class MainClass
     {
-        #region Constants
-        const string ProjectName = "Four Walls Of Death";
-        #endregion
-
-        #region Properties
         static readonly string ProjectVersion =
             $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}";
-        #endregion
+        static readonly string AssemblyName =
+            $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}";
 
         /// <summary>
         /// Entry point.
@@ -24,14 +22,21 @@ namespace fwod
         /// <returns>Error.</returns>
         internal static int Main(string[] args)
         {
-            // Default values
-            string bosstext = string.Empty;
-            char Pchar = '@';
-            string Pname = "Player ";
-            bool SkipIntro = false;
+            Game.MainPlayer =
+                new Player((Utils.WindowWidth / 4) + (Utils.WindowWidth / 2), Utils.WindowHeight / 2);
 
-            // Applying CMD-like colors so it won't look weird later. (Linux)
+            // Default values
+            bool PlayIntro = true;
+
+            // Applying CMD-like colors so it won't look weird later. (Mono fix)
             Console.ResetColor();
+
+            try
+            {
+                // May crash on Mono.
+                Console.CursorVisible = false;
+            }
+            finally { }
 
             for (int i = 0; i < args.Length; i++)
             {
@@ -46,49 +51,25 @@ namespace fwod
                         ShowVersion();
                         return 0;
 
-                    case "-Bs":
-                    case "-bosssays":
-                        if (args[i + 1] != null)
-                            bosstext = args[i + 1];
-                        break;
-
                     case "-Pc":
                     case "-playerchar":
                         if (args[i + 1] != null)
-                            Pchar = args[i + 1][0];
+                            Game.MainPlayer.CharacterChar = args[i + 1][0];
                         break;
 
                     case "-Pn":
                     case "-playername":
                         if (args[i + 1] != null)
-                            Pname = args[i + 1];
+                            Game.MainPlayer.CharacterName = args[i + 1];
                         break;
 
                     case "-S":
                     case "-skipintro":
-                        SkipIntro = true;
+                        PlayIntro = false;
                         break;
-
 #if DEBUG
                     case "--showmeme":
                         Misc.ShowMeme(); // :^)
-                        return 0;
-
-                    case "-say":
-                        if (args[i + 1] != null)
-                        {
-                            Debug.TalkTest(args[i + 1]);
-                            return 0;
-                        }
-                        else return 1;
-
-                    case "--runtests":
-                        int returnint = 0;
-                        Debug.StartTests(ref returnint);
-                        return returnint;
-
-                    case "--speedtalktest":
-                        Debug.SpeedTalkTest();
                         return 0;
 #endif
                 }
@@ -96,20 +77,19 @@ namespace fwod
 
             // -- Before the game --
             Console.Clear();
-            Console.Title = "fwod " + ProjectVersion;
+            Console.Title = AssemblyName + " " + ProjectVersion;
 
-            if (!SkipIntro)
+            if (PlayIntro)
             {
-                string BannerText = "* Welcome to " + ProjectName + " *";
+                string BannerText = "* Welcome to " + AssemblyName + " *";
                 string BannerOutline = new string('*', BannerText.Length);
 
                 Utils.WriteLineAndCenter(BannerOutline);
                 Utils.WriteLineAndCenter(BannerText);
                 Utils.WriteLineAndCenter(BannerOutline);
+
                 Console.WriteLine();
-
-                Console.WriteLine("[Insert shitty lore here]");
-
+                Console.WriteLine("");
                 Console.WriteLine();
                 Console.WriteLine("Every keystroke counts!");
 
@@ -125,57 +105,49 @@ namespace fwod
                 Console.Clear();
             }
 
-            // -- Game starts here --
-
+            #region Initialization
             // Add player and first enemy in game
-            Game.MainPlayer = new Player((Utils.WindowWidth / 4) + (Utils.WindowWidth / 2),
-                Utils.WindowHeight / 2);
             Person Stranger = new Person(Utils.WindowWidth / 4, Utils.WindowHeight / 2);
             Game.PeopleList.Add(Stranger);
 
             // Generate the 'main' box
-            Game.GenerateBox(Renderer.Layer.Game, Game.TypeOfLine.Double, 1, 1,
+            Game.GenerateBox(Renderer.Layer.Game, 1, 1,
                 Utils.WindowWidth - 2, Utils.WindowHeight - 3);
 
-            // Set player stuff
-            Game.MainPlayer.CharacterName = Pname;
-            Game.MainPlayer.CharacterChar = Pchar;
+            // Initialize
             Game.MainPlayer.Initialize();
 
             Stranger.CharacterChar = 'S';
             Stranger.Initialize();
 
-#warning Test
             Enemy TestRat = new Enemy(Utils.WindowWidth - 5, 5, Enemy.EnemyType.Rat, 24);
             Game.EnemyList.Add(TestRat);
             TestRat.Initialize();
+            #endregion
 
             #region Intro
-            if (!SkipIntro)
+            if (PlayIntro)
             {
-                Game.UpdateLatestEvent("Dialog...");
+                Game.Log("Dialog...");
 
                 Game.MainPlayer.Say("Ah! Where am I?");
 
                 Stranger.Say("Oh, you're awake... What is your name?");
-
-                if (Pname == "Player ")
+                
+                if (Game.MainPlayer.CharacterName == null) // Default name
                 {
                     string tmp_name = null;
-
                     do
                     {
                         tmp_name = Game.MainPlayer.GetAnswer();
-
                         Stranger.Say("Say something!");
                     } while (tmp_name == null);
-
                     Game.MainPlayer.CharacterName = tmp_name;
                 }
 
-                Game.MainPlayer.Say("It's " + Game.MainPlayer.CharacterName + ". Jeez, calm down.");
+                Game.MainPlayer.Say($"It's {Game.MainPlayer.CharacterName}.");
 
-                Stranger.Say("So, welcome to " + ProjectName + ".");
+                Stranger.Say($"Anyway, welcome to {AssemblyName}. So...");
 
                 Console.SetCursorPosition(27, 0);
                 Console.Write("|");
@@ -185,7 +157,7 @@ namespace fwod
 
                 Game.MainPlayer.Say("My HP?");
 
-                Stranger.Say("Health Points, yo.");
+                Stranger.Say("Health Points, obviously.");
 
                 Game.MainPlayer.Say("Um.. Okay?");
 
@@ -196,16 +168,13 @@ namespace fwod
                 Stranger.Say("And your money.");
 
                 Game.MainPlayer.Say("Oh yeah, I forgot I have that much.");
-
-                if (bosstext.Length > 0)
-                    Stranger.Say(bosstext);
-                else
-                    Stranger.Say("I'll be back for you anyway, " + Game.MainPlayer.CharacterName + ".");
+                
+                Stranger.Say($"I'll be back for you anyway, {Game.MainPlayer.CharacterName}.");
 
                 Game.MainPlayer.Say("Wait!");
 
                 Stranger.Say("Time for me to go!");
-                Stranger.Say("[POOF]");
+                Stranger.Say("*POOF*");
                 Stranger.Destroy();
 
                 Game.MainPlayer.Say("I guess there's no helping him... Better get moving.");
@@ -229,11 +198,11 @@ namespace fwod
             return 0;
         }
 
-        static internal void Entry()
+        static void Entry()
         {
-            ConsoleKeyInfo key = Console.ReadKey(true);
+            ConsoleKeyInfo c = Console.ReadKey(true);
 
-            switch (key.Key)
+            switch (c.Key)
             {
                 // Move up
                 case ConsoleKey.UpArrow:
@@ -257,27 +226,26 @@ namespace fwod
 
                 // Menu button
                 case ConsoleKey.Escape:
-                    Menu.Show();
+                    Game.MainMenu.Show();
                     break;
             }
 
-            // Steps a "turn" since this is turn based.. ish
+            // Game takes a turn.
             //Game.TakeTurn();
         }
 
         static void ShowHelp()
         {
             Console.WriteLine(" Usage:");
-            Console.WriteLine("  fwod [options]");
+            Console.WriteLine("  fwod [<Options>]");
             Console.WriteLine();
-            Console.WriteLine("  -Bs, -bosssays      Custom text from the Boss.");
             Console.WriteLine("  -Pc, -playerchar    Sets the player's character.");
             Console.WriteLine("  -Pn, -playername    Sets the player's name.");
             Console.WriteLine("  -S,  -skipintro     Skip intro and use defaults.");
 #if DEBUG
-            Console.WriteLine("  --runtests          Run debugging tests.");
-            Console.WriteLine("  --speedtalktest     Run a speed dialog test.");
-            Console.WriteLine("  -say                Make the player say something and exit.");
+            //Console.WriteLine("  --runtests          Run debugging tests.");
+            //Console.WriteLine("  --speedtalktest     Run a speed dialog test.");
+            //Console.WriteLine("  -say                Make the player say something and exit.");
             Console.WriteLine("  --showmeme          yeah");
 #endif
             Console.WriteLine();
@@ -289,7 +257,7 @@ namespace fwod
 
         static void ShowVersion()
         {
-            Console.WriteLine(ProjectName + " - " + ProjectVersion);
+            Console.WriteLine(AssemblyName + " - " + ProjectVersion);
             Console.WriteLine("Copyright (c) 2015 DD~!/guitarxhero");
             Console.WriteLine("License: MIT License <http://opensource.org/licenses/MIT>");
             Console.WriteLine("Project page: <https://github.com/guitarxhero/fwod>");

@@ -43,6 +43,7 @@
     <CodeAnalysisRuleSet>ExtendedDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
     <ConsolePause>false</ConsolePause>
     <Externalconsole>true</Externalconsole>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -54,6 +55,7 @@
     <Prefer32Bit>true</Prefer32Bit>
     <LangVersion>6</LangVersion>
     <DebugSymbols>true</DebugSymbols>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>fwod.MainClass</StartupObject>
@@ -69,7 +71,6 @@
     <Compile Include="MapManager.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Renderer.cs" />
-    <Compile Include="Debug.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="Menu.cs" />

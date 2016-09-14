@@ -9,13 +9,14 @@ namespace fwod
     static class Renderer
     {
         #region Layers
-        /// <summary>
-        /// Multi-layered char buffer
-        /// </summary>
-        /// <remarks>
-        /// Default: 3 layers of 24 row x 80 rolumns each
-        /// 2D Arrays work like this: [ROW, COL]
-        /// </remarks>
+        /*
+         * TODO!! Remove the People and Menu layers.
+         * The idea is just to have an array for the map.
+         * The menu and people layers are useless since the menu is directly
+         * drawn on the screen buffer while the people (player, enemies, etc.)
+         * already have their own dictionary depending on the level.
+         * Basically, removing the layer feature for simplicity.
+         */
         internal static char[][,] Layers = new char[3][,]
         {
             new char[Utils.WindowHeight, Utils.WindowWidth], // Menu
@@ -47,7 +48,7 @@ namespace fwod
             /// </summary>
             Game,
             /// <summary>
-            /// Output to no layers, print on screen only.
+            /// Output to no layers, print directly on screen.
             /// </summary>
             None
         }
@@ -57,57 +58,57 @@ namespace fwod
         /// <summary>
         /// Write at current location.
         /// </summary>
-        /// <param name="pLayer">Layer to output.</param>
-        /// <param name="pInput">Character.</param>
-        internal static void Write(Layer pLayer, char pInput)
+        /// <param name="layer">Layer to output.</param>
+        /// <param name="c">Character.</param>
+        internal static void Write(Layer layer, char c)
         {
-            Write(pLayer, pInput, Console.CursorLeft, Console.CursorTop);
+            Write(layer, c, Console.CursorLeft, Console.CursorTop);
         }
 
         /// <summary>
         /// Write at specific location.
         /// </summary>
-        /// <param name="pLayer">Layer to output.</param>
-        /// <param name="pInput">Character.</param>
-        /// <param name="pPosX">Left position.</param>
-        /// <param name="pPosY">Top position.</param>
-        internal static void Write(Layer pLayer, char pInput, int pPosX, int pPosY)
+        /// <param name="layer">Layer to output.</param>
+        /// <param name="c">Character.</param>
+        /// <param name="x">Left position.</param>
+        /// <param name="y">Top position.</param>
+        internal static void Write(Layer layer, char c, int x, int y)
         {
-            if (pLayer != Layer.None)
-                Layers[(int)pLayer][pPosY, pPosX] = pInput;
-            Console.SetCursorPosition(pPosX, pPosY);
-            Console.Write(pInput);
+            if (layer != Layer.None)
+                Layers[(int)layer][y, x] = c;
+            Console.SetCursorPosition(x, y);
+            Console.Write(c);
         }
 
         /// <summary>
         /// Write at current location.
         /// </summary>
-        /// <param name="pLayer">Layer to output.</param>
-        /// <param name="pInput">String.</param>
-        internal static void Write(Layer pLayer, string pInput)
+        /// <param name="layer">Layer to output.</param>
+        /// <param name="text">String.</param>
+        internal static void Write(Layer layer, string text)
         {
-            Write(pLayer, pInput, Console.CursorLeft, Console.CursorTop);
+            Write(layer, text, Console.CursorLeft, Console.CursorTop);
         }
 
         /// <summary>
         /// Write at specific location.
         /// </summary>
-        /// <param name="pLayer">Layer to output.</param>
-        /// <param name="pInput">String.</param>
-        /// <param name="pPosX">Left position.</param>
-        /// <param name="pPosY">Top position.</param>
-        internal static void Write(Layer pLayer, string pInput, int pPosX, int pPosY)
+        /// <param name="layer">Layer to output.</param>
+        /// <param name="text">String.</param>
+        /// <param name="x">Left position.</param>
+        /// <param name="y">Top position.</param>
+        internal static void Write(Layer layer, string text, int x, int y)
         {
-            if (pLayer != Layer.None)
+            if (layer != Layer.None)
             {
-                for (int i = 0; i < pInput.Length; i++)
+                for (int i = 0; i < text.Length; i++)
                 {
-                    Layers[(int)pLayer][pPosY, pPosX + i] = pInput[i];
+                    Layers[(int)layer][y, x + i] = text[i];
                 }
             }
 
-            Console.SetCursorPosition(pPosX, pPosY);
-            Console.Write(pInput);
+            Console.SetCursorPosition(x, y);
+            Console.Write(text);
         }
         #endregion
 
@@ -115,37 +116,37 @@ namespace fwod
         /// <summary>
         /// Write at current location with newline.
         /// </summary>
-        /// <param name="pLayer">Layer to output.</param>
-        /// <param name="pInput">Character.</param>
-        internal static void WriteLine(Layer pLayer, char pInput)
+        /// <param name="layer">Layer to output.</param>
+        /// <param name="c">Character.</param>
+        internal static void WriteLine(Layer layer, char c)
         {
-            WriteLine(pLayer, pInput, Console.CursorLeft, Console.CursorTop);
+            WriteLine(layer, c, Console.CursorLeft, Console.CursorTop);
         }
 
-        internal static void WriteLine(Layer pLayer, char pInput, int pPosX, int pPosY)
+        internal static void WriteLine(Layer layer, char c, int x, int y)
         {
-            if (pLayer != Layer.None)
-                Layers[(int)pLayer][pPosY, pPosX] = pInput;
+            if (layer != Layer.None)
+                Layers[(int)layer][y, x] = c;
 
-            Console.WriteLine(pInput);
+            Console.WriteLine(c);
         }
 
-        internal static void WriteLine(Layer pLayer, string pInput)
+        internal static void WriteLine(Layer layer, string text)
         {
-            WriteLine(pLayer, pInput, Console.CursorLeft, Console.CursorTop);
+            WriteLine(layer, text, Console.CursorLeft, Console.CursorTop);
         }
 
-        internal static void WriteLine(Layer pLayer, string pInput, int pPosX, int pPosY)
+        internal static void WriteLine(Layer layer, string text, int x, int y)
         {
-            if (pLayer != Layer.None)
+            if (layer != Layer.None)
             {
-                for (int i = 0; i < pInput.Length; i++)
+                for (int i = 0; i < text.Length; i++)
                 {
-                    Layers[(int)pLayer][pPosY, pPosX + i] = pInput[i];
+                    Layers[(int)layer][y, x + i] = text[i];
                 }
             }
 
-            Console.WriteLine(pInput);
+            Console.WriteLine(text);
         }
         #endregion
 
@@ -153,13 +154,13 @@ namespace fwod
         /// <summary>
         /// Get a characters from a layer at a position.
         /// </summary>
-        /// <param name="pLayer">Layer.</param>
-        /// <param name="pPosX">Left position.</param>
-        /// <param name="pPosY">Top position.</param>
+        /// <param name="layer">Layer.</param>
+        /// <param name="x">Left position.</param>
+        /// <param name="y">Top position.</param>
         /// <returns>Stored character.</returns>
-        internal static char GetCharAt(Layer pLayer, int pPosX, int pPosY)
+        internal static char GetCharAt(Layer layer, int x, int y)
         {
-            return Layers[(int)pLayer][pPosY, pPosX];
+            return Layers[(int)layer][y, x];
         }
         #endregion
 
@@ -167,28 +168,28 @@ namespace fwod
         /// <summary>
         /// Clears a layer and prints to console
         /// </summary>
-        /// <param name="pLayer">Layer to clear</param>
-        internal static void ClearLayer(Layer pLayer)
+        /// <param name="layer">Layer to clear</param>
+        internal static void ClearLayer(Layer layer)
         {
-            ClearLayer(pLayer, true);
+            ClearLayer(layer, true);
         }
 
         /// <summary>
         /// Clears a layer
         /// </summary>
-        /// <param name="pLayer">Layer to clear</param>
-        /// <param name="pClearConsole">Update console</param>
-        internal static void ClearLayer(Layer pLayer, bool pClearConsole)
+        /// <param name="layer">Layer to clear</param>
+        /// <param name="clear">Update display buffer</param>
+        internal static void ClearLayer(Layer layer, bool clear)
         {
             for (int h = 0; h < Utils.WindowHeight; h++)
             {
                 for (int w = 0; w < Utils.WindowWidth; w++)
                 {
-                    Layers[(int)pLayer][h, w] = '\0';
+                    Layers[(int)layer][h, w] = '\0';
                 }
             }
 
-            if (pClearConsole)
+            if (clear)
                 Console.Clear();
         }
 

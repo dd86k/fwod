@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 /*
     Various tools for the command prompt and terminal.
@@ -23,48 +24,48 @@ namespace fwod
         /// <summary>
         /// Center text to middle and write
         /// </summary>
-        /// <param name="pText">Input text</param>
-        static internal void WriteAndCenter(string pText)
+        /// <param name="text">Input text</param>
+        static internal void WriteAndCenter(string text)
         {
-            WriteAndCenter(pText, Console.CursorTop);
+            WriteAndCenter(text, Console.CursorTop);
         }
 
         /// <summary>
         /// Center text to middle and write to a specific top position
         /// </summary>
-        /// <param name="pText">Input text</param>
-        /// <param name="pTopPosition">Top position</param>
-        static internal void WriteAndCenter(string pText, int pTopPosition)
+        /// <param name="text">Input text</param>
+        /// <param name="ypos">Top position</param>
+        static internal void WriteAndCenter(string text, int ypos)
         {
             // Calculate the starting position
-            int start = (WindowWidth / 2) - (pText.Length / 2);
+            int start = (WindowWidth / 2) - (text.Length / 2);
 
             // If the text is longer than the buffer, set it to 0
-            start = start + pText.Length > WindowWidth ? 0 : start;
+            start = start + text.Length > WindowWidth ? 0 : start;
 
             // Print away at the current cursor height (top)
-            Console.SetCursorPosition(start, pTopPosition);
-            Console.Write(pText);
+            Console.SetCursorPosition(start, ypos);
+            Console.Write(text);
         }
 
         /// <summary>
         /// Center text to middle and write, then moves a line foward
         /// </summary>
-        /// <param name="pText">Input text</param>
-        static internal void WriteLineAndCenter(string pText)
+        /// <param name="text">Input text</param>
+        static internal void WriteLineAndCenter(string text)
         {
-            WriteLineAndCenter(pText, Console.CursorTop);
+            WriteLineAndCenter(text, Console.CursorTop);
         }
 
         /// <summary>
         /// Center text to middle and write, then moves a line foward
         /// </summary>
-        /// <param name="pText">Input text</param>
-        /// <param name="pTopPosition">Top position</param>
-        static internal void WriteLineAndCenter(string pText, int pTopPosition)
+        /// <param name="text">Input text</param>
+        /// <param name="ypos">Top position</param>
+        static internal void WriteLineAndCenter(string text, int ypos)
         {
-            WriteAndCenter(pText, pTopPosition);
-            Console.SetCursorPosition(0, pTopPosition + 1);
+            WriteAndCenter(text, ypos);
+            Console.SetCursorPosition(0, ypos + 1);
         }
         #endregion
 
@@ -72,146 +73,114 @@ namespace fwod
         /// <summary>
         /// Center text to middle and write
         /// </summary>
-        /// <param name="pText">Input text</param>
-        static internal void WriteAndCenterCore(string pText)
+        /// <param name="text">Input text</param>
+        static internal void WriteAndCenterCore(string text)
         {
-            WriteAndCenter(pText, Console.CursorTop);
+            WriteAndCenter(text, Console.CursorTop);
         }
 
         /// <summary>
         /// Center text to middle and write to a specific top position
         /// </summary>
-        /// <param name="pText">Input text</param>
-        /// <param name="pTopPosition">Top position</param>
-        static internal void WriteAndCenter(Renderer.Layer pLayer, string pText, int pTopPosition)
+        /// <param name="text">Input text</param>
+        /// <param name="ypos">Top position</param>
+        static internal void WriteAndCenter(Renderer.Layer layer, string text, int ypos)
         {
             // Calculate the starting position
-            int start = (WindowWidth / 2) - (pText.Length / 2);
+            int start = (WindowWidth / 2) - (text.Length / 2);
 
             // If the text is longer than the buffer, set it to 0
-            start = start + pText.Length > WindowWidth ? 0 : start;
+            start = start + text.Length > WindowWidth ? 0 : start;
 
             // Print away at the current cursor height (top)
-            Console.SetCursorPosition(start, pTopPosition);
-            Renderer.Write(pLayer, pText);
+            Console.SetCursorPosition(start, ypos);
+            Renderer.Write(layer, text);
         }
 
         /// <summary>
         /// Center text to middle and write, then moves a line foward
         /// </summary>
-        /// <param name="pText">Input text</param>
-        static internal void WriteLineAndCenter(Renderer.Layer pLayer, string pText)
+        /// <param name="text">Input text</param>
+        static internal void WriteLineAndCenter(Renderer.Layer layer, string text)
         {
-            WriteLineAndCenter(pLayer, pText, Console.CursorTop);
+            WriteLineAndCenter(layer, text, Console.CursorTop);
         }
 
         /// <summary>
         /// Center text to middle and write, then moves a line foward
         /// </summary>
-        /// <param name="pText">Input text</param>
-        /// <param name="pTopPosition">Top position</param>
-        static internal void WriteLineAndCenter(Renderer.Layer pLayer, string pText, int pTopPosition)
+        /// <param name="text">Input text</param>
+        /// <param name="ypos">Top position</param>
+        static internal void WriteLineAndCenter(Renderer.Layer layer, string text, int ypos)
         {
-            WriteAndCenter(pLayer, pText, pTopPosition);
-            Console.SetCursorPosition(0, pTopPosition + 1);
+            WriteAndCenter(layer, text, ypos);
+            Console.SetCursorPosition(0, ypos + 1);
         }
         #endregion
 
         #region GenH
-        /// <summary>
-        /// Generates a horizontal line on screen
-        /// </summary>
-        /// <param name="pChar">Character to use</param>
-        /// <param name="pLenght">Length</param>
-        static internal void GenerateHorizontalLine(Renderer.Layer pLayer, char pChar, int pLenght)
+        static internal void GenerateHorizontalLine(Renderer.Layer layer, char c, int len)
         {
-            GenerateHorizontalLine(pLayer, pChar, Console.CursorLeft, Console.CursorTop, pLenght);
+            GenerateHorizontalLine(layer, c, Console.CursorLeft, Console.CursorTop, len);
         }
-
-        /// <summary>
-        /// Generates a horizontal line on screen
-        /// </summary>
-        /// <param name="pChar">Character to use</param>
-        /// <param name="pPosX">Left position</param>
-        /// <param name="pPosY">Top position</param>
-        /// <param name="pLenght">Length</param>
-        static internal void GenerateHorizontalLine(Renderer.Layer pLayer, char pChar, int pPosX, int pPosY, int pLenght)
+        
+        static internal void GenerateHorizontalLine(Renderer.Layer layer, char c, int x, int y, int len)
         {
-            Renderer.Write(pLayer, new string(pChar, pLenght));
+            Renderer.Write(layer, new string(c, len), x, y);
         }
         #endregion
 
         #region GenV
-        /// <summary>
-        /// Generates a vertical line on screen
-        /// </summary>
-        /// <param name="pChar">Character to use</param>
-        /// <param name="pLenght">Length</param>
-        static internal void GenerateVerticalLine(Renderer.Layer pLayer, char pChar, int pLenght)
+        static internal void GenerateVerticalLine(Renderer.Layer layer, char c, int len)
         {
-            GenerateVerticalLine(pLayer, pChar, Console.CursorLeft, Console.CursorTop, pLenght);
+            GenerateVerticalLine(layer, c, Console.CursorLeft, Console.CursorTop, len);
         }
 
-        /// <summary>
-        /// Generates a vertical line on screen
-        /// </summary>
-        /// <param name="pChar">Character to use</param>
-        /// <param name="pPosX">Left position</param>
-        /// <param name="pPosY">Top position</param>
-        /// <param name="pLenght">Length</param>
-        static internal void GenerateVerticalLine(Renderer.Layer pLayer, char pChar, int pPosX, int pPosY, int pLenght)
+        static internal void GenerateVerticalLine(Renderer.Layer layer, char c, int x, int y, int len)
         {
-            int len = pPosY + pLenght;
-            for (int i = pPosY; i < len; i++)
+            int l = y + len;
+            for (int i = y; i < l; i++)
             {
-                Console.SetCursorPosition(pPosX, i);
-                Renderer.Write(pLayer, pChar);
+                Console.SetCursorPosition(x, i);
+                Renderer.Write(layer, c);
             }
         }
         #endregion
 
         #region String
-        /// <summary>
-        /// Generates a string with margins.
-        /// </summary>
-        /// <param name="pText"></param>
-        /// <param name="pWidth"></param>
-        /// <returns></returns>
-        static internal string CenterString(string pText, int pWidth)
+        public static unsafe string CenterString(string text, int width)
         {
-            string stmp = new string(' ', pWidth);
-            int start = (pWidth / 2) - (pText.Length / 2);
-            stmp = stmp.Insert(start, pText);
-            stmp = stmp.Remove(start + pText.Length, pText.Length);
-            return stmp;
+            if (text.Length > width)
+                text = text.Substring(0, width);
+            
+            int s = (width / 2) - (text.Length / 2);
+            string t = new string(' ', width);
+            fixed (char* pt = t)
+                for (int i = 0; i < text.Length; i++)
+                    pt[s + i] = text[i];
+
+            return t;
         }
         #endregion
 
         #region Read
         /// <summary>
-        /// Readline with a maximum length.
-        /// </summary>
-        /// <param name="pLimit">Limit in characters</param>
-        /// <returns>User's input</returns>
-        internal static string ReadLine(int pLimit)
-        {
-            return ReadLine(pLimit, false);
-        }
-
-        /// <summary>
         /// Readline with a maximum length plus optional password mode.
         /// </summary>
-        /// <param name="pLimit">Character limit</param>
+        /// <param name="length">Input size/buffer</param>
         /// <param name="pPassword">Is password</param>
         /// <returns>User's input</returns>
-        internal static string ReadLine(int pLimit, bool pPassword)
+        internal static string ReadLine(int length, bool pPassword = false)
         {
-            System.Text.StringBuilder Output = new System.Text.StringBuilder();
+            //TODO: Optimize ReadLine(int, bool)
+            // String buffer, pointer, trim at the end.
+            // Maybe make multiple lines system.
+            StringBuilder Output = new StringBuilder();
             int CurrentIndex = 0;
-            bool GotAnswer = false;
+            bool getting = true;
             int OrigninalLeft = Console.CursorLeft;
 
-            while (!GotAnswer)
+            while (getting)
             {
                 ConsoleKeyInfo c = Console.ReadKey(true);
 
@@ -226,7 +195,7 @@ namespace fwod
                         break;
 
                     case ConsoleKey.Enter:
-                        GotAnswer = true;
+                        getting = false;
                         break;
 
                     case ConsoleKey.Backspace:
@@ -239,11 +208,10 @@ namespace fwod
                                 Output.Clear();
                                 CurrentIndex = 0;
                                 Console.SetCursorPosition(OrigninalLeft, Console.CursorTop);
-                                Console.Write(new string(' ', pLimit));
+                                Console.Write(new string(' ', length));
                                 Console.SetCursorPosition(OrigninalLeft, Console.CursorTop);
                             }
-                            // Erase one character
-                            else
+                            else // Erase one character
                             {
                                 Output = Output.Remove(Output.Length - 1, 1);
                                 CurrentIndex--;
@@ -255,7 +223,7 @@ namespace fwod
                         break;
 
                     default:
-                        if (CurrentIndex < pLimit)
+                        if (CurrentIndex < length)
                         {
                             Output.Append(c.KeyChar);
 
