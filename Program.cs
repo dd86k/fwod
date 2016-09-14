@@ -89,8 +89,7 @@ namespace fwod
                 Utils.WriteLineAndCenter(BannerText);
                 Utils.WriteLineAndCenter(BannerOutline);
 
-                Console.WriteLine();
-                Console.WriteLine("");
+
                 Console.WriteLine();
                 Console.WriteLine("Every keystroke counts!");
 
@@ -124,7 +123,7 @@ namespace fwod
             Stranger.Initialize();
 
             Enemy TestRat = new Enemy(Utils.WindowWidth - 5, 5, EnemyType.Rat, 24);
-            Game.PeopleList[Game.CurrentFloor].Add(TestRat);
+            Game.PeopleList[Game.CurrentFloor].Add(new Enemy(Utils.WindowWidth - 5, 5, EnemyType.Rat, 3));
             TestRat.Initialize();
             #endregion
 
@@ -164,7 +163,7 @@ namespace fwod
 
                 Game.MainPlayer.Say("Um.. Okay?");
 
-                Console.SetCursorPosition(41, 0);
+                Console.SetCursorPosition(43, 0);
                 Console.Write("|");
                 Game.MainPlayer.Money = 12;
 
@@ -192,7 +191,7 @@ namespace fwod
             do
             {
                 Entry();
-            } while (Game.isPlaying);
+            } while (Game.IsPlaying);
 
             // -- The user is leaving the game --
 

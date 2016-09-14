@@ -72,7 +72,7 @@
         #region Object properties
         public new string Name => $"{Enhancement} {base.Name}";
         public int BaseDamage { get; }
-        public float Damage => Enhancement.GetDamage(BaseDamage);
+        public ushort Damage => (ushort)Enhancement.GetDamage(BaseDamage);
         public WeaponModifier Enhancement { get; }
         #endregion
     }
@@ -94,7 +94,7 @@
     {
         #region Construstion
         //TODO: Expand armor to include boots, leggings, etc.
-        internal Armor(string name, int armorPoints)
+        internal Armor(string name, ushort armorPoints)
             : base(name)
         {
             ArmorPoints = armorPoints;
@@ -102,7 +102,7 @@
         #endregion
 
         #region Properties
-        internal int ArmorPoints { get; }
+        public ushort ArmorPoints { get; }
         #endregion
     }
     #endregion

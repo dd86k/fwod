@@ -197,15 +197,15 @@ namespace fwod
                 case MenuItemType.ShowStats:
                     new Menu(true,
                         new MenuItem("Steps taken", MenuItemType.Information),
-                        new MenuItem($"{Game.Statistics.StatStepsTaken}", MenuItemType.Information),
+                        new MenuItem($"{Game.Statistics.StepsTaken}", MenuItemType.Information),
                         new MenuItem("Monsters killed", MenuItemType.Information),
-                        new MenuItem($"{Game.Statistics.StatEnemiesKilled}", MenuItemType.Information),
+                        new MenuItem($"{Game.Statistics.EnemiesKilled}", MenuItemType.Information),
                         new MenuItem("Damage dealt", MenuItemType.Information),
-                        new MenuItem($"{Game.Statistics.StatEnemiesKilled}", MenuItemType.Information),
+                        new MenuItem($"{Game.Statistics.EnemiesKilled}", MenuItemType.Information),
                         new MenuItem("Damage received", MenuItemType.Information),
-                        new MenuItem($"{Game.Statistics.StatEnemiesKilled}", MenuItemType.Information),
+                        new MenuItem($"{Game.Statistics.EnemiesKilled}", MenuItemType.Information),
                         new MenuItem("Money gain", MenuItemType.Information),
-                        new MenuItem($"{Game.Statistics.StatMoneyGained}$", MenuItemType.Information),
+                        new MenuItem($"{Game.Statistics.MoneyGained}$", MenuItemType.Information),
                         new MenuItem(),
                         new MenuItem("Return", MenuItemType.Return)
                     );
@@ -220,7 +220,7 @@ namespace fwod
                     break;
 
                 case MenuItemType.Quit:
-                    InMenu = Game.isPlaying = false;
+                    InMenu = Game.IsPlaying = false;
                     break;
             }
         }

@@ -20,7 +20,7 @@ namespace fwod
             switch (t)
             {
                 // Common enemies
-                default: return 1.3f;
+                default: return 1.8f;
             }
         }
     }
@@ -124,7 +124,7 @@ namespace fwod
             Renderer.Write(Renderer.Layer.People, CharacterChar, newX, newY);
 
             if (this is Player)
-                Game.Statistics.StatStepsTaken++;
+                Game.Statistics.StepsTaken++;
         }
         #endregion
 
@@ -133,35 +133,36 @@ namespace fwod
         /// <summary>
         /// Get or set the HP.
         /// </summary>
-        internal int HP
+        public int HP
         {
             get { return _hp; }
             set
             {
-                if (this is Player)
-                    //TODO: Check if this is correct.
-                    Game.Statistics.StatDamageReceived += value > _hp ? (uint)(_hp - value) : 0;
-
                 if (value > _maxhp)
                     _hp = _maxhp;
                 else
+                {
+                    Game.Statistics.DamageReceived += (uint)(_hp - value);
+
                     _hp = value;
+
+                    if (value <= 0)
+                        Destroy();
+                }
 
                 if (this is Player)
                 {
                     Console.SetCursorPosition(29, 0);
-                    Console.Write(new string(' ', 11));
-                    Console.SetCursorPosition(29, 0); //HP: 000/000
-                    Console.Write($"HP: {_hp:000}/{_maxhp:000}");
+                    Console.Write(new string(' ', 13));
+                    Console.SetCursorPosition(29, 0); //HP: 0000/0000
+                    Console.Write($"HP: {_hp:D4}/{_maxhp:D4}");
                 }
 
-                if (_hp <= 0)
-                    Destroy();
             }
         }
 
         int _maxhp;
-        internal int MaxHP
+        public int MaxHP
         {
             get { return _maxhp; }
             set
@@ -212,117 +213,75 @@ namespace fwod
             get; set;
         }
 
-        int _s1;
+        byte[] _s;
         /// <summary>
         /// Strength
         /// </summary>
-        internal int S1
+        public byte S1
         {
-            get { return _s1 ; }
-            set
-            {
-                if (value > 10)
-                    _s1 = 10;
-                else if (value >= 0)
-                    _s1 = value;
-            }
+            get { return _s[0] ; }
+            // Check overflow.
+            set { _s[0] = value + 1 == 0 ? _s[0] = 0xff : _s[0] = value; }
         }
-
-        int _s2;
+        
         /// <summary>
         /// Dexterity
         /// </summary>
-        internal int S2
+        public byte S2
         {
-            get { return _s2; }
-            set
-            {
-                if (value > 10)
-                    _s2 = 10;
-                else if (value >= 0)
-                    _s2 = value;
-            }
+            get { return _s[1]; }
+            // Check overflow.
+            set { _s[1] = value + 1 == 0 ? _s[1] = 0xff : _s[1] = value; }
         }
-
-        int _s3;
+        
         /// <summary>
         /// Agility
         /// </summary>
-        internal int S3
+        public byte S3
         {
-            get { return _s3; }
-            set
-            {
-                if (value > 10)
-                    _s3 = 10;
-                else if (value >= 0)
-                    _s3 = value;
-            }
+            get { return _s[2]; }
+            // Check overflow.
+            set { _s[2] = value + 1 == 0 ? _s[2] = 0xff : _s[2] = value; }
         }
-
-        int _s4;
+        
+        /// <summary>
+        /// Sight
+        /// </summary>
+        public byte S4
+        {
+            get { return _s[3]; }
+            // Check overflow.
+            set { _s[3] = value + 1 == 0 ? _s[3] = 0xff : _s[3] = value; }
+        }
+        
         /// <summary>
         /// 
         /// </summary>
-        internal int S4
+        public byte S5
         {
-            get { return _s4; }
-            set
-            {
-                if (value > 10)
-                    _s4 = 10;
-                else if (value >= 0)
-                    _s4 = value;
-            }
-            
+            get { return _s[4]; }
+            // Check overflow.
+            set { _s[4] = value + 1 == 0 ? _s[4] = 0xff : _s[4] = value; }
         }
-
-        int _s5;
+        
         /// <summary>
         /// 
         /// </summary>
-        internal int S5
+        public byte S6
         {
-            get { return _s5; }
-            set
-            {
-                if (value > 10)
-                    _s5 = 10;
-                else if (value >= 0)
-                    _s5 = value;
-            }
+            get { return _s[5]; }
+            // Check overflow.
+            set { _s[5] = value + 1 == 0 ? _s[5] = 0xff : _s[5] = value; }
         }
-
-        int _s6;
+        
         /// <summary>
         /// 
         /// </summary>
-        internal int S6
+        public byte S7
         {
-            get { return _s6; }
-            set
-            {
-                if (value > 10)
-                    _s6 = 10;
-                else if (value >= 0)
-                    _s6 = value;
-            }
-        }
-
-        int _s7;
-        /// <summary>
-        /// 
-        /// </summary>
-        internal int S7
-        {
-            get { return _s7; }
-            set
-            {
-                if (value > 10)
-                    _s7 = 10;
-                else if (value >= 0)
-                    _s7 = value;
-            }
+            get { return _s[6]; }
+            // Check overflow.
+            set { _s[6] = value + 1 == 0 ? _s[6] = 0xff : _s[6] = value; }
         }
         #endregion
 
@@ -357,16 +316,15 @@ namespace fwod
             get { return _money; }
             set
             {
-                if (value < 9999999)
+                if (value <= 1000000) // 1'000'000
                     _money = value;
-
-
+                
                 if (this is Player)
                 {
-                    Console.SetCursorPosition(43, 0);
+                    Console.SetCursorPosition(45, 0);
                     Console.Write(new string(' ', 8));
-                    Console.SetCursorPosition(43, 0); //0'000'000$
-                    Console.Write(string.Format("{0:0'000'000}$", _money));
+                    Console.SetCursorPosition(45, 0); //0'000'000$
+                    Console.Write($"{_money:0'000'000}$");
                 }
             }
         }
@@ -378,36 +336,29 @@ namespace fwod
         #endregion
 
         #region Construction
-        internal Person()
-            : this(Utils.WindowWidth / 2, Utils.WindowHeight / 2, 10)
-        {
-
-        }
-
-        internal Person(int pX, int pY)
+        public Person(int pX, int pY)
             : this(pX, pY, 10)
         {
 
         }
 
-        internal Person(int x, int y, int hp)
+        public Person(int x, int y, short hp, bool initialize = true)
         {
             _hp = hp;
             _maxhp = _hp;
             _money = (int)(hp * 0.5);
             _x = x;
             _y = y;
-            _s1 = 1;
-            _s2 = 1;
-            _s3 = 1;
-            _s4 = 1;
-            _s5 = 1;
-            _s6 = 1;
-            _s7 = 1;
+            _s = new byte[7];
+            for (int i = 0; i < 7; _s[i++]++);
             CharacterChar = 'P';
+            //TODO: Left and right weapon?
             EquipedWeapon = new Weapon("Fists", 0);
-            EquipedArmor = new Armor("Jacket", 0);
+            EquipedArmor = new Armor("Shirt", 0);
             Inventory = new List<Item>();
+
+            if (initialize)
+                Initialize();
         }
         #endregion
 
@@ -452,12 +403,12 @@ namespace fwod
         /// <param name="pLength">Length of the string</param>
         void ClearBubble(int pLength)
         {
-            //TODO: Fix assuming over the head (what?)
-            int height = (pLength / (BUBBLE_TEXTMAXLEN + 1)) + 3;
-            int width = pLength + (BUBBLE_PADDING_X * 2) + 2;
-            int startx = X - ((pLength / 2) + BUBBLE_PADDING_X + 1);
-            int starty = Y - (pLength / BUBBLE_TEXTMAXLEN) - 3;
-            ClearBubble(startx, starty, width, height);
+            ClearBubble(
+                X - ((pLength / 2) + BUBBLE_PADDING_X + 1),
+                Y - (pLength / BUBBLE_TEXTMAXLEN) - 3,
+                pLength + (BUBBLE_PADDING_X * 2) + 2,
+                (pLength / (BUBBLE_TEXTMAXLEN + 1)) + 3
+            );
         }
 
         /// <summary>
@@ -600,7 +551,7 @@ namespace fwod
         /// <summary>
         /// Makes the enemy move up one square
         /// </summary>
-        internal void MoveUp()
+        public void MoveUp()
         {
             Y--;
         }
@@ -608,7 +559,7 @@ namespace fwod
         /// <summary>
         /// Makes the enemy move down one square
         /// </summary>
-        internal void MoveDown()
+        public void MoveDown()
         {
             Y++;
         }
@@ -616,7 +567,7 @@ namespace fwod
         /// <summary>
         /// Makes the enemy move left one square
         /// </summary>
-        internal void MoveLeft()
+        public void MoveLeft()
         {
             X--;
         }
@@ -624,24 +575,24 @@ namespace fwod
         /// <summary>
         /// Makes the enemy move right one square
         /// </summary>
-        internal void MoveRight()
+        public void MoveRight()
         {
             X++;
         }
         #endregion
 
         #region Attack
-        internal void Attack(Person person)
+        public void Attack(Person person)
         {
             //TODO: Attack algorithm
-            int AttackPoints = (int)(((S1 * 2) + EquipedWeapon.Damage) - EquipedArmor.ArmorPoints);
+            int AttackPoints = ((S1 * 2) + EquipedWeapon.Damage) - EquipedArmor.ArmorPoints;
 
-            string atk = $": {person.HP} HP - {AttackPoints} AP = {person.HP -= AttackPoints} HP";
+            string atk = $": {person.HP} HP - {AttackPoints} = {person.HP -= AttackPoints} HP";
 
             if (person.HP <= 0)
                 atk += $" -- Dead! You earn {person.Money}$!";
 
-            Game.Statistics.StatDamageDealt += (uint)AttackPoints;
+            Game.Statistics.DamageDealt += (uint)AttackPoints;
 
             if (person is Enemy)
                 Game.Log(((Enemy)person).Race + atk);
@@ -658,20 +609,18 @@ namespace fwod
         {
             Console.SetCursorPosition(X, Y);
             Console.Write(' ');
+
+            Game.MainPlayer.Money += Money;
+            Game.Statistics.MoneyGained += (uint)Money;
+            Game.PeopleList[Game.CurrentFloor].Remove(this);
+
             if (this is Enemy)
             {
-                Game.MainPlayer.Money += Money;
-                Game.Statistics.StatMoneyGained += (uint)Money;
-                Game.PeopleList[Game.CurrentFloor].Remove((Enemy)this);
-                Game.Statistics.StatEnemiesKilled++;
+                Game.Statistics.EnemiesKilled++;
             }
             else if (this is Player)
             { //TODO: Game over
 
-            }
-            else
-            {
-                Game.PeopleList[Game.CurrentFloor].Remove(this);
             }
         }
         #endregion
@@ -705,7 +654,7 @@ namespace fwod
         public Enemy(int x, int y, EnemyType type, int level)
             : base(x, y)
         {
-            HP = MaxHP = (int)(level * type.GetModifier());
+            HP = MaxHP = (ushort)(level * type.GetModifier());
             CharacterChar = 'E';
         }
         

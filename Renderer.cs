@@ -11,11 +11,18 @@ namespace fwod
         #region Layers
         /*
          * TODO!! Remove the People and Menu layers.
-         * The idea is just to have an array for the map.
+         * 
+         * The idea is just to have an array for the map. (Called char[,] Map)
          * The menu and people layers are useless since the menu is directly
          * drawn on the screen buffer while the people (player, enemies, etc.)
          * already have their own dictionary depending on the level.
-         * Basically, removing the layer feature for simplicity.
+         * 
+         * Basically, removing the layer feature for simplicity. Which includes:
+         * - Renaming Layers to Map, removing the two other "layers".
+         * - Remove the Layer enumeration.
+         * - Use the Core/Rendeder for map stuff only.
+         * 
+         * Will take a while to do.
          */
         internal static char[][,] Layers = new char[3][,]
         {

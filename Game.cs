@@ -10,19 +10,19 @@ namespace fwod
     class Game
     {
         #region Properties
-        public static bool isPlaying = true;
+        public static bool IsPlaying = true;
         public static Menu MainMenu = Menu.GetMainMenu();
-        public static int CurrentFloor = 0;
+        public static byte CurrentFloor = 0;
         #endregion
 
         #region Statistics
-        internal class Statistics
+        public class Statistics
         {
-            internal static ulong StatEnemiesKilled = 0;
-            internal static ulong StatStepsTaken = 0;
-            internal static ulong StatMoneyGained = 0;
-            internal static ulong StatDamageDealt = 0;
-            internal static ulong StatDamageReceived = 0;
+            public static ulong EnemiesKilled = 0;
+            public static ulong StepsTaken = 0;
+            public static ulong MoneyGained = 0;
+            public static ulong DamageDealt = 0;
+            public static ulong DamageReceived = 0;
         }
         #endregion
 
@@ -60,7 +60,6 @@ namespace fwod
         /// <returns>Enemy, null if no found</returns>
         internal static Person GetPersonObjectAt(int floor, int x, int y)
         {
-            //TODO: Add per level searching. Since the dictionary now exists.
             foreach (Person P in PeopleList[floor])
             {
                 if (P.X == x && P.Y == y)
