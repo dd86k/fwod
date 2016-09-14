@@ -68,9 +68,8 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MapManager.cs" />
     <Compile Include="Utils.cs" />
-    <Compile Include="Renderer.cs" />
+    <Compile Include="MapManager.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="Menu.cs" />

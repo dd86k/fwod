@@ -239,14 +239,14 @@ namespace fwod
             if (MenuIndex != PastMenuIndex)
             {
                 Console.SetCursorPosition(MenuItemLeft + 1, MenuItemTopPast);
-                Console.Write(Utils.CenterString(MenuItemList[PastMenuIndex].Text, MENU_WIDTH - 2));
+                Console.Write(Utils.Center(MenuItemList[PastMenuIndex].Text, MENU_WIDTH - 2));
             }
 
             // Apply new item's colors
             Console.ForegroundColor = ConsoleColor.Black;
             Console.BackgroundColor = ConsoleColor.White;
             Console.SetCursorPosition(MenuItemLeft + 1, MenuItemTop);
-            Console.Write(Utils.CenterString(MenuItemList[MenuIndex].Text, MENU_WIDTH - 2));
+            Console.Write(Utils.Center(MenuItemList[MenuIndex].Text, MENU_WIDTH - 2));
 
             // Revert to original colors
             Console.ResetColor();
@@ -255,18 +255,21 @@ namespace fwod
         void Draw()
         {
             string line = new string('─', MENU_WIDTH - 2);
+            int left = (Utils.WindowWidth / 2) - (MENU_WIDTH / 2);
 
             int i = 1;
-            Utils.WriteAndCenter(Renderer.Layer.Menu, $"┌{line}┐", MENU_TOP);
+            Console.SetCursorPosition(left, MENU_TOP);
+            Console.Write($"┌{line}┐");
             foreach (MenuItem item in MenuItemList)
             {
-                Utils.WriteAndCenter(
-                    Renderer.Layer.Menu,
+                Console.SetCursorPosition(left, MENU_TOP + i++);
+                Console.Write(
                     item.ItemType == MenuItemType.Seperator ?
-                    $"├{line}┤" : $"│{Utils.CenterString(item.Text, MENU_WIDTH - 2)}│",
-                    MENU_TOP + i++);
+                    $"├{line}┤" : $"│{Utils.Center(item.Text, MENU_WIDTH - 2)}│"
+                );
             }
-            Utils.WriteAndCenter(Renderer.Layer.Menu, $"└{line}┘", MENU_TOP + MenuItemList.Count + 1);
+            Console.SetCursorPosition(left, MENU_TOP + MenuItemList.Count + 1);
+            Console.Write($"└{line}┘");
         }
 
         /// <summary>
@@ -277,17 +280,17 @@ namespace fwod
             int startY = MENU_TOP;
             int startX = (Utils.WindowWidth / 2) - (MENU_WIDTH / 2);
             int lengthY = MenuItemList.Count + 6; // Yeah I know it's that odd
-            int gamelayer = (int)Renderer.Layer.Game;
 
-            //TODO: Optimize this with a pointer probably
+            //TODO: Optimize this with a buffer and pointer
             for (int row = startY; row < lengthY; row++)
             {
                 for (int col = startX; col < Utils.WindowWidth; col++)
                 {
                     Console.SetCursorPosition(col, row); // Safety measure
                     Console.Write(
-                        Renderer.Layers[gamelayer][row, col] == '\0' ?
-                        ' ' : Renderer.Layers[gamelayer][row, col]);
+                        MapManager.Map[row, col] == '\0' ?
+                        ' ' : MapManager.Map[row, col]
+                    );
                 }
             }
 

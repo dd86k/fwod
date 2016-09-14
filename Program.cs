@@ -55,13 +55,13 @@ namespace fwod
                     case "-Pc":
                     case "-playerchar":
                         if (args[i + 1] != null)
-                            Game.MainPlayer.CharacterChar = args[i + 1][0];
+                            Game.MainPlayer.Char = args[i + 1][0];
                         break;
 
                     case "-Pn":
                     case "-playername":
                         if (args[i + 1] != null)
-                            Game.MainPlayer.CharacterName = args[i + 1];
+                            Game.MainPlayer.Name = args[i + 1];
                         break;
 
                     case "-S":
@@ -85,11 +85,10 @@ namespace fwod
                 string BannerText = "* Welcome to " + AssemblyName + " *";
                 string BannerOutline = new string('*', BannerText.Length);
 
-                Utils.WriteLineAndCenter(BannerOutline);
-                Utils.WriteLineAndCenter(BannerText);
-                Utils.WriteLineAndCenter(BannerOutline);
-
-
+                Utils.CenterAndWriteLine(BannerOutline);
+                Utils.CenterAndWriteLine(BannerText);
+                Utils.CenterAndWriteLine(BannerOutline);
+                
                 Console.WriteLine();
                 Console.WriteLine("Every keystroke counts!");
 
@@ -106,24 +105,29 @@ namespace fwod
             }
 
             #region Initialization
-            // Add player and first enemy in game
-            Person Stranger = new Person(Utils.WindowWidth / 4, Utils.WindowHeight / 2);
+            MapManager.Map = new char[Utils.WindowHeight, Utils.WindowWidth];
+
+            // Generate the 'main' box
+            MapManager.GenerateBox(
+                1, 1, Utils.WindowWidth - 2, Utils.WindowHeight - 3
+            );
+
+            // Add stranger
+            Person Stranger = new Person(
+                Utils.WindowWidth / 4, Utils.WindowHeight / 2
+            );
             Game.PeopleList = new List<List<Person>>();
             Game.PeopleList.Add(new List<Person>());
             Game.PeopleList[Game.CurrentFloor].Add(Stranger);
 
-            // Generate the 'main' box
-            Game.GenerateBox(Renderer.Layer.Game, 1, 1,
-                Utils.WindowWidth - 2, Utils.WindowHeight - 3);
-
             // Initialize
             Game.MainPlayer.Initialize();
 
-            Stranger.CharacterChar = 'S';
+            Stranger.Char = 'S';
             Stranger.Initialize();
-
-            Enemy TestRat = new Enemy(Utils.WindowWidth - 5, 5, EnemyType.Rat, 24);
-            Game.PeopleList[Game.CurrentFloor].Add(new Enemy(Utils.WindowWidth - 5, 5, EnemyType.Rat, 3));
+            
+            Enemy TestRat = new Enemy(Utils.WindowWidth - 5, 5, EnemyType.Rat, 1);
+            Game.PeopleList[Game.CurrentFloor].Add(TestRat);
             TestRat.Initialize();
             #endregion
 
@@ -136,7 +140,7 @@ namespace fwod
 
                 Stranger.Say("Oh, you're awake... What is your name?");
                 
-                if (Game.MainPlayer.CharacterName == null) // Default name
+                if (Game.MainPlayer.Name == null) // Default name
                 {
                     string tmp_name = null;
                     do
@@ -144,12 +148,12 @@ namespace fwod
                         tmp_name = Game.MainPlayer.GetAnswer();
                         Stranger.Say("Say something!");
                     } while (tmp_name == null);
-                    Game.MainPlayer.CharacterName = tmp_name;
+                    Game.MainPlayer.Name = tmp_name;
                 }
 
-                Game.MainPlayer.Say($"It's {Game.MainPlayer.CharacterName}.");
+                Game.MainPlayer.Say($"It's {Game.MainPlayer.Name}.");
 
-                Stranger.Say($"Anyway, welcome to {AssemblyName}. So...");
+                Stranger.Say($"Welcome to {AssemblyName}, {Game.MainPlayer.Name}. So...");
 
                 Console.SetCursorPosition(27, 0);
                 Console.Write("|");
@@ -171,7 +175,7 @@ namespace fwod
 
                 Game.MainPlayer.Say("Oh yeah, I forgot I have that much.");
                 
-                Stranger.Say($"I'll be back for you anyway, {Game.MainPlayer.CharacterName}.");
+                Stranger.Say($"I'll be back for you anyway, {Game.MainPlayer.Name}.");
 
                 Game.MainPlayer.Say("Wait!");
 
@@ -184,7 +188,7 @@ namespace fwod
             else
             {
                 Stranger.Destroy();
-                Game.QuickSetup();
+                Game.QuickInitialization();
             }
             #endregion
 

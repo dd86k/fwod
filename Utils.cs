@@ -20,135 +20,86 @@ namespace fwod
         internal const int WindowWidth = 80;
         #endregion
 
-        #region Center text (Normal)
-        /// <summary>
-        /// Center text to middle and write
-        /// </summary>
-        /// <param name="text">Input text</param>
-        static internal void WriteAndCenter(string text)
+        #region Box generation
+        public static void GenerateBox(int x, int y, int width, int height)
         {
-            WriteAndCenter(text, Console.CursorTop);
-        }
+            // Top wall
+            Console.SetCursorPosition(x, y);
+            Console.Write('┌');
+            Console.Write(new string('─', width - 2));
+            Console.Write('┐');
 
-        /// <summary>
-        /// Center text to middle and write to a specific top position
-        /// </summary>
-        /// <param name="text">Input text</param>
-        /// <param name="ypos">Top position</param>
-        static internal void WriteAndCenter(string text, int ypos)
-        {
-            // Calculate the starting position
-            int start = (WindowWidth / 2) - (text.Length / 2);
+            // Side walls
+            Console.SetCursorPosition(x, y + 1);
+            GenerateVerticalLine('│', height - 1);
+            Console.SetCursorPosition(x + (width - 1), y + 1);
+            GenerateVerticalLine('│', height - 1);
 
-            // If the text is longer than the buffer, set it to 0
-            start = start + text.Length > WindowWidth ? 0 : start;
-
-            // Print away at the current cursor height (top)
-            Console.SetCursorPosition(start, ypos);
-            Console.Write(text);
-        }
-
-        /// <summary>
-        /// Center text to middle and write, then moves a line foward
-        /// </summary>
-        /// <param name="text">Input text</param>
-        static internal void WriteLineAndCenter(string text)
-        {
-            WriteLineAndCenter(text, Console.CursorTop);
-        }
-
-        /// <summary>
-        /// Center text to middle and write, then moves a line foward
-        /// </summary>
-        /// <param name="text">Input text</param>
-        /// <param name="ypos">Top position</param>
-        static internal void WriteLineAndCenter(string text, int ypos)
-        {
-            WriteAndCenter(text, ypos);
-            Console.SetCursorPosition(0, ypos + 1);
-        }
-        #endregion
-
-        #region Center text (Core.cs)
-        /// <summary>
-        /// Center text to middle and write
-        /// </summary>
-        /// <param name="text">Input text</param>
-        static internal void WriteAndCenterCore(string text)
-        {
-            WriteAndCenter(text, Console.CursorTop);
-        }
-
-        /// <summary>
-        /// Center text to middle and write to a specific top position
-        /// </summary>
-        /// <param name="text">Input text</param>
-        /// <param name="ypos">Top position</param>
-        static internal void WriteAndCenter(Renderer.Layer layer, string text, int ypos)
-        {
-            // Calculate the starting position
-            int start = (WindowWidth / 2) - (text.Length / 2);
-
-            // If the text is longer than the buffer, set it to 0
-            start = start + text.Length > WindowWidth ? 0 : start;
-
-            // Print away at the current cursor height (top)
-            Console.SetCursorPosition(start, ypos);
-            Renderer.Write(layer, text);
-        }
-
-        /// <summary>
-        /// Center text to middle and write, then moves a line foward
-        /// </summary>
-        /// <param name="text">Input text</param>
-        static internal void WriteLineAndCenter(Renderer.Layer layer, string text)
-        {
-            WriteLineAndCenter(layer, text, Console.CursorTop);
-        }
-
-        /// <summary>
-        /// Center text to middle and write, then moves a line foward
-        /// </summary>
-        /// <param name="text">Input text</param>
-        /// <param name="ypos">Top position</param>
-        static internal void WriteLineAndCenter(Renderer.Layer layer, string text, int ypos)
-        {
-            WriteAndCenter(layer, text, ypos);
-            Console.SetCursorPosition(0, ypos + 1);
+            // Bottom wall
+            Console.SetCursorPosition(x, y + (height - 1));
+            Console.Write('└');
+            Console.Write(new string('─', width - 2));
+            Console.Write('┘');
         }
         #endregion
 
         #region GenH
-        static internal void GenerateHorizontalLine(Renderer.Layer layer, char c, int len)
+        static internal void GenerateHorizontalLine(char c, int len)
         {
-            GenerateHorizontalLine(layer, c, Console.CursorLeft, Console.CursorTop, len);
+            GenerateHorizontalLine(c, Console.CursorLeft, Console.CursorTop, len);
+        }
+
+        static internal void GenerateHorizontalLine(char c, int x, int y, int len)
+        {
+            Console.SetCursorPosition(x, y);
+            Console.Write(new string(c, len));
+        }
+
+        static internal void GenerateHorizontalLineMap(char c, int len)
+        {
+            GenerateHorizontalLineMap(c, Console.CursorLeft, Console.CursorTop, len);
         }
         
-        static internal void GenerateHorizontalLine(Renderer.Layer layer, char c, int x, int y, int len)
+        static internal void GenerateHorizontalLineMap(char c, int x, int y, int len)
         {
-            Renderer.Write(layer, new string(c, len), x, y);
+            MapManager.Write(new string(c, len), x, y);
         }
         #endregion
 
         #region GenV
-        static internal void GenerateVerticalLine(Renderer.Layer layer, char c, int len)
+        static internal void GenerateVerticalLine(char c, int len)
         {
-            GenerateVerticalLine(layer, c, Console.CursorLeft, Console.CursorTop, len);
+            GenerateVerticalLine(c, Console.CursorLeft, Console.CursorTop, len);
         }
 
-        static internal void GenerateVerticalLine(Renderer.Layer layer, char c, int x, int y, int len)
+        static internal void GenerateVerticalLine(char c, int x, int y, int len)
         {
             int l = y + len;
             for (int i = y; i < l; i++)
             {
                 Console.SetCursorPosition(x, i);
-                Renderer.Write(layer, c);
+                Console.Write(c);
+            }
+        }
+
+        static internal void GenerateVerticalLineMap(char c, int len)
+        {
+            GenerateVerticalLineMap(c, Console.CursorLeft, Console.CursorTop, len);
+        }
+
+        static internal void GenerateVerticalLineMap(char c, int x, int y, int len)
+        {
+            int l = y + len;
+            for (int i = y; i < l; i++)
+            {
+                Console.SetCursorPosition(x, i);
+                MapManager.Write(c);
             }
         }
         #endregion
 
-        #region String
-        public static unsafe string CenterString(string text, int width)
+        #region Centering
+        public static unsafe string Center(this string text, int width)
         {
             if (text.Length > width)
                 text = text.Substring(0, width);
@@ -160,6 +111,18 @@ namespace fwod
                     pt[s + i] = text[i];
 
             return t;
+        }
+
+        public static void CenterAndWrite(string text)
+        {
+            Console.SetCursorPosition((WindowWidth / 2) - (text.Length / 2), Console.CursorTop);
+            Console.Write(text);
+        }
+
+        public static void CenterAndWriteLine(string text)
+        {
+            Console.SetCursorPosition((WindowWidth / 2) - (text.Length / 2), Console.CursorTop);
+            Console.WriteLine(text);
         }
         #endregion
 

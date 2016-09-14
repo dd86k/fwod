@@ -24,7 +24,7 @@ namespace fwod
             foreach (Person Enemy in Game.PeopleList[Game.CurrentFloor])
             {
                 // Return true if we find it in the list
-                if (Enemy.CharacterChar == c)
+                if (Enemy.Char == c)
                     return true;
             }
 

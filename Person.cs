@@ -46,13 +46,12 @@ namespace fwod
             {
                 if (value != _x)
                 {
-                    char futrG = Renderer.GetCharAt(Renderer.Layer.Game, value, Y);
-                    char futrP = Renderer.GetCharAt(Renderer.Layer.People, value, Y);
-                    bool futrIsSolid = futrG.IsSolidObject();
-                    bool futrIsSomeone = futrP.IsPersonObject();
-                    if (!futrIsSolid)
+                    char g = MapManager.Map[_y, value];
+                    bool solid = g.IsSolidObject();
+                    bool someone = Game.IsSomeonePresentAt(Game.CurrentFloor, value, _y);
+                    if (!solid)
                     {
-                        if (futrIsSomeone)
+                        if (someone)
                         {
                             Person futrPerson =
                                 Game.GetPersonObjectAt(Game.CurrentFloor, value, Y);
@@ -64,7 +63,7 @@ namespace fwod
                         }
                         else
                         {
-                            Move(X, Y, value, Y);
+                            Move(_x, _y, value, _y);
                         }
                     }
                 }
@@ -82,13 +81,12 @@ namespace fwod
             {
                 if (value != _y)
                 {
-                    char futrG = Renderer.GetCharAt(Renderer.Layer.Game, X, value);
-                    char futrP = Renderer.GetCharAt(Renderer.Layer.People, X, value);
-                    bool futrIsSolid = futrG.IsSolidObject();
-                    bool futrIsEnemy = futrP.IsPersonObject();
-                    if (!futrIsSolid)
+                    char g = MapManager.Map[value, _x];
+                    bool solid = g.IsSolidObject();
+                    bool someone = Game.IsSomeonePresentAt(Game.CurrentFloor, _x, value);
+                    if (!solid)
                     {
-                        if (futrIsEnemy)
+                        if (someone)
                         {
                             Person futrPerson =
                                 Game.GetPersonObjectAt(Game.CurrentFloor, X, value);
@@ -100,7 +98,7 @@ namespace fwod
                         }
                         else
                         {
-                            Move(X, Y, X, value);
+                            Move(_x, _y, _x, value);
                         }
                     }
                 }
@@ -110,7 +108,7 @@ namespace fwod
         void Move(int pastX, int pastY, int newX, int newY)
         {
             // Get old char
-            char pastchar = Renderer.GetCharAt(Renderer.Layer.Game, pastX, pastY);
+            char pastchar = MapManager.Map[pastY, pastX];
 
             // Place old char
             Console.SetCursorPosition(pastX, pastY);
@@ -121,7 +119,8 @@ namespace fwod
             _x = newX;
 
             // Move player
-            Renderer.Write(Renderer.Layer.People, CharacterChar, newX, newY);
+            Console.SetCursorPosition(newX, newY);
+            Console.Write(Char);
 
             if (this is Player)
                 Game.Statistics.StepsTaken++;
@@ -176,16 +175,16 @@ namespace fwod
         #endregion
 
         #region Name, appearance
-        string _characterName;
+        string _name;
         /// <summary>
         /// Get or set the name of the character.
         /// </summary>
-        internal string CharacterName
+        public string Name
         {
-            get { return _characterName; }
+            get { return _name; }
             set
             {
-                _characterName = value;
+                _name = value;
 
                 if (this is Player)
                 {
@@ -193,18 +192,15 @@ namespace fwod
                     Console.SetCursorPosition(1, 0);
                     Console.Write(new string(' ', 25));
                     Console.SetCursorPosition(1, 0);
-                    Console.Write(_characterName);
+                    Console.Write(_name);
                 }
             }
         }
 
         /// <summary>
-        /// Get or set the Unicode character on screen.
+        /// Get or set the character displayed on screen.
         /// </summary>
-        internal char CharacterChar
-        {
-            get; set;
-        }
+        public char Char { get; set; }
         #endregion
 
         #region Stats
@@ -351,7 +347,7 @@ namespace fwod
             _y = y;
             _s = new byte[7];
             for (int i = 0; i < 7; _s[i++]++);
-            CharacterChar = 'P';
+            Char = 'P';
             //TODO: Left and right weapon?
             EquipedWeapon = new Weapon("Fists", 0);
             EquipedArmor = new Armor("Shirt", 0);
@@ -368,7 +364,8 @@ namespace fwod
         /// </summary>
         internal void Initialize()
         {
-            Renderer.Write(Renderer.Layer.People, CharacterChar, _x, _y);
+            Console.SetCursorPosition(_x, _y);
+            Console.Write(Char);
         }
         #endregion
 
@@ -382,7 +379,7 @@ namespace fwod
         /// <param name="pHeight">Bubble height</param>
         void GenerateBubble(int pStartX, int pStartY, int pWidth, int pHeight)
         {
-            Game.GenerateBox(Renderer.Layer.None, pStartX, pStartY, pWidth, pHeight);
+            Utils.GenerateBox(pStartX, pStartY, pWidth, pHeight);
 
             // Bubble chat "connector"
             if (pStartY < Y) // Over Person
@@ -428,7 +425,7 @@ namespace fwod
                 for (int col = pStartX; col < colmax; col++)
                 {
                     Console.SetCursorPosition(col, row);
-                    c = Renderer.GetCharAt(Renderer.Layer.Game, col, row);
+                    c = MapManager.Map[row, col];
                     Console.Write(c == '\0' ? ' ' : c);
                 }
             }
@@ -636,8 +633,8 @@ namespace fwod
         public Player(int X, int Y)
             : base(X, Y)
         {
-            CharacterChar = '@';
-            CharacterName = null;
+            Char = '@';
+            Name = null;
         }
 
         //TODO: ShowInventory(void)
@@ -655,7 +652,7 @@ namespace fwod
             : base(x, y)
         {
             HP = MaxHP = (ushort)(level * type.GetModifier());
-            CharacterChar = 'E';
+            Char = 'E';
         }
         
         public EnemyType Race { get; }

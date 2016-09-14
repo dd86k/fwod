@@ -30,7 +30,7 @@ namespace fwod
         /// <summary>
         /// Places Player stuff on screen.
         /// </summary>
-        internal static void QuickSetup()
+        internal static void QuickInitialization()
         {
             Console.SetCursorPosition(27, 0);
             Console.Write("|");
@@ -68,6 +68,23 @@ namespace fwod
 
             return null;
         }
+
+        /// <summary>
+        /// Determine the Player with position
+        /// </summary>
+        /// <param name="x">Future left position</param>
+        /// <param name="y">Future top position</param>
+        /// <returns>Enemy, null if no found</returns>
+        internal static bool IsSomeonePresentAt(int floor, int x, int y)
+        {
+            foreach (Person P in PeopleList[floor])
+            {
+                if (P.X == x && P.Y == y)
+                    return true;
+            }
+
+            return false;
+        }
         #endregion
 
         #region Graphics
@@ -83,29 +100,6 @@ namespace fwod
                 internal const char Chest = 'm';
                 internal const char Terminal = 'T';
             }
-        }
-        #endregion
-
-        #region Box generation
-        static internal void GenerateBox(Renderer.Layer layer, int x, int y, int width, int height)
-        {
-            // Top wall
-            Renderer.Write(layer, '┌', x, y);
-            Utils.GenerateHorizontalLine(layer, '─', width - 2);
-            Renderer.Write(layer, '┐');
-
-            // Side walls
-            Console.SetCursorPosition(x, y + 1);
-            Utils.GenerateVerticalLine(layer, '│', height - 1);
-
-            Console.SetCursorPosition(x + (width - 1), y + 1);
-            Utils.GenerateVerticalLine(layer, '│', height - 1);
-
-            // Bottom wall
-            Console.SetCursorPosition(x, y + (height - 1));
-            Renderer.Write(layer, '└');
-            Utils.GenerateHorizontalLine(layer, '─', width - 2);
-            Renderer.Write(layer, '┘');
         }
         #endregion
 
