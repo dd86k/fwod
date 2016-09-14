@@ -448,12 +448,11 @@ namespace fwod
 
         /// <summary>
         /// Clear the past bubble and reprint chars from game layer.
-        /// Assumes it's over-the-head (for now)
-        /// TODO: Fix assuming
         /// </summary>
         /// <param name="pLength">Length of the string</param>
         void ClearBubble(int pLength)
         {
+            //TODO: Fix assuming over the head (what?)
             int height = (pLength / (BUBBLE_TEXTMAXLEN + 1)) + 3;
             int width = pLength + (BUBBLE_PADDING_X * 2) + 2;
             int startx = X - ((pLength / 2) + BUBBLE_PADDING_X + 1);
@@ -667,8 +666,7 @@ namespace fwod
                 Game.Statistics.StatEnemiesKilled++;
             }
             else if (this is Player)
-            { // Game over
-                //TODO: Game over
+            { //TODO: Game over
 
             }
             else

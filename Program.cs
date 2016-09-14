@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 /*
     Entry point of the program.
@@ -108,7 +109,9 @@ namespace fwod
             #region Initialization
             // Add player and first enemy in game
             Person Stranger = new Person(Utils.WindowWidth / 4, Utils.WindowHeight / 2);
-            Game.PeopleList.Add(Stranger);
+            Game.PeopleList = new List<List<Person>>();
+            Game.PeopleList.Add(new List<Person>());
+            Game.PeopleList[Game.CurrentFloor].Add(Stranger);
 
             // Generate the 'main' box
             Game.GenerateBox(Renderer.Layer.Game, 1, 1,
@@ -120,8 +123,8 @@ namespace fwod
             Stranger.CharacterChar = 'S';
             Stranger.Initialize();
 
-            Enemy TestRat = new Enemy(Utils.WindowWidth - 5, 5, Enemy.EnemyType.Rat, 24);
-            Game.EnemyList.Add(TestRat);
+            Enemy TestRat = new Enemy(Utils.WindowWidth - 5, 5, EnemyType.Rat, 24);
+            Game.PeopleList[Game.CurrentFloor].Add(TestRat);
             TestRat.Initialize();
             #endregion
 

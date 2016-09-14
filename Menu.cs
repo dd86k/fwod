@@ -292,9 +292,7 @@ namespace fwod
             }
 
             // Place the people back on screen.
-            foreach (Person e in Game.EnemyList)
-                e.Initialize();
-            foreach (Person p in Game.PeopleList)
+            foreach (Person p in Game.PeopleList[Game.CurrentFloor])
                 p.Initialize();
 
             Game.MainPlayer.Initialize();
