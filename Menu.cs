@@ -37,7 +37,7 @@ namespace fwod
             );
         }
         
-        const int MENU_WIDTH = 30;
+        const int MENU_WIDTH = 40;
         const int MENU_TOP = 4;
         public bool InMenu { get; private set; }
         List<MenuItem> MenuItemList { get; }
@@ -197,7 +197,7 @@ namespace fwod
                     ClearMenu(false);
                     new Menu(true,
                         new MenuItem($"Steps taken: {Game.Statistics.StepsTaken}"),
-                        new MenuItem($"Monsters killed: {Game.Statistics.EnemiesKilled:D16}"),
+                        new MenuItem($"Monsters killed: {Game.Statistics.EnemiesKilled}"),
                         new MenuItem($"Damage dealt {Game.Statistics.EnemiesKilled}"),
                         new MenuItem($"Damage received {Game.Statistics.EnemiesKilled}"),
                         new MenuItem($"Money gain: {Game.Statistics.MoneyGained}$"),
@@ -249,25 +249,27 @@ namespace fwod
 
         void Draw()
         {
-            string line = $"├{new string('─', MENU_WIDTH - 2)}┤";
-            
+            string line = new string('─', MENU_WIDTH - 2);
+            string fline = $"├{line}┤";
+            int c = MenuItemList.Count;
+
             Console.SetCursorPosition(LeftPosition, MENU_TOP);
             Console.Write($"┌{line}┐");
-            for (int i = 0; i < MenuItemList.Count; i++)
+            for (int i = 0; i < c; i++)
             {
-                Console.SetCursorPosition(LeftPosition, MENU_TOP + i);
+                Console.SetCursorPosition(LeftPosition, MENU_TOP + i + 1);
 
                 switch (MenuItemList[i].Type)
                 {
                     case MenuItemType.Seperator:
-                        Console.Write(line);
+                        Console.Write(fline);
                         break;
                     default:
                         Console.Write($"│{MenuItemList[i].Text.Center(MENU_WIDTH - 2)}│");
                         break;
                 }
             }
-            Console.SetCursorPosition(LeftPosition, MENU_TOP + 1);
+            Console.SetCursorPosition(LeftPosition, MENU_TOP + c + 1);
             Console.Write($"└{line}┘");
         }
 
