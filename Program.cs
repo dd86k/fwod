@@ -152,7 +152,7 @@ namespace fwod
                     {
                         tmp_name = Game.MainPlayer.GetAnswer();
                         Stranger.Say("Say something!");
-                    } while (tmp_name == null);
+                    } while (tmp_name.Length == 0);
                     Game.MainPlayer.Name = tmp_name;
                 }
                 else

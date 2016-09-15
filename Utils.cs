@@ -155,15 +155,10 @@ namespace fwod
                     case ConsoleKey.DownArrow:
                         break;
 
-                    // Cancel
-                    case ConsoleKey.Escape:
-                        Console.CursorVisible = false;
-                        return string.Empty;
-
                     // Returns the string
                     case ConsoleKey.Enter:
-                        Console.CursorVisible = false;
-                        return o.ToString();
+                        c = false;
+                        break;
 
                     // Navigation
                     case ConsoleKey.LeftArrow:
@@ -263,7 +258,13 @@ namespace fwod
                 }
             }
 
-            return string.Empty;
+            try
+            {
+                Console.CursorVisible = false;
+            }
+            catch {}
+
+            return o.ToString();
         }
         #endregion
     }
