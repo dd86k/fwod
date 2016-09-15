@@ -265,7 +265,7 @@ namespace fwod
                 Console.SetCursorPosition(left, MENU_TOP + i++);
                 Console.Write(
                     item.ItemType == MenuItemType.Seperator ?
-                    $"├{line}┤" : $"│{Utils.Center(item.Text, MENU_WIDTH - 2)}│"
+                    $"├{line}┤" : $"│{item.Text.Center(MENU_WIDTH - 2)}│"
                 );
             }
             Console.SetCursorPosition(left, MENU_TOP + MenuItemList.Count + 1);
@@ -281,7 +281,7 @@ namespace fwod
                 (Utils.WindowWidth / 2) - (MENU_WIDTH / 2),
                 MENU_TOP,
                 MENU_WIDTH,
-                MenuItemList.Count + 6
+                MenuItemList.Count + 2
             );
         }
     }
