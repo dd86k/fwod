@@ -13,11 +13,11 @@ namespace fwod
         /// <summary>
         /// Initial window height. ANSI/ISO screen size.
         /// </summary>
-        internal const int WindowHeight = 24;
+        public const int WindowHeight = 24;
         /// <summary>
         /// Initial window width. ANSI/ISO screen size.
         /// </summary>
-        internal const int WindowWidth = 80;
+        public const int WindowWidth = 80;
         #endregion
 
         #region Box generation
@@ -44,35 +44,35 @@ namespace fwod
         #endregion
 
         #region GenH
-        static internal void GenerateHorizontalLine(char c, int len)
+        static public void GenerateHorizontalLine(char c, int len)
         {
             GenerateHorizontalLine(c, Console.CursorLeft, Console.CursorTop, len);
         }
 
-        static internal void GenerateHorizontalLine(char c, int x, int y, int len)
+        static public void GenerateHorizontalLine(char c, int x, int y, int len)
         {
             Console.SetCursorPosition(x, y);
             Console.Write(new string(c, len));
         }
 
-        static internal void GenerateHorizontalLineMap(char c, int len)
+        static public void GenerateHorizontalLineMap(char c, int len)
         {
             GenerateHorizontalLineMap(c, Console.CursorLeft, Console.CursorTop, len);
         }
         
-        static internal void GenerateHorizontalLineMap(char c, int x, int y, int len)
+        static public void GenerateHorizontalLineMap(char c, int x, int y, int len)
         {
             MapManager.Write(new string(c, len), x, y);
         }
         #endregion
 
         #region GenV
-        static internal void GenerateVerticalLine(char c, int len)
+        static public void GenerateVerticalLine(char c, int len)
         {
             GenerateVerticalLine(c, Console.CursorLeft, Console.CursorTop, len);
         }
 
-        static internal void GenerateVerticalLine(char c, int x, int y, int len)
+        static public void GenerateVerticalLine(char c, int x, int y, int len)
         {
             int l = y + len;
             for (int i = y; i < l; i++)
@@ -82,12 +82,12 @@ namespace fwod
             }
         }
 
-        static internal void GenerateVerticalLineMap(char c, int len)
+        static public void GenerateVerticalLineMap(char c, int len)
         {
             GenerateVerticalLineMap(c, Console.CursorLeft, Console.CursorTop, len);
         }
 
-        static internal void GenerateVerticalLineMap(char c, int x, int y, int len)
+        static public void GenerateVerticalLineMap(char c, int x, int y, int len)
         {
             int l = y + len;
             for (int i = y; i < l; i++)

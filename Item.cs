@@ -36,14 +36,14 @@
     class Item
     {
         #region Constructors
-        internal Item(string name)
+        public Item(string name)
         {
             Name = name;
         }
         #endregion
 
         #region Object properties
-        internal string Name
+        public string Name
         {
             get;
         }
@@ -55,13 +55,13 @@
     class Weapon : Item
     {
         #region Construction
-        internal Weapon(string name, int baseDamage)
+        public Weapon(string name, int baseDamage)
             : this(name, baseDamage, WeaponModifier.Normal)
         {
 
         }
 
-        internal Weapon(string name, int baseDamage, WeaponModifier weaponmod)
+        public Weapon(string name, int baseDamage, WeaponModifier weaponmod)
             : base(name)
         {
             BaseDamage = baseDamage;
@@ -80,7 +80,7 @@
     class Sword : Weapon
     {
         #region Construction
-        internal Sword(string name, int baseDamage)
+        public Sword(string name, int baseDamage)
             : base(name, baseDamage)
         {
 
@@ -94,7 +94,7 @@
     {
         #region Construstion
         //TODO: Expand armor to include boots, leggings, etc.
-        internal Armor(string name, ushort armorPoints)
+        public Armor(string name, ushort armorPoints)
             : base(name)
         {
             ArmorPoints = armorPoints;
@@ -110,13 +110,13 @@
     #region Drinks
     class Food : Item
     {
-        internal Food(string name, int restorePoints)
+        public Food(string name, int restorePoints)
             : base(name)
         {
             RestorePoints = restorePoints;
         }
         
-        internal int RestorePoints { get; }
+        public int RestorePoints { get; }
     }
     #endregion
 }

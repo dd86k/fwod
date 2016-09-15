@@ -16,7 +16,7 @@ namespace fwod
         /// </summary>
         /// <param name="layer">Layer to output.</param>
         /// <param name="c">Character.</param>
-        internal static void Write(char c)
+        public static void Write(char c)
         {
             Write(c, Console.CursorLeft, Console.CursorTop);
         }
@@ -28,7 +28,7 @@ namespace fwod
         /// <param name="c">Character.</param>
         /// <param name="x">Left position.</param>
         /// <param name="y">Top position.</param>
-        internal static void Write(char c, int x, int y)
+        public static void Write(char c, int x, int y)
         {
             Map[y, x] = c;
             Console.SetCursorPosition(x, y);
@@ -40,7 +40,7 @@ namespace fwod
         /// </summary>
         /// <param name="layer">Layer to output.</param>
         /// <param name="text">String.</param>
-        internal static void Write(string text)
+        public static void Write(string text)
         {
             Write(text, Console.CursorLeft, Console.CursorTop);
         }
@@ -71,22 +71,22 @@ namespace fwod
         /// </summary>
         /// <param name="layer">Layer to output.</param>
         /// <param name="c">Character.</param>
-        internal static void WriteLine(char c)
+        public static void WriteLine(char c)
         {
             WriteLine(c, Console.CursorLeft, Console.CursorTop);
         }
 
-        internal static void WriteLine(char c, int x, int y)
+        public static void WriteLine(char c, int x, int y)
         {
             Console.WriteLine(Map[y, x] = c);
         }
 
-        internal static void WriteLine(string text)
+        public static void WriteLine(string text)
         {
             WriteLine(text, Console.CursorLeft, Console.CursorTop);
         }
 
-        internal static unsafe void WriteLine(string text, int x, int y)
+        public static unsafe void WriteLine(string text, int x, int y)
         {
             fixed (char* pt = text)
             {
@@ -154,7 +154,7 @@ namespace fwod
         /// Clears the current map.
         /// </summary>
         /// <param name="clear">Update display buffer</param>
-        internal static void ClearMap(bool clear = true)
+        public static void ClearMap(bool clear = true)
         {
             Map = new char[Utils.WindowHeight, Utils.WindowWidth];
 

@@ -39,7 +39,7 @@ namespace fwod
         /// <summary>
         /// Set or get the Player position (Left).
         /// </summary>
-        internal int X
+        public int X
         {
             get { return _x; }
             set
@@ -74,7 +74,7 @@ namespace fwod
         /// <summary>
         /// Set or get the Player position (Top).
         /// </summary>
-        internal int Y
+        public int Y
         {
             get { return _y; }
             set
@@ -204,7 +204,7 @@ namespace fwod
         #endregion
 
         #region Stats
-        internal int Level
+        public int Level
         {
             get; set;
         }
@@ -285,7 +285,7 @@ namespace fwod
         /// <summary>
         /// Current EquipedWeapon in this Person.
         /// </summary>
-        internal Weapon EquipedWeapon
+        public Weapon EquipedWeapon
         {
             get; set;
         }
@@ -295,7 +295,7 @@ namespace fwod
         /// <summary>
         /// Current EquipedArmor in this Person.
         /// </summary>
-        internal Armor EquipedArmor
+        public Armor EquipedArmor
         {
             get; set;
         }
@@ -307,7 +307,7 @@ namespace fwod
         /// Current sum of money in this Person.
         /// The sum is display via the inventory for Player.
         /// </summary>
-        internal int Money
+        public int Money
         {
             get { return _money; }
             set
@@ -362,7 +362,7 @@ namespace fwod
         /// <summary>
         /// Place the Person on screen.
         /// </summary>
-        internal void Initialize()
+        public void Initialize()
         {
             Console.SetCursorPosition(_x, _y);
             Console.Write(Char);
@@ -427,7 +427,7 @@ namespace fwod
         /// </summary>
         /// <param name="text">Dialog</param>
         /// <param name="wait">Wait for keydown</param>
-        internal void Say(string text, bool wait = true)
+        public void Say(string text, bool wait = true)
         {
             string[] lines = new string[] { text };
 
@@ -457,7 +457,7 @@ namespace fwod
         /// </summary>
         /// <param name="lines">Lines of dialog</param>
         /// <param name="wait">Wait for keydown</param>
-        internal void Say(string[] lines, bool wait)
+        public void Say(string[] lines, bool wait)
         {
             //TODO: Clean this clutter.
             int arrlen = lines.Length;
@@ -509,7 +509,7 @@ namespace fwod
         /// Get input from the Person.
         /// </summary>
         /// <returns>Answer</returns>
-        internal string GetAnswer()
+        public string GetAnswer()
         {
             return GetAnswer(BUBBLE_TEXT_MAXLEN);
         }
@@ -519,7 +519,7 @@ namespace fwod
         /// </summary>
         /// <param name="limit">Limit in characters.</param>
         /// <returns>Answer</returns>
-        internal string GetAnswer(int limit)
+        public string GetAnswer(int limit)
         {
             Say(new string(' ', limit), false);
 
@@ -591,7 +591,7 @@ namespace fwod
         /// <summary>
         /// Remove completely the Person from the game.
         /// </summary>
-        internal void Destroy()
+        public void Destroy()
         {
             Console.SetCursorPosition(X, Y);
             Console.Write(' ');

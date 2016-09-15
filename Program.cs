@@ -22,7 +22,7 @@ namespace fwod
         /// </summary>
         /// <param name="args">Arguments.</param>
         /// <returns>Error.</returns>
-        internal static int Main(string[] args)
+        public static int Main(string[] args)
         {
             Game.MainPlayer =
                 new Player((Utils.WindowWidth / 4) + (Utils.WindowWidth / 2), Utils.WindowHeight / 2);

@@ -4,12 +4,12 @@
 
 namespace fwod
 {
-    internal static class TypeExtension
+    public static class TypeExtension
     {
         const string SolidObjects =
             "░▒▓█▄▌▐▀│─┌┐┘└┤┴┬├┼║═╔╗╝╚╣╩╦╠╬╓╖╜╙╢╨╥╟╫╕╛╘╒╡╧╤╞╪";
 
-        internal static bool IsSolidObject(this char c)
+        public static bool IsSolidObject(this char c)
         {
             return SolidObjects.Contains(c.ToString());
         }
@@ -19,7 +19,7 @@ namespace fwod
         /// </summary>
         /// <param name="c">Char</param>
         /// <returns>True if player</returns>
-        internal static bool IsPersonObject(this char c)
+        public static bool IsPersonObject(this char c)
         {
             foreach (Person Enemy in Game.PeopleList[Game.CurrentFloor])
             {

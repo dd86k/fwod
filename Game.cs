@@ -30,7 +30,7 @@ namespace fwod
         /// <summary>
         /// Places Player stuff on screen.
         /// </summary>
-        internal static void QuickInitialize()
+        public static void QuickInitialize()
         {
             Console.SetCursorPosition(27, 0);
             Console.Write("|");
@@ -58,7 +58,7 @@ namespace fwod
         /// <param name="x">Future left position</param>
         /// <param name="y">Future top position</param>
         /// <returns>Enemy, null if no found</returns>
-        internal static Person GetPersonObjectAt(int floor, int x, int y)
+        public static Person GetPersonObjectAt(int floor, int x, int y)
         {
             foreach (Person P in PeopleList[floor])
             {
@@ -75,7 +75,7 @@ namespace fwod
         /// <param name="x">Future left position</param>
         /// <param name="y">Future top position</param>
         /// <returns>Enemy, null if no found</returns>
-        internal static bool IsSomeonePresentAt(int floor, int x, int y)
+        public static bool IsSomeonePresentAt(int floor, int x, int y)
         {
             foreach (Person P in PeopleList[floor])
             {
@@ -95,17 +95,17 @@ namespace fwod
         {
             public class Objects
             {
-                internal const char Grass = '.';
-                internal const char Ladder = 'H';
-                internal const char Chest = 'm';
-                internal const char Terminal = 'T';
+                public const char Grass = '.';
+                public const char Ladder = 'H';
+                public const char Chest = 'm';
+                public const char Terminal = 'T';
             }
         }
         #endregion
 
         #region Events
         /*
-        internal static void TakeTurn()
+        public static void TakeTurn()
         {
             foreach (Player Enemy in EnemyList)
             {
@@ -118,7 +118,7 @@ namespace fwod
         /// Display what's going on.
         /// </summary>
         /// <param name="text">Event entry.</param>
-        internal static void Log(string text)
+        public static void Log(string text)
         {
             //TODO: Clean this clutter.
             string[] Lines = new string[] { text };
@@ -163,12 +163,12 @@ namespace fwod
         #region Save/Load
         //TODO: New menu for Save/Load function.
 
-        /*static internal bool SaveProgress() // Return true is saved properly
+        /*static public bool SaveProgress() // Return true is saved properly
         { //TODO: Find a way to convert to binary blob and encode it (basE91?)
             using (TextWriter tw = 
         }*/
 
-        /*static internal <StructOfGameData> LoadGame()
+        /*static public <StructOfGameData> LoadGame()
         {
 
         }*/

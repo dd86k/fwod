@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace fwod
 {
-    internal enum MenuItemType : byte
+    public enum MenuItemType : byte
     {
         Information,
         Seperator,
@@ -100,7 +100,7 @@ namespace fwod
         /// <summary>
         /// Entry point for menu
         /// </summary>
-        internal void Entry()
+        public void Entry()
         {
             ConsoleKeyInfo cki = Console.ReadKey(true);
 
@@ -128,7 +128,7 @@ namespace fwod
         /// <summary>
         /// Goes to the next control
         /// </summary>
-        internal void NextControl()
+        public void NextControl()
         {
             bool s = true;
             PastMenuIndex = MenuIndex;
@@ -155,7 +155,7 @@ namespace fwod
         /// <summary>
         /// Goes to the previous control
         /// </summary>
-        internal void PreviousControl()
+        public void PreviousControl()
         {
             bool s = true;
             PastMenuIndex = MenuIndex;
@@ -182,7 +182,7 @@ namespace fwod
         /// <summary>
         /// Selects the item in the menu
         /// </summary>
-        internal void Select()
+        public void Select()
         {
             switch (MenuItemList[MenuIndex].ItemType)
             {
@@ -196,16 +196,16 @@ namespace fwod
 
                 case MenuItemType.ShowStats:
                     new Menu(true,
-                        new MenuItem("Steps taken", MenuItemType.Information),
-                        new MenuItem($"{Game.Statistics.StepsTaken}", MenuItemType.Information),
-                        new MenuItem("Monsters killed", MenuItemType.Information),
-                        new MenuItem($"{Game.Statistics.EnemiesKilled}", MenuItemType.Information),
-                        new MenuItem("Damage dealt", MenuItemType.Information),
-                        new MenuItem($"{Game.Statistics.EnemiesKilled}", MenuItemType.Information),
-                        new MenuItem("Damage received", MenuItemType.Information),
-                        new MenuItem($"{Game.Statistics.EnemiesKilled}", MenuItemType.Information),
-                        new MenuItem("Money gain", MenuItemType.Information),
-                        new MenuItem($"{Game.Statistics.MoneyGained}$", MenuItemType.Information),
+                        new MenuItem("Steps taken"),
+                        new MenuItem($"{Game.Statistics.StepsTaken}"),
+                        new MenuItem("Monsters killed"),
+                        new MenuItem($"{Game.Statistics.EnemiesKilled}"),
+                        new MenuItem("Damage dealt"),
+                        new MenuItem($"{Game.Statistics.EnemiesKilled}"),
+                        new MenuItem("Damage received"),
+                        new MenuItem($"{Game.Statistics.EnemiesKilled}"),
+                        new MenuItem("Money gain"),
+                        new MenuItem($"{Game.Statistics.MoneyGained}$"),
                         new MenuItem(),
                         new MenuItem("Return", MenuItemType.Return)
                     );
@@ -292,15 +292,15 @@ namespace fwod
         public MenuItemType ItemType { get; }
 
         public MenuItem()
-            : this(string.Empty, MenuItemType.Seperator) {}
+            : this(null, MenuItemType.Seperator) {}
 
-        public MenuItem(string pText)
-            : this(pText, MenuItemType.Information) {}
+        public MenuItem(string text)
+            : this(text, MenuItemType.Information) {}
 
-        public MenuItem(string pText, MenuItemType pAction)
+        public MenuItem(string text, MenuItemType type)
         {
-            Text = pText;
-            ItemType = pAction;
+            Text = text;
+            ItemType = type;
         }
 
         public override string ToString()
