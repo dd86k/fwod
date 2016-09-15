@@ -273,32 +273,16 @@ namespace fwod
         }
 
         /// <summary>
-        /// Clears the menu and places things back on screen.
+        /// Clears the menu and redraw map.
         /// </summary>
         public void ClearMenu()
         {
-            int startY = MENU_TOP;
-            int startX = (Utils.WindowWidth / 2) - (MENU_WIDTH / 2);
-            int lengthY = MenuItemList.Count + 6; // Yeah I know it's that odd
-
-            //TODO: Optimize this with a buffer and pointer
-            for (int row = startY; row < lengthY; row++)
-            {
-                for (int col = startX; col < Utils.WindowWidth; col++)
-                {
-                    Console.SetCursorPosition(col, row); // Safety measure
-                    Console.Write(
-                        MapManager.Map[row, col] == '\0' ?
-                        ' ' : MapManager.Map[row, col]
-                    );
-                }
-            }
-
-            // Place the people back on screen.
-            foreach (Person p in Game.PeopleList[Game.CurrentFloor])
-                p.Initialize();
-
-            Game.MainPlayer.Initialize();
+            MapManager.RedrawMap(
+                (Utils.WindowWidth / 2) - (MENU_WIDTH / 2),
+                MENU_TOP,
+                MENU_WIDTH,
+                MenuItemList.Count + 6
+            );
         }
     }
     

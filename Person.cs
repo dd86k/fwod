@@ -29,8 +29,8 @@ namespace fwod
     class Person
     {
         #region Constants
-        const int BUBBLE_PADDING_X = 0;
-        const int BUBBLE_TEXTMAXLEN = 25;
+        const int BUBBLE_PADDING_HORIZONTAL = 0;
+        const int BUBBLE_TEXT_MAXLEN = 25;
         #endregion
 
         #region Object properties
@@ -397,38 +397,27 @@ namespace fwod
         /// <summary>
         /// Clear the past bubble and reprint chars from game layer.
         /// </summary>
-        /// <param name="pLength">Length of the string</param>
-        void ClearBubble(int pLength)
+        /// <param name="length">Length of the string</param>
+        void ClearBubble(int length)
         {
-            ClearBubble(
-                X - ((pLength / 2) + BUBBLE_PADDING_X + 1),
-                Y - (pLength / BUBBLE_TEXTMAXLEN) - 3,
-                pLength + (BUBBLE_PADDING_X * 2) + 2,
-                (pLength / (BUBBLE_TEXTMAXLEN + 1)) + 3
+            MapManager.RedrawMap(
+                X - (length / 2) + (BUBBLE_PADDING_HORIZONTAL * 2),
+                Y - (length / BUBBLE_TEXT_MAXLEN) - 3,
+                length + (BUBBLE_PADDING_HORIZONTAL * 2) + 2,
+                (length / (BUBBLE_TEXT_MAXLEN + 1)) + 3
             );
         }
 
         /// <summary>
         /// Clear the past bubble and reprint chars from game layer.
         /// </summary>
-        /// <param name="pStartX">Top starting position</param>
-        /// <param name="pStartY">Left starting position</param>
-        /// <param name="pWidth">Bubble width</param>
-        /// <param name="pHeight">Bubble height</param>
-        void ClearBubble(int pStartX, int pStartY, int pWidth, int pHeight)
+        /// <param name="x">Top starting position</param>
+        /// <param name="y">Left starting position</param>
+        /// <param name="width">Bubble width</param>
+        /// <param name="height">Bubble height</param>
+        unsafe void ClearBubble(int x, int y, int width, int height)
         {
-            char c;
-            int colmax = pWidth + pStartX;
-            int rowmax = pHeight + pStartY;
-            for (int row = pStartY; row < rowmax; row++)
-            {
-                for (int col = pStartX; col < colmax; col++)
-                {
-                    Console.SetCursorPosition(col, row);
-                    c = MapManager.Map[row, col];
-                    Console.Write(c == '\0' ? ' ' : c);
-                }
-            }
+            MapManager.RedrawMap(x, y, width, height);
         }
         #endregion
 
@@ -442,21 +431,21 @@ namespace fwod
         {
             string[] lines = new string[] { text };
 
-            if (text.Length > BUBBLE_TEXTMAXLEN)
+            if (text.Length > BUBBLE_TEXT_MAXLEN)
             {
                 int ci = 0; // Multiline scenario row index
                 int start = 0; // Multiline cutting index
-                lines = new string[(text.Length / (BUBBLE_TEXTMAXLEN + 1)) + 1];
+                lines = new string[(text.Length / (BUBBLE_TEXT_MAXLEN + 1)) + 1];
 
                 // This block seperates the input into BUBBLE_MAXLEN characters each lines equally.
                 do
                 {
-                    if (start + BUBBLE_TEXTMAXLEN > text.Length)
+                    if (start + BUBBLE_TEXT_MAXLEN > text.Length)
                         lines[ci] = text.Substring(start, text.Length - start);
                     else
-                        lines[ci] = text.Substring(start, BUBBLE_TEXTMAXLEN);
+                        lines[ci] = text.Substring(start, BUBBLE_TEXT_MAXLEN);
                     ci++;
-                    start += BUBBLE_TEXTMAXLEN;
+                    start += BUBBLE_TEXT_MAXLEN;
                 } while (start < text.Length);
             }
             
@@ -474,18 +463,18 @@ namespace fwod
             int arrlen = lines.Length;
             int strlen = arrlen > 1 ?
                 lines.GetLonguestStringLength() : lines[0].Length;
-            int width = strlen + (BUBBLE_PADDING_X * 2) + 2;
+            int width = strlen + (BUBBLE_PADDING_HORIZONTAL * 2) + 2;
             int height = arrlen + 2;
-            int startX = X - (strlen / 2) - 1;
+            int startX = X - (strlen / 2);
             int startY = Y - (arrlen) - 3;
 
-            // Re-places StartX if it goes further than the display buffer
+            // Re-locate startX if it goes further than the display buffer
             if (startX + width > Utils.WindowWidth)
                 startX = Utils.WindowWidth - width;
             else if (startX < 0)
                 startX = 0;
 
-            // Re-places StartY if it goes further than the display buffer
+            // Re-locate startY if it goes further than the display buffer
             if (startY > Utils.WindowWidth)
                 startY = Utils.WindowWidth - (arrlen - 2);
             else if (startY < 3)
@@ -494,13 +483,13 @@ namespace fwod
             // Generate the bubble
             GenerateBubble(startX, startY, width, height);
 
-            int TextStartX = startX + 1;
-            int TextStartY = startY + 1;
+            int textStartX = startX + 1;
+            int textStartY = startY + 1;
 
             // Insert Text
             for (int i = 0; i < arrlen; i++)
             {
-                Console.SetCursorPosition(TextStartX, TextStartY + i);
+                Console.SetCursorPosition(textStartX, textStartY + i);
                 Console.Write(lines[i]);
             }
 
@@ -512,7 +501,7 @@ namespace fwod
             else
             {
                 // Prepare for text
-                Console.SetCursorPosition(TextStartX, TextStartY);
+                Console.SetCursorPosition(textStartX, textStartY);
             }
         }
 
@@ -522,7 +511,7 @@ namespace fwod
         /// <returns>Answer</returns>
         internal string GetAnswer()
         {
-            return GetAnswer(BUBBLE_TEXTMAXLEN);
+            return GetAnswer(BUBBLE_TEXT_MAXLEN);
         }
 
         /// <summary>

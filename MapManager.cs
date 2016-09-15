@@ -100,6 +100,34 @@ namespace fwod
         #endregion
 
         #region Helpers
+        public static unsafe void RedrawMap(int x, int y, int width, int height)
+        {
+            int lx = x + width;
+            int ly = y + height;
+            int ox = x;
+            string buffer = new string('\0', width);
+
+            fixed (char* p = buffer)
+            {
+                for (; y < ly; y++)
+                {
+                    Console.SetCursorPosition(x, y);
+                    
+                    for (; x < lx; x++)
+                        p[x] = Map[y, x];
+                    x = ox;
+
+                    Console.Write(buffer);
+                }
+            }
+
+            // Place the people back on screen.
+            foreach (Person p in Game.PeopleList[Game.CurrentFloor])
+                p.Initialize();
+
+            Game.MainPlayer.Initialize();
+        }
+
         public static void GenerateBox(int x, int y, int width, int height)
         {
             // Top wall
@@ -123,15 +151,12 @@ namespace fwod
 
         #region Clear
         /// <summary>
-        /// Clears a layer
+        /// Clears the current map.
         /// </summary>
-        /// <param name="layer">Layer to clear</param>
         /// <param name="clear">Update display buffer</param>
         internal static void ClearMap(bool clear = true)
         {
-            for (int h = 0; h < Utils.WindowHeight; h++)
-                for (int w = 0; w < Utils.WindowWidth; w++)
-                    Map[h, w] = '\0';
+            Map = new char[Utils.WindowHeight, Utils.WindowWidth];
 
             if (clear)
                 Console.Clear();

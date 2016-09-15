@@ -30,7 +30,7 @@ namespace fwod
         /// <summary>
         /// Places Player stuff on screen.
         /// </summary>
-        internal static void QuickInitialization()
+        internal static void QuickInitialize()
         {
             Console.SetCursorPosition(27, 0);
             Console.Write("|");

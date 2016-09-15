@@ -31,9 +31,9 @@ namespace fwod
 
             // Side walls
             Console.SetCursorPosition(x, y + 1);
-            GenerateVerticalLine('│', height - 1);
+            GenerateVerticalLine('│', height - 2);
             Console.SetCursorPosition(x + (width - 1), y + 1);
-            GenerateVerticalLine('│', height - 1);
+            GenerateVerticalLine('│', height - 2);
 
             // Bottom wall
             Console.SetCursorPosition(x, y + (height - 1));
@@ -133,72 +133,137 @@ namespace fwod
         /// <param name="length">Input size/buffer</param>
         /// <param name="pPassword">Is password</param>
         /// <returns>User's input</returns>
-        internal static string ReadLine(int length, bool pPassword = false)
+        public static unsafe string ReadLine(int length, bool pPassword = false)
         {
-            //TODO: Optimize ReadLine(int, bool)
-            // String buffer, pointer, trim at the end.
-            // Maybe make multiple lines system.
-            StringBuilder Output = new StringBuilder();
-            int CurrentIndex = 0;
-            bool getting = true;
-            int OrigninalLeft = Console.CursorLeft;
+            StringBuilder o = new StringBuilder();
+            int index = 0;
+            bool c = true;
+            int oleft = Console.CursorLeft; // Origninal Left Position
+            int otop = Console.CursorTop; // Origninal Top Position
 
-            while (getting)
+            Console.CursorVisible = true;
+
+            while (c)
             {
-                ConsoleKeyInfo c = Console.ReadKey(true);
+                ConsoleKeyInfo k = Console.ReadKey(true);
 
-                switch (c.Key)
+                switch (k.Key)
                 {
-                    /* Ignored characters */
+                    // Ignore keys
                     case ConsoleKey.Tab:
-                    case ConsoleKey.LeftArrow:
                     case ConsoleKey.UpArrow:
-                    case ConsoleKey.RightArrow:
                     case ConsoleKey.DownArrow:
                         break;
 
+                    // Cancel
+                    case ConsoleKey.Escape:
+                        Console.CursorVisible = false;
+                        return string.Empty;
+
+                    // Returns the string
                     case ConsoleKey.Enter:
-                        getting = false;
+                        Console.CursorVisible = false;
+                        return o.ToString();
+
+                    // Navigation
+                    case ConsoleKey.LeftArrow:
+                        if (index > 0)
+                        {
+                            Console.SetCursorPosition(oleft + --index, otop);
+                        }
+                        break;
+                    case ConsoleKey.RightArrow:
+                        if (index < o.Length)
+                        {
+                            Console.SetCursorPosition(oleft + ++index, otop);
+                        }
+                        break;
+                    case ConsoleKey.Home:
+                        if (index > 0)
+                        {
+                            index = 0;
+                            Console.SetCursorPosition(oleft, otop);
+                        }
+                        break;
+                    case ConsoleKey.End:
+                        if (index < o.Length)
+                        {
+                            index = o.Length;
+                            Console.SetCursorPosition(oleft + index, otop);
+                        }
                         break;
 
-                    case ConsoleKey.Backspace:
-                        if (CurrentIndex > 0)
+                    case ConsoleKey.Delete:
+                        if (index < o.Length)
                         {
-                            // Erase whole
-                            if (c.Modifiers == ConsoleModifiers.Control)
+                            // Erase whole from index
+                            if (k.Modifiers == ConsoleModifiers.Control)
                             {
-                                //TODO: Erase word
-                                Output.Clear();
-                                CurrentIndex = 0;
-                                Console.SetCursorPosition(OrigninalLeft, Console.CursorTop);
+                                o = o.Remove(index, o.Length - index);
+                                Console.SetCursorPosition(oleft, otop);
                                 Console.Write(new string(' ', length));
-                                Console.SetCursorPosition(OrigninalLeft, Console.CursorTop);
+                                Console.SetCursorPosition(oleft, otop);
+                                Console.Write(pPassword ? new string('*', o.Length) : o.ToString());
+                                Console.SetCursorPosition(oleft + index, otop);
                             }
                             else // Erase one character
                             {
-                                Output = Output.Remove(Output.Length - 1, 1);
-                                CurrentIndex--;
-                                Console.SetCursorPosition(OrigninalLeft + CurrentIndex, Console.CursorTop);
-                                Console.Write(' ');
-                                Console.SetCursorPosition(OrigninalLeft + CurrentIndex, Console.CursorTop);
+                                o = o.Remove(index, 1);
+                                Console.SetCursorPosition(oleft, otop);
+                                Console.Write(new string(' ', length));
+                                Console.SetCursorPosition(oleft, otop);
+                                Console.Write(pPassword ? new string('*', o.Length) : o.ToString());
+                                Console.SetCursorPosition(oleft + index, otop);
+                            }
+                        }
+                        break;
+
+                    case ConsoleKey.Backspace:
+                        if (index > 0)
+                        {
+                            // Erase whole from index
+                            if (k.Modifiers == ConsoleModifiers.Control)
+                            {
+                                o = o.Remove(0, index);
+                                index = 0;
+                                Console.SetCursorPosition(oleft, otop);
+                                Console.Write(new string(' ', length));
+                                Console.SetCursorPosition(oleft, otop);
+                                Console.Write(pPassword ? new string('*', o.Length) : o.ToString());
+                                Console.SetCursorPosition(oleft + index, otop);
+                            }
+                            else // Erase one character
+                            {
+                                o = o.Remove(--index, 1);
+                                Console.SetCursorPosition(oleft, otop);
+                                Console.Write(new string(' ', length));
+                                Console.SetCursorPosition(oleft, otop);
+                                Console.Write(pPassword ? new string('*', o.Length) : o.ToString());
+                                Console.SetCursorPosition(oleft + index, otop);
                             }
                         }
                         break;
 
                     default:
-                        if (CurrentIndex < length)
+                        if (o.Length < length)
                         {
-                            Output.Append(c.KeyChar);
+                            char h = k.KeyChar;
 
-                            CurrentIndex++;
-
-                            Console.Write(pPassword ? '*' : c.KeyChar);
+                            if (char.IsLetterOrDigit(h) || char.IsPunctuation(h) || char.IsSymbol(h) || char.IsWhiteSpace(h))
+                            {
+                                o.Insert(index++, h);
+                                Console.SetCursorPosition(oleft, otop);
+                                Console.Write(new string(' ', length));
+                                Console.SetCursorPosition(oleft, otop);
+                                Console.Write(pPassword ? new string('*', o.Length) : o.ToString());
+                                Console.SetCursorPosition(oleft + index, otop);
+                            }
                         }
                         break;
                 }
             }
 
-            return Output.Length > 0 ? Output.ToString() : null;
+            return string.Empty;
         }
         #endregion
     }

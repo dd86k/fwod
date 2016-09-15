@@ -6,6 +6,7 @@ using System.Collections.Generic;
 */
 
 //TODO: Error enumeration?
+//TODO: Consider adding Person to People list automatically at construction time.
 
 namespace fwod
 {
@@ -32,12 +33,16 @@ namespace fwod
             // Applying CMD-like colors so it won't look weird later. (Mono fix)
             Console.ResetColor();
 
+#if DEBUG
+            //args = new string[] { "-Pn", "AAAA" };
+#endif
+
             try
             {
                 // May crash on Mono.
                 Console.CursorVisible = false;
             }
-            finally { }
+            catch { }
 
             for (int i = 0; i < args.Length; i++)
             {
@@ -139,7 +144,7 @@ namespace fwod
                 Game.MainPlayer.Say("Ah! Where am I?");
 
                 Stranger.Say("Oh, you're awake... What is your name?");
-                
+
                 if (Game.MainPlayer.Name == null) // Default name
                 {
                     string tmp_name = null;
@@ -149,6 +154,11 @@ namespace fwod
                         Stranger.Say("Say something!");
                     } while (tmp_name == null);
                     Game.MainPlayer.Name = tmp_name;
+                }
+                else
+                {
+                    Console.SetCursorPosition(1, 0);
+                    Console.Write(Game.MainPlayer.Name);
                 }
 
                 Game.MainPlayer.Say($"It's {Game.MainPlayer.Name}.");
@@ -184,11 +194,12 @@ namespace fwod
                 Stranger.Destroy();
 
                 Game.MainPlayer.Say("I guess there's no helping him... Better get moving.");
+                Game.Log("Use the arrow keys to navigate.");
             }
             else
             {
                 Stranger.Destroy();
-                Game.QuickInitialization();
+                Game.QuickInitialize();
             }
             #endregion
 
