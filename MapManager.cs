@@ -18,7 +18,8 @@ namespace fwod
         /// <param name="c">Character.</param>
         public static void Write(char c)
         {
-            Write(c, Console.CursorLeft, Console.CursorTop);
+            Map[Console.CursorTop, Console.CursorLeft] = c;
+            Console.Write(c);
         }
 
         /// <summary>
@@ -136,10 +137,8 @@ namespace fwod
             Write('┐');
 
             // Side walls
-            Console.SetCursorPosition(x, y + 1);
-            Utils.GenerateVerticalLineMap('│', height - 1);
-            Console.SetCursorPosition(x + (width - 1), y + 1);
-            Utils.GenerateVerticalLineMap('│', height - 1);
+            GenerateVerticalLineMap('│', height - 1, x, y + 1);
+            GenerateVerticalLineMap('│', height - 1, x + (width - 1), y + 1);
 
             // Bottom wall
             Console.SetCursorPosition(x, y + (height - 1));
@@ -148,6 +147,16 @@ namespace fwod
             Write('┘');
         }
         #endregion
+
+        static public void GenerateVerticalLineMap(char c, int len, int x, int y)
+        {
+            int l = y + len;
+            for (int i = y; i < l; i++)
+            {
+                Console.SetCursorPosition(x, i);
+                Write(c);
+            }
+        }
 
         #region Clear
         /// <summary>

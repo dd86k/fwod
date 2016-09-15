@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace fwod
 {
-    class MainClass
+    class Program
     {
         static readonly string ProjectVersion =
             $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}";
@@ -75,7 +75,7 @@ namespace fwod
                         break;
 #if DEBUG
                     case "--showmeme":
-                        Misc.ShowMeme(); // :^)
+                        Misc.Wunk(); // :^)
                         return 0;
 #endif
                 }

@@ -30,10 +30,8 @@ namespace fwod
             Console.Write('┐');
 
             // Side walls
-            Console.SetCursorPosition(x, y + 1);
-            GenerateVerticalLine('│', height - 2);
-            Console.SetCursorPosition(x + (width - 1), y + 1);
-            GenerateVerticalLine('│', height - 2);
+            GenerateVerticalLine('│', height - 2, x, y + 1);
+            GenerateVerticalLine('│', height - 2, x + (width - 1), y + 1);
 
             // Bottom wall
             Console.SetCursorPosition(x, y + (height - 1));
@@ -67,33 +65,13 @@ namespace fwod
         #endregion
 
         #region GenV
-        static public void GenerateVerticalLine(char c, int len)
-        {
-            GenerateVerticalLine(c, Console.CursorLeft, Console.CursorTop, len);
-        }
-
-        static public void GenerateVerticalLine(char c, int x, int y, int len)
+        static public void GenerateVerticalLine(char c, int len, int x, int y)
         {
             int l = y + len;
             for (int i = y; i < l; i++)
             {
                 Console.SetCursorPosition(x, i);
                 Console.Write(c);
-            }
-        }
-
-        static public void GenerateVerticalLineMap(char c, int len)
-        {
-            GenerateVerticalLineMap(c, Console.CursorLeft, Console.CursorTop, len);
-        }
-
-        static public void GenerateVerticalLineMap(char c, int x, int y, int len)
-        {
-            int l = y + len;
-            for (int i = y; i < l; i++)
-            {
-                Console.SetCursorPosition(x, i);
-                MapManager.Write(c);
             }
         }
         #endregion
