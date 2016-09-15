@@ -18,11 +18,12 @@ namespace fwod
         #region Statistics
         public class Statistics
         {
-            public static ulong EnemiesKilled = 0;
-            public static ulong StepsTaken = 0;
-            public static ulong MoneyGained = 0;
-            public static ulong DamageDealt = 0;
-            public static ulong DamageReceived = 0;
+            public static ulong
+                EnemiesKilled = 0,
+                StepsTaken = 0,
+                MoneyGained = 0,
+                DamageDealt = 0,
+                DamageReceived = 0;
         }
         #endregion
 
@@ -43,7 +44,7 @@ namespace fwod
 
         #region People
         /// <summary>
-        /// List of non-enemy people.
+        /// List of people in every levels.
         /// </summary>
         public static List<List<Person>> PeopleList = new List<List<Person>>();
 
@@ -95,10 +96,12 @@ namespace fwod
         {
             public class Objects
             {
-                public const char Grass = '.';
-                public const char Ladder = 'H';
-                public const char Chest = 'm';
-                public const char Terminal = 'T';
+                public const char
+                    Grass = '.',
+                    Ladder = 'H',
+                    Chest = 'm',
+                    Terminal = 'T',
+                    ATM = '$';
             }
         }
         #endregion
@@ -161,7 +164,8 @@ namespace fwod
         #endregion
 
         #region Save/Load
-        //TODO: New menu for Save/Load function.
+        //TODO: Save method
+        //TODO: Load method
 
         /*static public bool SaveProgress() // Return true is saved properly
         { //TODO: Find a way to convert to binary blob and encode it (basE91?)

@@ -133,22 +133,21 @@ namespace fwod
         {
             // Top wall
             Write('┌', x, y);
-            Utils.GenerateHorizontalLineMap('─', width - 2);
+            Write(new string('─', width - 2));
             Write('┐');
 
             // Side walls
-            GenerateVerticalLineMap('│', height - 1, x, y + 1);
-            GenerateVerticalLineMap('│', height - 1, x + (width - 1), y + 1);
+            GenerateVerticalLine('│', height - 1, x, y + 1);
+            GenerateVerticalLine('│', height - 1, x + (width - 1), y + 1);
 
             // Bottom wall
             Console.SetCursorPosition(x, y + (height - 1));
             Write('└');
-            Utils.GenerateHorizontalLineMap('─', width - 2);
+            Write(new string('─', width - 2));
             Write('┘');
         }
-        #endregion
 
-        static public void GenerateVerticalLineMap(char c, int len, int x, int y)
+        public static void GenerateVerticalLine(char c, int len, int x, int y)
         {
             int l = y + len;
             for (int i = y; i < l; i++)
@@ -157,6 +156,7 @@ namespace fwod
                 Write(c);
             }
         }
+        #endregion
 
         #region Clear
         /// <summary>

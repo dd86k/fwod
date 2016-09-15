@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 /*
     A Person.
@@ -15,12 +14,20 @@ namespace fwod
 
     static class EnemyTypeHelper
     {
-        public static float GetModifier(this EnemyType t)
+        public static float GetHPModifier(this EnemyType t)
         {
             switch (t)
             {
                 // Common enemies
                 default: return 1.8f;
+            }
+        }
+
+        public static float GetMoneyModifier(this EnemyType t)
+        {
+            switch (t)
+            {
+                default: return 0.2f;
             }
         }
     }
@@ -46,15 +53,12 @@ namespace fwod
             {
                 if (value != _x)
                 {
-                    char g = MapManager.Map[_y, value];
-                    bool solid = g.IsSolidObject();
-                    bool someone = Game.IsSomeonePresentAt(Game.CurrentFloor, value, _y);
-                    if (!solid)
+                    if (!MapManager.Map[_y, value].IsSolidObject())
                     {
-                        if (someone)
+                        if (Game.IsSomeonePresentAt(Game.CurrentFloor, value, _y))
                         {
                             Person futrPerson =
-                                Game.GetPersonObjectAt(Game.CurrentFloor, value, Y);
+                                Game.GetPersonObjectAt(Game.CurrentFloor, value, _y);
 
                             if (futrPerson != this && futrPerson is Enemy)
                             {
@@ -81,15 +85,12 @@ namespace fwod
             {
                 if (value != _y)
                 {
-                    char g = MapManager.Map[value, _x];
-                    bool solid = g.IsSolidObject();
-                    bool someone = Game.IsSomeonePresentAt(Game.CurrentFloor, _x, value);
-                    if (!solid)
+                    if (!MapManager.Map[value, _x].IsSolidObject())
                     {
-                        if (someone)
+                        if (Game.IsSomeonePresentAt(Game.CurrentFloor, _x, value))
                         {
                             Person futrPerson =
-                                Game.GetPersonObjectAt(Game.CurrentFloor, X, value);
+                                Game.GetPersonObjectAt(Game.CurrentFloor, _x, value);
 
                             if (futrPerson != this && futrPerson is Enemy)
                             {
@@ -114,12 +115,8 @@ namespace fwod
             Console.SetCursorPosition(pastX, pastY);
             Console.Write(pastchar == '\0' ? ' ' : pastchar);
 
-            // Update values
-            _y = newY;
-            _x = newX;
-
             // Move player
-            Console.SetCursorPosition(newX, newY);
+            Console.SetCursorPosition(_x = newX, _y = newY);
             Console.Write(Char);
 
             if (this is Player)
@@ -209,75 +206,75 @@ namespace fwod
             get; set;
         }
 
-        byte[] _s;
+        ushort[] _s;
         /// <summary>
         /// Strength
         /// </summary>
-        public byte S1
+        public ushort S1
         {
             get { return _s[0] ; }
             // Check overflow.
-            set { _s[0] = value + 1 == 0 ? _s[0] = 0xff : _s[0] = value; }
+            set { _s[0] = value > 0xff ? _s[0] = 0xff : _s[0] = value; }
         }
         
         /// <summary>
         /// Dexterity
         /// </summary>
-        public byte S2
+        public ushort S2
         {
             get { return _s[1]; }
             // Check overflow.
-            set { _s[1] = value + 1 == 0 ? _s[1] = 0xff : _s[1] = value; }
+            set { _s[1] = value > 0xff ? _s[1] = 0xff : _s[1] = value; }
         }
         
         /// <summary>
         /// Agility
         /// </summary>
-        public byte S3
+        public ushort S3
         {
             get { return _s[2]; }
             // Check overflow.
-            set { _s[2] = value + 1 == 0 ? _s[2] = 0xff : _s[2] = value; }
+            set { _s[2] = value > 0xff ? _s[2] = 0xff : _s[2] = value; }
         }
         
         /// <summary>
         /// Sight
         /// </summary>
-        public byte S4
+        public ushort S4
         {
             get { return _s[3]; }
             // Check overflow.
-            set { _s[3] = value + 1 == 0 ? _s[3] = 0xff : _s[3] = value; }
+            set { _s[3] = value > 0xff ? _s[3] = 0xff : _s[3] = value; }
         }
         
         /// <summary>
         /// 
         /// </summary>
-        public byte S5
+        public ushort S5
         {
             get { return _s[4]; }
             // Check overflow.
-            set { _s[4] = value + 1 == 0 ? _s[4] = 0xff : _s[4] = value; }
+            set { _s[4] = value > 0xff ? _s[4] = 0xff : _s[4] = value; }
         }
         
         /// <summary>
         /// 
         /// </summary>
-        public byte S6
+        public ushort S6
         {
             get { return _s[5]; }
             // Check overflow.
-            set { _s[5] = value + 1 == 0 ? _s[5] = 0xff : _s[5] = value; }
+            set { _s[5] = value > 0xff ? _s[5] = 0xff : _s[5] = value; }
         }
         
         /// <summary>
         /// 
         /// </summary>
-        public byte S7
+        public ushort S7
         {
             get { return _s[6]; }
             // Check overflow.
-            set { _s[6] = value + 1 == 0 ? _s[6] = 0xff : _s[6] = value; }
+            set { _s[6] = value > 0xff ? _s[6] = 0xff : _s[6] = value; }
         }
         #endregion
 
@@ -327,7 +324,7 @@ namespace fwod
         #endregion
 
         #region Inventory
-        public List<Item> Inventory { get; }
+        public Inventory Inventory { get; }
         #endregion
         #endregion
 
@@ -340,18 +337,16 @@ namespace fwod
 
         public Person(int x, int y, short hp, bool initialize = true)
         {
-            _hp = hp;
-            _maxhp = _hp;
-            _money = (int)(hp * 0.5);
+            _maxhp = _hp = hp;
             _x = x;
             _y = y;
-            _s = new byte[7];
+            _s = new ushort[7];
             for (int i = 0; i < 7; _s[i++]++);
             Char = 'P';
             //TODO: Left and right weapon?
             EquipedWeapon = new Weapon("Fists", 0);
             EquipedArmor = new Armor("Shirt", 0);
-            Inventory = new List<Item>();
+            Inventory = new Inventory();
 
             if (initialize)
                 Initialize();
@@ -373,16 +368,16 @@ namespace fwod
         /// <summary>
         /// Generates a bubble for this Person.
         /// </summary>
-        /// <param name="pStartX">Top starting position</param>
-        /// <param name="pStartY">Left starting position</param>
-        /// <param name="pWidth">Bubble width</param>
-        /// <param name="pHeight">Bubble height</param>
-        void GenerateBubble(int pStartX, int pStartY, int pWidth, int pHeight)
+        /// <param name="x">Top starting position</param>
+        /// <param name="y">Left starting position</param>
+        /// <param name="width">Bubble width</param>
+        /// <param name="height">Bubble height</param>
+        void GenerateBubble(int x, int y, int width, int height)
         {
-            Utils.GenerateBox(pStartX, pStartY, pWidth, pHeight);
+            Utils.GenerateBox(x, y, width, height);
 
             // Bubble chat "connector"
-            if (pStartY < Y) // Over Person
+            if (y < Y) // Over Person
             {
                 Console.SetCursorPosition(X, Y - 2);
                 Console.Write('┬');
@@ -625,12 +620,6 @@ namespace fwod
             Char = '@';
             Name = null;
         }
-
-        //TODO: ShowInventory(void)
-        public void ShowInventory()
-        {
-
-        }
     }
     #endregion
 
@@ -640,8 +629,9 @@ namespace fwod
         public Enemy(int x, int y, EnemyType type, int level)
             : base(x, y)
         {
-            HP = MaxHP = (ushort)(level * type.GetModifier());
-            Char = 'E';
+            HP = MaxHP = (ushort)(level * type.GetHPModifier());
+            Money = (int)(HP * 0.5);
+            Char = '&';
         }
         
         public EnemyType Race { get; }

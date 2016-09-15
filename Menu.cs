@@ -190,7 +190,7 @@ namespace fwod
                     break;
 
                 case MenuItemType.ShowInventory:
-                    Game.MainPlayer.ShowInventory();
+                    Game.MainPlayer.Inventory.Show();
                     break;
 
                 case MenuItemType.ShowStats:

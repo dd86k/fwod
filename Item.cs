@@ -61,11 +61,11 @@
 
         }
 
-        public Weapon(string name, int baseDamage, WeaponModifier weaponmod)
+        public Weapon(string name, int baseDamage, WeaponModifier weaponMod)
             : base(name)
         {
             BaseDamage = baseDamage;
-            Enhancement = weaponmod;
+            Enhancement = weaponMod;
         }
         #endregion
 

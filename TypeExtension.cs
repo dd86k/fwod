@@ -13,24 +13,6 @@ namespace fwod
         {
             return SolidObjects.Contains(c.ToString());
         }
-
-        /// <summary>
-        /// Returns true if the char is an enemy
-        /// </summary>
-        /// <param name="c">Char</param>
-        /// <returns>True if player</returns>
-        public static bool IsPersonObject(this char c)
-        {
-            foreach (Person Enemy in Game.PeopleList[Game.CurrentFloor])
-            {
-                // Return true if we find it in the list
-                if (Enemy.Char == c)
-                    return true;
-            }
-
-            // Return false if not found
-            return false;
-        }
         
         /// <summary>
         /// Returns the longuest string in a string array.

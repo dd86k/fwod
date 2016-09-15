@@ -52,16 +52,6 @@ namespace fwod
             Console.SetCursorPosition(x, y);
             Console.Write(new string(c, len));
         }
-
-        static public void GenerateHorizontalLineMap(char c, int len)
-        {
-            GenerateHorizontalLineMap(c, Console.CursorLeft, Console.CursorTop, len);
-        }
-        
-        static public void GenerateHorizontalLineMap(char c, int x, int y, int len)
-        {
-            MapManager.Write(new string(c, len), x, y);
-        }
         #endregion
 
         #region GenV

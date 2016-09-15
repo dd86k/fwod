@@ -34,7 +34,7 @@ namespace fwod
             Console.ResetColor();
 
 #if DEBUG
-            //args = new string[] { "-Pn", "AAAA" };
+            //args = new string[] { "-Pn", "AAAA", "-S" };
 #endif
 
             try
@@ -113,14 +113,10 @@ namespace fwod
             MapManager.Map = new char[Utils.WindowHeight, Utils.WindowWidth];
 
             // Generate the 'main' box
-            MapManager.GenerateBox(
-                1, 1, Utils.WindowWidth - 2, Utils.WindowHeight - 3
-            );
+            MapManager.GenerateBox(1, 1, Utils.WindowWidth - 2, Utils.WindowHeight - 3);
 
             // Add stranger
-            Person Stranger = new Person(
-                Utils.WindowWidth / 4, Utils.WindowHeight / 2
-            );
+            Person Stranger = new Person(Utils.WindowWidth / 4, Utils.WindowHeight / 2);
             Game.PeopleList = new List<List<Person>>();
             Game.PeopleList.Add(new List<Person>());
             Game.PeopleList[Game.CurrentFloor].Add(Stranger);

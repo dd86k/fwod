@@ -68,6 +68,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Inventory.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="MapManager.cs" />
     <Compile Include="Game.cs" />
