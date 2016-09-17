@@ -44,14 +44,11 @@ namespace fwod
 
         #region People
         /// <summary>
-        /// List of people in every levels.
-        /// </summary>
-        public static List<List<Person>> PeopleList = new List<List<Person>>();
-
-        /// <summary>
         /// Main player
         /// </summary>
         public static Player MainPlayer;
+
+        public static PeopleManager PeopleList;
 
         /// <summary>
         /// Determine the Player with position
@@ -124,6 +121,7 @@ namespace fwod
         public static void Log(string text)
         {
             //TODO: Clean this clutter.
+            // Idea: Remove the array and use the substrings directly.
             string[] Lines = new string[] { text };
             int MaxLength = Utils.WindowWidth - 2;
             string MoreText = " -- More --";

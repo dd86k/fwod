@@ -5,6 +5,8 @@ using System.Collections.Generic;
     Menu system
 */
 
+//TODO: DialogResponse
+
 namespace fwod
 {
     public enum MenuItemType : byte
@@ -12,11 +14,17 @@ namespace fwod
         Information,
         Seperator,
         Return,
-        ShowStats,
+        ShowStatistics,
         Load,
         Save,
         Quit,
-        ShowInventory
+        ShowInventory,
+        Yes, No, Cancel // "Dialog"-type
+    }
+
+    public enum MenuResponse
+    {
+        Yes, No, Cancel
     }
 
     class Menu
@@ -26,12 +34,15 @@ namespace fwod
             return new Menu(
                 new MenuItem("Return", MenuItemType.Return),
                 new MenuItem(),
-                new MenuItem("Inventory", MenuItemType.ShowInventory),
+                new MenuItem("Abilities"),
+                new MenuItem("Inventory"),//, MenuItemType.ShowInventory),
                 new MenuItem(),
-                new MenuItem("Statistics", MenuItemType.ShowStats),
+                new MenuItem("Statistics", MenuItemType.ShowStatistics),
                 new MenuItem(),
-                new MenuItem("Load", MenuItemType.Load),
-                new MenuItem("Save", MenuItemType.Save),
+                new MenuItem("Load"),// MenuItemType.Load),
+                new MenuItem("Save"),// MenuItemType.Save),
+                new MenuItem(),
+                new MenuItem("Settings"),
                 new MenuItem(),
                 new MenuItem("Quit", MenuItemType.Quit)
             );
@@ -40,6 +51,7 @@ namespace fwod
         const int MENU_WIDTH = 40;
         const int MENU_TOP = 4;
         public bool InMenu { get; private set; }
+        public MenuResponse Response { get; private set; }
         List<MenuItem> MenuItemList { get; }
         
         int PastMenuIndex = 0, MenuIndex = 0, LeftPosition = 0;
@@ -193,7 +205,7 @@ namespace fwod
                     Game.MainPlayer.Inventory.Show();
                     break;
 
-                case MenuItemType.ShowStats:
+                case MenuItemType.ShowStatistics:
                     ClearMenu(false);
                     new Menu(true,
                         new MenuItem($"Steps taken: {Game.Statistics.StepsTaken}"),

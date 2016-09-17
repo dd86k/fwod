@@ -5,11 +5,18 @@
     Can be a Player, Enemy, etc.
 */
 
+//TODO: Make strength a defense thing (0.2 ratio)
+
 namespace fwod
 {
     public enum EnemyType
     {
         Rat, 
+    }
+
+    public enum EnemyModifier
+    {
+        Weak, Strong
     }
 
     static class EnemyTypeHelper
@@ -329,26 +336,26 @@ namespace fwod
         #endregion
 
         #region Construction
-        public Person(int pX, int pY)
-            : this(pX, pY, 10)
+        public Person(int pX, int pY) : this(pX, pY, 10)
         {
 
         }
 
-        public Person(int x, int y, short hp, bool initialize = true)
+        public Person(int x, int y, short hp = 10,
+            char c = 'P', bool init = true)
         {
             _maxhp = _hp = hp;
             _x = x;
             _y = y;
             _s = new ushort[7];
-            for (int i = 0; i < 7; _s[i++]++);
-            Char = 'P';
+            for (int i = 0; i < 7; ++_s[i++]);
+            Char = c;
             //TODO: Left and right weapon?
             EquipedWeapon = new Weapon("Fists", 0);
             EquipedArmor = new Armor("Shirt", 0);
             Inventory = new Inventory();
 
-            if (initialize)
+            if (init)
                 Initialize();
         }
         #endregion
@@ -377,14 +384,14 @@ namespace fwod
             Utils.GenerateBox(x, y, width, height);
 
             // Bubble chat "connector"
-            if (y < Y) // Over Person
+            if (y < _y) // Over Person
             {
-                Console.SetCursorPosition(X, Y - 2);
+                Console.SetCursorPosition(_x, _y - 1);
                 Console.Write('┬');
             }
             else // Under Person
             {
-                Console.SetCursorPosition(X, Y + 2);
+                Console.SetCursorPosition(_x, _y + 1);
                 Console.Write('┴');
             }
         }
@@ -396,10 +403,10 @@ namespace fwod
         void ClearBubble(int length)
         {
             MapManager.RedrawMap(
-                X - (length / 2) + (BUBBLE_PADDING_HORIZONTAL * 2),
+                X - (length / 2) - (BUBBLE_PADDING_HORIZONTAL * 2) - 1,
                 Y - (length / BUBBLE_TEXT_MAXLEN) - 3,
                 length + (BUBBLE_PADDING_HORIZONTAL * 2) + 2,
-                (length / (BUBBLE_TEXT_MAXLEN + 1)) + 3
+                (length / (BUBBLE_TEXT_MAXLEN + 1)) + 4
             );
         }
 
@@ -452,7 +459,7 @@ namespace fwod
         /// </summary>
         /// <param name="lines">Lines of dialog</param>
         /// <param name="wait">Wait for keydown</param>
-        public void Say(string[] lines, bool wait)
+        public void Say(string[] lines, bool wait = true)
         {
             //TODO: Clean this clutter.
             int arrlen = lines.Length;
@@ -460,8 +467,8 @@ namespace fwod
                 lines.GetLonguestStringLength() : lines[0].Length;
             int width = strlen + (BUBBLE_PADDING_HORIZONTAL * 2) + 2;
             int height = arrlen + 2;
-            int startX = X - (strlen / 2);
-            int startY = Y - (arrlen) - 3;
+            int startX = X - (width / 2);
+            int startY = Y - (height);
 
             // Re-locate startX if it goes further than the display buffer
             if (startX + width > Utils.WindowWidth)
@@ -471,7 +478,7 @@ namespace fwod
 
             // Re-locate startY if it goes further than the display buffer
             if (startY > Utils.WindowWidth)
-                startY = Utils.WindowWidth - (arrlen - 2);
+                startY = Utils.WindowWidth - (width - 2);
             else if (startY < 3)
                 startY = 3;
 
@@ -615,9 +622,8 @@ namespace fwod
             : this(Utils.WindowWidth / 2, Utils.WindowHeight / 2) {}
 
         public Player(int X, int Y)
-            : base(X, Y)
+            : base(X, Y, 10, '@')
         {
-            Char = '@';
             Name = null;
         }
     }
@@ -626,12 +632,10 @@ namespace fwod
     #region Enemy
     class Enemy : Person
     {
-        public Enemy(int x, int y, EnemyType type, int level)
-            : base(x, y)
+        public Enemy(int x, int y, EnemyType type, int level, bool initialize = true)
+            : base(x, y, (short)(level * type.GetHPModifier()), '&')
         {
-            HP = MaxHP = (ushort)(level * type.GetHPModifier());
             Money = (int)(HP * 0.5);
-            Char = '&';
         }
         
         public EnemyType Race { get; }

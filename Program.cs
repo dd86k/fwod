@@ -7,6 +7,8 @@ using System.Collections.Generic;
 
 //TODO: Error enumeration?
 //TODO: Consider adding Person to People list automatically at construction time.
+//TODO: StartMenu
+//TODO: Consider making modifiers a flag
 
 namespace fwod
 {
@@ -73,6 +75,11 @@ namespace fwod
                     case "-skipintro":
                         PlayIntro = false;
                         break;
+
+                    /*case "-L":
+                    case "-load":
+
+                        break;*/
 #if DEBUG
                     case "--showmeme":
                         Misc.Wunk(); // :^)
@@ -84,6 +91,7 @@ namespace fwod
             // -- Before the game --
             Console.Clear();
             Console.Title = AssemblyName + " " + ProjectVersion;
+            MapManager.Map = new char[Utils.WindowHeight, Utils.WindowWidth];
 
             if (PlayIntro)
             {
@@ -108,36 +116,34 @@ namespace fwod
                 Console.ReadKey(true);
                 Console.Clear();
             }
-
-            #region Initialization
-            MapManager.Map = new char[Utils.WindowHeight, Utils.WindowWidth];
-
+            
             // Generate the 'main' box
             MapManager.GenerateBox(1, 1, Utils.WindowWidth - 2, Utils.WindowHeight - 3);
 
             // Add stranger
-            Person Stranger = new Person(Utils.WindowWidth / 4, Utils.WindowHeight / 2);
-            Game.PeopleList = new List<List<Person>>();
-            Game.PeopleList.Add(new List<Person>());
-            Game.PeopleList[Game.CurrentFloor].Add(Stranger);
 
             // Initialize
             Game.MainPlayer.Initialize();
+            Game.PeopleList = new PeopleManager();
 
-            Stranger.Char = 'S';
-            Stranger.Initialize();
-            
-            Enemy TestRat = new Enemy(Utils.WindowWidth - 5, 5, EnemyType.Rat, 1);
-            Game.PeopleList[Game.CurrentFloor].Add(TestRat);
-            TestRat.Initialize();
-            #endregion
+
+            Game.PeopleList[0].Add(
+                new Enemy(Utils.WindowWidth - 5, 5, EnemyType.Rat, 1)
+            );
 
             #region Intro
             if (PlayIntro)
             {
+                Game.PeopleList.CreatePerson(
+                    Utils.WindowWidth / 4, Utils.WindowHeight / 2,
+                    1, 'S', "Stranger"
+                );
+
                 Game.Log("Dialog...");
 
                 Game.MainPlayer.Say("Ah! Where am I?");
+
+                Person Stranger = Game.PeopleList["Stranger"];
 
                 Stranger.Say("Oh, you're awake... What is your name?");
 
@@ -194,7 +200,6 @@ namespace fwod
             }
             else
             {
-                Stranger.Destroy();
                 Game.QuickInitialize();
             }
             #endregion
