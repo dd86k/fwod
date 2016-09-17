@@ -10,6 +10,8 @@ Inspired from [NetHack](https://en.wikipedia.org/wiki/NetHack), fwod is a roguel
 
 Mono compatible.
 
+Nightly builds are available [here](http://cdn.skildust.com/osp/fwod/nightly/).
+
 ## Notes
 
 - Estimated completion: 10%

@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace fwod
 {
-    class Inventory
+    class InventoryManager
     {
         int INV_ROW = 4;
         int INV_COL = 10;
 
         public List<Item> Items { get; }
 
-        public Inventory()
+        public InventoryManager()
         {
             Items = new List<Item>();
         }

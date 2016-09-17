@@ -68,7 +68,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Inventory.cs" />
+    <Compile Include="InventoryManager.cs" />
     <Compile Include="PeopleManager.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="MapManager.cs" />

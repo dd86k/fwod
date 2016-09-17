@@ -331,7 +331,7 @@ namespace fwod
         #endregion
 
         #region Inventory
-        public Inventory Inventory { get; }
+        public InventoryManager Inventory { get; }
         #endregion
         #endregion
 
@@ -353,7 +353,7 @@ namespace fwod
             //TODO: Left and right weapon?
             EquipedWeapon = new Weapon("Fists", 0);
             EquipedArmor = new Armor("Shirt", 0);
-            Inventory = new Inventory();
+            Inventory = new InventoryManager();
 
             if (init)
                 Initialize();
