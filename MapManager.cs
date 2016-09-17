@@ -5,6 +5,8 @@ using System.Collections.Generic;
     Rendering for the multi-layer system.
 */
 
+//TODO: Re-do the system where the camera follows the player instead
+
 namespace fwod
 {
     static class MapManager

@@ -32,7 +32,7 @@
         }
     }
 
-    #region Item base class
+    #region Item base
     class Item
     {
         #region Constructors
@@ -43,10 +43,7 @@
         #endregion
 
         #region Object properties
-        public string Name
-        {
-            get;
-        }
+        public string Name { get; }
         #endregion
     }
     #endregion
@@ -54,27 +51,21 @@
     #region Weapons
     class Weapon : Item
     {
-        #region Construction
         public Weapon(string name, int baseDamage)
-            : this(name, baseDamage, WeaponModifier.Normal)
-        {
+            : this(name, baseDamage, WeaponModifier.Normal) {}
 
-        }
-
-        public Weapon(string name, int baseDamage, WeaponModifier weaponMod)
+        public Weapon(string name, int baseDamage,
+            WeaponModifier weaponMod = WeaponModifier.Normal)
             : base(name)
         {
             BaseDamage = baseDamage;
             Enhancement = weaponMod;
         }
-        #endregion
 
-        #region Object properties
         public new string Name => $"{Enhancement} {base.Name}";
         public int BaseDamage { get; }
         public ushort Damage => (ushort)Enhancement.GetDamage(BaseDamage);
         public WeaponModifier Enhancement { get; }
-        #endregion
     }
 
     class Sword : Weapon

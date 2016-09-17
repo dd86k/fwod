@@ -7,6 +7,20 @@ using System.Text;
 
 namespace fwod
 {
+    [Flags]
+    public enum Borders : byte
+    {
+        Top = 1, Right = 2, Bottom = 4, Left = 8,
+        All = Top | Right | Bottom | Left
+    }
+
+    [Flags]
+    public enum Corners : byte
+    {
+        TopLeft = 1, TopRight = 2, BottomRight = 4, BottomLeft = 8,
+        All = TopLeft | TopRight | BottomRight | BottomLeft
+    }
+
     static class Utils
     {
         #region Properties
@@ -21,13 +35,18 @@ namespace fwod
         #endregion
 
         #region Box generation
+        /// <summary>
+        /// Generates a simple box.
+        /// </summary>
+        /// <param name="x">Left position.</param>
+        /// <param name="y">Top position.</param>
+        /// <param name="width">Width.</param>
+        /// <param name="height">Height.</param>
         public static void GenerateBox(int x, int y, int width, int height)
         {
             // Top wall
             Console.SetCursorPosition(x, y);
-            Console.Write('┌');
-            Console.Write(new string('─', width - 2));
-            Console.Write('┐');
+            Console.Write($"┌{new string('─', width - 2)}┐");
 
             // Side walls
             GenerateVerticalLine('│', height - 2, x, y + 1);
@@ -35,9 +54,128 @@ namespace fwod
 
             // Bottom wall
             Console.SetCursorPosition(x, y + (height - 1));
-            Console.Write('└');
-            Console.Write(new string('─', width - 2));
-            Console.Write('┘');
+            Console.Write($"└{new string('─', width - 2)}┘");
+        }
+
+        /// <summary>
+        /// Generates a custom box, might be a bit slower.
+        /// </summary>
+        /// <param name="x">Left position.</param>
+        /// <param name="y">Top position.</param>
+        /// <param name="width">Width.</param>
+        /// <param name="height">Height.</param>
+        /// <param name="borders"></param>
+        /// <param name="corners"></param>
+        public static void GenerateCustomBox(int x, int y, int width, int height,
+            Borders borders = Borders.All, Corners corners = Corners.All)
+        {
+            if (corners.HasFlag(Corners.TopLeft))
+            {
+                Console.SetCursorPosition(x, y);
+                Console.Write('┌');
+            }
+
+            if (borders.HasFlag(Borders.Top))
+            {
+                Console.SetCursorPosition(x + 1, y);
+                Console.Write(new string('─', width - 2));
+            }
+
+            if (corners.HasFlag(Corners.TopRight))
+            {
+                Console.SetCursorPosition(x + width - 1, y);
+                Console.Write('┐');
+            }
+
+            // Side walls
+            if (borders.HasFlag(Borders.Left))
+                GenerateVerticalLine('│', height - 2, x, y + 1);
+            if (borders.HasFlag(Borders.Right))
+                GenerateVerticalLine('│', height - 2, x + (width - 1), y + 1);
+
+            // Bottom wall
+            int ym = y + (height - 1);
+
+            if (corners.HasFlag(Corners.BottomLeft))
+            {
+                Console.SetCursorPosition(x, ym);
+                Console.Write('└');
+            }
+
+            if (borders.HasFlag(Borders.Bottom))
+            {
+                Console.SetCursorPosition(x + 1, ym);
+                Console.Write(new string('─', width - 2));
+            }
+            
+            if (corners.HasFlag(Corners.BottomRight))
+            {
+                Console.SetCursorPosition(x + width - 1, ym);
+                Console.Write('┘');
+            }
+        }
+
+        /// <summary>
+        /// Generate a box with a grill in it.
+        /// </summary>
+        /// <param name="x">Left position.</param>
+        /// <param name="y">Top position.</param>
+        /// <param name="columns">Columns.</param>
+        /// <param name="rows">Rows.</param>
+        public static unsafe void GenerateGrill(int x, int y,
+            int columns, int rows)
+        {
+            // Width and height
+            int w = (columns * 2) + 1;
+            int h = (rows * 2);
+            // Top, horizontal, vertical, and bottom lines/buffers.
+            string tbuf = $"┌{new string('┬', w - 2)}┐";
+            string hbuf = $"├{new string('┼', w - 2)}┤";
+            string vbuf = $"│{new string('│', w - 2)}│";
+            string bbuf = $"└{new string('┴', w - 2)}┘";
+
+            fixed (char* pt = tbuf)
+            fixed (char* pv = vbuf)
+            fixed (char* ph = hbuf)
+            fixed (char* pb = bbuf)
+            {
+                for (int i = 1; i < hbuf.Length; i += 2)
+                {
+                    pt[i] = '─';
+                    ph[i] = '─';
+                    pv[i] = ' ';
+                    pb[i] = '─';
+                }
+            }
+
+            bool b = y % 2 == 0;
+
+            int ly = y + h;
+            int iy = y;
+            Console.SetCursorPosition(x, iy++);
+            Console.Write(tbuf);
+            if (b)
+                for (; iy < ly; iy++)
+                {
+                    Console.SetCursorPosition(x, iy);
+
+                    if (iy % 2 == 0)
+                        Console.Write(hbuf);
+                    else
+                        Console.Write(vbuf);
+                }
+            else
+                for (; iy < ly; iy++)
+                {
+                    Console.SetCursorPosition(x, iy);
+
+                    if (iy % 2 == 0)
+                        Console.Write(vbuf);
+                    else
+                        Console.Write(hbuf);
+                }
+            Console.SetCursorPosition(x, iy);
+            Console.Write(bbuf);
         }
         #endregion
 

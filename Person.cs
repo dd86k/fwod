@@ -5,7 +5,7 @@
     Can be a Player, Enemy, etc.
 */
 
-//TODO: Make strength a defense thing (0.2 ratio)
+//TODO: Make strength contribute to defensepoints (0.2 ratio)
 
 namespace fwod
 {
@@ -47,7 +47,7 @@ namespace fwod
         const int BUBBLE_TEXT_MAXLEN = 25;
         #endregion
 
-        #region Object properties
+        #region Properties
         #region Position
         int _x;
         /// <summary>
@@ -285,26 +285,6 @@ namespace fwod
         }
         #endregion
 
-        #region Weapon
-        /// <summary>
-        /// Current EquipedWeapon in this Person.
-        /// </summary>
-        public Weapon EquipedWeapon
-        {
-            get; set;
-        }
-        #endregion
-
-        #region Armor
-        /// <summary>
-        /// Current EquipedArmor in this Person.
-        /// </summary>
-        public Armor EquipedArmor
-        {
-            get; set;
-        }
-        #endregion
-
         #region Money
         int _money;
         /// <summary>
@@ -351,9 +331,9 @@ namespace fwod
             for (int i = 0; i < 7; ++_s[i++]);
             Char = c;
             //TODO: Left and right weapon?
-            EquipedWeapon = new Weapon("Fists", 0);
-            EquipedArmor = new Armor("Shirt", 0);
             Inventory = new InventoryManager();
+
+            //Game.PeopleList[Game.CurrentFloor].Add(this);
 
             if (init)
                 Initialize();
@@ -573,7 +553,7 @@ namespace fwod
         public void Attack(Person person)
         {
             //TODO: Attack algorithm
-            int AttackPoints = ((S1 * 2) + EquipedWeapon.Damage) - EquipedArmor.ArmorPoints;
+            int AttackPoints = ((S1 * 2) + Inventory.Weapon.Damage) - Inventory.Armor.ArmorPoints;
 
             string atk = $": {person.HP} HP - {AttackPoints} = {person.HP -= AttackPoints} HP";
 

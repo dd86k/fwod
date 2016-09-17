@@ -35,7 +35,7 @@ namespace fwod
                 new MenuItem("Return", MenuItemType.Return),
                 new MenuItem(),
                 new MenuItem("Abilities"),
-                new MenuItem("Inventory"),//, MenuItemType.ShowInventory),
+                new MenuItem("Inventory", MenuItemType.ShowInventory),
                 new MenuItem(),
                 new MenuItem("Statistics", MenuItemType.ShowStatistics),
                 new MenuItem(),
@@ -202,6 +202,7 @@ namespace fwod
                     break;
 
                 case MenuItemType.ShowInventory:
+                    ClearMenu(false);
                     Game.MainPlayer.Inventory.Show();
                     break;
 
