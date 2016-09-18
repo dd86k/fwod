@@ -1,15 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+/*TODO: Inventory mockup
+
++-+-+-+-+----------------+
+|o|m| | | Potion         |
++-+-+-+-+                |
+| | | | | Mysterious.    |
++-+-+-+-+                |
+| | | | |                |
++-+-+-+-+ Heals 4 HP.    |
+| | | | |                |
++-+-+-+-+----------------+
+| Weapon: Flashy Sword   |
+| Armour: Dented Meat    |
++------------------------+
+ 
+*/
 
 namespace fwod
 {
     class InventoryManager
     {
         const int INV_ROW = 4;
-        const int INV_COL = 20;
+        const int INV_COL = 10;
         const int MaximumNumberOfItems = INV_COL * INV_ROW;
 
         public Weapon Weapon { get; set; }
@@ -32,7 +46,8 @@ namespace fwod
         {
             Draw();
 
-            Game.Log("Enter=Submenu");
+            //TODO: Inventory instructions
+            //Game.Log("");
 
             bool c = true;
             while (c = Entry());
