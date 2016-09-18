@@ -4,7 +4,7 @@
 
 namespace fwod
 {
-    public static class TypeExtension
+    public static class TypeExtensions
     {
         const string SolidObjects =
             "░▒▓█▄▌▐▀│─┌┐└┘┤┴┬├┼║═╔╗╝╚╣╩╦╠╬╓╖╜╙╢╨╥╟╫╕╛╘╒╡╧╤╞╪";
@@ -32,6 +32,54 @@ namespace fwod
                 }
             }
             return max;
+        }
+
+        public static float GetModificationValue(this Modifier c, int b)
+        {
+            switch (c)
+            {
+                case Modifier.Broken:
+                    return b * 0.5f;
+
+                case Modifier.Rusty:
+                    return b * 0.7f;
+
+                case Modifier.Sharp:
+                    return b * 1.2f;
+
+                case Modifier.Godly:
+                    return b * 2.5f;
+
+                case Modifier.PleaseNerf:
+                    return b * 10;
+
+                default: // Normal
+                    return b;
+            }
+        }
+
+        public static int GetBaseDamage(this WeaponType w)
+        {
+            switch (w)
+            {
+                case WeaponType.Beretta92FS:
+                    return 3;
+
+                case WeaponType.Cutlass:
+                    return 6;
+
+                default: return 1;
+            }
+        }
+
+        public static int GetBaseDefense(this ArmorType a)
+        {
+            switch (a)
+            {
+
+
+                default: return 1;
+            }
         }
     }
 }
