@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 /*
     General game mechanics.
@@ -66,13 +65,7 @@ namespace fwod
 
             return null;
         }
-
-        /// <summary>
-        /// Determine the Player with position
-        /// </summary>
-        /// <param name="x">Future left position</param>
-        /// <param name="y">Future top position</param>
-        /// <returns>Enemy, null if no found</returns>
+        
         public static bool IsSomeonePresentAt(int floor, int x, int y)
         {
             foreach (Person P in PeopleList[floor])

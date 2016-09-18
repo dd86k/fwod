@@ -113,13 +113,13 @@ namespace fwod
 
             fixed (char* p = buffer)
             {
-                for (; y < ly; y++)
+                for (; y < ly; y++, x = ox)
                 {
                     Console.SetCursorPosition(x, y);
                     
-                    for (; x < lx; x++)
+                    for (; x < lx; ++x)
                         p[x] = Map[y, x];
-                    x = ox;
+                    //x = ox;
 
                     Console.Write(buffer);
                 }

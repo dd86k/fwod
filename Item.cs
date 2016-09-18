@@ -7,9 +7,9 @@
 
     public enum WeaponType : byte
     {
-        Unarmed,
+        Fist,
         Cutlass,
-        Beretta92FS
+        Beretta_92_FS
     }
 
     public enum ArmorType : byte
@@ -18,14 +18,16 @@
 
     }
 
-    #region Item base
+    public enum FoodType : byte
+    {
+        Energy_Drink,
+    }
+    
     class Item
     {
 
     }
-    #endregion
-
-    #region Weapons
+    
     /// <summary>
     /// Base class for a weapon.
     /// </summary>
@@ -36,16 +38,15 @@
             Type = weapon;
             Damage = (int)mod.GetModificationValue(weapon.GetBaseDamage());
             Modifier = mod;
+            Name = $"{Modifier} {Type.GetName()}";
         }
         
         public int Damage { get; }
         public WeaponType Type { get; }
         public Modifier Modifier { get; }
-        public string Name => $"{Modifier} {Type}";
+        public string Name { get; }
     }
-    #endregion
 
-    #region Armor
     class Armor : Item
     {
         public Armor(ArmorType armor, Modifier mod = Modifier.Normal)
@@ -53,24 +54,26 @@
             Type = armor;
             Modifier = mod;
             ArmorPoints = (int)mod.GetModificationValue(armor.GetBaseDefense());
+            Name = $"{Modifier} {Type.GetName()}";
         }
 
         public ArmorType Type { get; }
         public Modifier Modifier { get; }
         public int ArmorPoints { get; }
-        public string Name => $"{Modifier} {Type}";
+        public string Name { get; }
     }
-    #endregion
 
-    #region Nutrition
     class Food : Item
     {
-        public Food(string name, int restorePoints)
+        public Food(FoodType food)
         {
-            RestorePoints = restorePoints;
+            Type = food;
+            RestorePoints = food.GetBaseRecovery();
+            Name = food.GetName();
         }
         
+        public FoodType Type { get; }
         public int RestorePoints { get; }
+        public string Name { get; }
     }
-    #endregion
 }

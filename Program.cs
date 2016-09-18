@@ -80,11 +80,19 @@ namespace fwod
                     case "-load":
 
                         break;*/
-#if DEBUG
+
                     case "--showmeme":
                         Misc.Wunk(); // :^)
                         return 0;
-#endif
+
+                    case "-say":
+                        new Person(
+                            Console.WindowWidth / 2,
+                            Console.WindowHeight / 2,
+                            c: '@',
+                            init: true
+                        ).Say(args[i + 1]);
+                        return 0;
                 }
             }
 

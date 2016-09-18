@@ -45,6 +45,7 @@ namespace fwod
         #region Constants
         const int BUBBLE_PADDING_HORIZONTAL = 0;
         const int BUBBLE_TEXT_MAXLEN = 25;
+        const int STAT_MAX = 10;
         #endregion
 
         #region Properties
@@ -217,41 +218,41 @@ namespace fwod
         /// <summary>
         /// Strength
         /// </summary>
-        public ushort S1
+        public ushort Strength
         {
             get { return _s[0] ; }
             // Check overflow.
-            set { _s[0] = value > 0xff ? _s[0] = 0xff : _s[0] = value; }
+            set { _s[0] = value > STAT_MAX ? _s[0] = 0xff : _s[0] = value; }
         }
         
         /// <summary>
         /// Dexterity
         /// </summary>
-        public ushort S2
+        public ushort Dexterity
         {
             get { return _s[1]; }
             // Check overflow.
-            set { _s[1] = value > 0xff ? _s[1] = 0xff : _s[1] = value; }
+            set { _s[1] = value > STAT_MAX ? _s[1] = 0xff : _s[1] = value; }
         }
         
         /// <summary>
         /// Agility
         /// </summary>
-        public ushort S3
+        public ushort Agility
         {
             get { return _s[2]; }
             // Check overflow.
-            set { _s[2] = value > 0xff ? _s[2] = 0xff : _s[2] = value; }
+            set { _s[2] = value > STAT_MAX ? _s[2] = 0xff : _s[2] = value; }
         }
         
         /// <summary>
         /// Sight
         /// </summary>
-        public ushort S4
+        public ushort Sight
         {
             get { return _s[3]; }
             // Check overflow.
-            set { _s[3] = value > 0xff ? _s[3] = 0xff : _s[3] = value; }
+            set { _s[3] = value > STAT_MAX ? _s[3] = 0xff : _s[3] = value; }
         }
         
         /// <summary>
@@ -261,7 +262,7 @@ namespace fwod
         {
             get { return _s[4]; }
             // Check overflow.
-            set { _s[4] = value > 0xff ? _s[4] = 0xff : _s[4] = value; }
+            set { _s[4] = value > STAT_MAX ? _s[4] = 0xff : _s[4] = value; }
         }
         
         /// <summary>
@@ -271,7 +272,7 @@ namespace fwod
         {
             get { return _s[5]; }
             // Check overflow.
-            set { _s[5] = value > 0xff ? _s[5] = 0xff : _s[5] = value; }
+            set { _s[5] = value > STAT_MAX ? _s[5] = 0xff : _s[5] = value; }
         }
         
         /// <summary>
@@ -281,7 +282,7 @@ namespace fwod
         {
             get { return _s[6]; }
             // Check overflow.
-            set { _s[6] = value > 0xff ? _s[6] = 0xff : _s[6] = value; }
+            set { _s[6] = value > STAT_MAX ? _s[6] = 0xff : _s[6] = value; }
         }
         #endregion
 
@@ -332,8 +333,8 @@ namespace fwod
             Char = c;
             //TODO: Left and right weapon?
             Inventory = new InventoryManager();
-            Inventory.Armor = new Armor(ArmorType.Shirt, 0);
-            Inventory.Weapon = new Weapon(WeaponType.Unarmed, 1);
+            Inventory.Armor = new Armor(ArmorType.Shirt);
+            Inventory.Weapon = new Weapon(WeaponType.Fist);
 
             //Game.PeopleList[Game.CurrentFloor].Add(this);
 
@@ -554,15 +555,23 @@ namespace fwod
         #region Attack
         public void Attack(Person person)
         {
-            //TODO: Attack algorithm
-            int AttackPoints = ((S1 * 2) + Inventory.Weapon.Damage) - Inventory.Armor.ArmorPoints;
+            //TODO: Accuracy algorithm
 
-            string atk = $": {person.HP} HP - {AttackPoints} = {person.HP -= AttackPoints} HP";
+            int dam = Inventory.Weapon.Damage;
+            int def = person.Inventory.Armor.ArmorPoints;
+            
+            // Attack points
+            int ap =
+                Inventory.Weapon.Type.IsGun() ?
+                dam - def :
+                ((Strength * dam) + dam) - (def);
+
+            string atk = $": {person.HP} HP - {ap} = {person.HP -= ap} HP";
 
             if (person.HP <= 0)
                 atk += $" -- Dead! You earn {person.Money}$!";
 
-            Game.Statistics.DamageDealt += (uint)AttackPoints;
+            Game.Statistics.DamageDealt += (uint)ap;
 
             if (person is Enemy)
                 Game.Log(((Enemy)person).Race + atk);

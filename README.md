@@ -8,15 +8,17 @@
 
 Inspired from [NetHack](https://en.wikipedia.org/wiki/NetHack), fwod is a roguelike, turn-based, dungeon crawling game.
 
-Mono compatible.
+Based around the early 1990s, one day, you wake up in a mysterious bunker 
 
-Nightly builds are available [here](http://cdn.skildust.com/osp/fwod/nightly/).
+fwod is Mono compatible.
+
+Nightly builds are available [here](http://cdn.skildust.com/osp/fwod/nightly/), by the thanks of my girlfriend, @sKiLdUsT.
 
 ## Notes
 
 - Estimated completion: 10%
 - Fixed 80x24 resolution for **maximum** compatiblity (ISO/ANSI screen size).
-- A D (programming language) port is planned after this game is done.
+- A D (programming language) port is planned after this game is completed.
 
 ## License
 [MIT License](LICENSE)

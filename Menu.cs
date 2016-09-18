@@ -197,6 +197,9 @@ namespace fwod
         {
             switch (MenuItemList[MenuIndex].Type)
             {
+                case MenuItemType.Yes:
+                    
+                    break;
                 case MenuItemType.Return:
                     InMenu = false;
                     break;

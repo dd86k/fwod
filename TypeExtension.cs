@@ -58,11 +58,15 @@ namespace fwod
             }
         }
 
+        /*
+         * This section is only used for Item.cs
+         */
+
         public static int GetBaseDamage(this WeaponType w)
         {
             switch (w)
             {
-                case WeaponType.Beretta92FS:
+                case WeaponType.Beretta_92_FS:
                     return 3;
 
                 case WeaponType.Cutlass:
@@ -79,6 +83,35 @@ namespace fwod
 
 
                 default: return 1;
+            }
+        }
+
+        public static int GetBaseRecovery(this FoodType t)
+        {
+            switch (t)
+            {
+                case FoodType.Energy_Drink:
+                    return 10;
+
+                default: return 1;
+            }
+        }
+        
+        public static string GetName(this WeaponType t)
+            => t.ToString().Replace('_', ' ');
+        public static string GetName(this ArmorType t)
+            => t.ToString().Replace('_', ' ');
+        public static string GetName(this FoodType t)
+            => t.ToString().Replace('_', ' ');
+
+        public static bool IsGun(this WeaponType t)
+        {
+            switch (t)
+            {
+                case WeaponType.Beretta_92_FS:
+                    return true;
+
+                default: return false;
             }
         }
     }

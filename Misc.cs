@@ -1,5 +1,4 @@
-﻿#if DEBUG
-using System;
+﻿using System;
 
 /*
     Unrelated of the game, for amusement.
@@ -40,4 +39,3 @@ namespace fwod
         }
     }
 }
-#endif
