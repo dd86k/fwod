@@ -332,6 +332,8 @@ namespace fwod
             Char = c;
             //TODO: Left and right weapon?
             Inventory = new InventoryManager();
+            Inventory.Armor = new Armor(ArmorType.Shirt, 0);
+            Inventory.Weapon = new Weapon(WeaponType.Unarmed, 1);
 
             //Game.PeopleList[Game.CurrentFloor].Add(this);
 

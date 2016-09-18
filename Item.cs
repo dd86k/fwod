@@ -5,7 +5,25 @@
         Normal, Broken, Rusty, Sharp, Godly, PleaseNerf
     }
 
-    static class ModifierHelper
+    public enum WeaponType : byte
+    {
+        Unarmed,
+        Cutlass,
+        Beretta92FS
+    }
+
+    public enum ArmorType : byte
+    {
+        Shirt,
+
+    }
+
+    public enum ArmorModifier : byte
+    {
+        Normal,
+    }
+
+    static class WeaponHelper
     {
         public static float GetDamage(this WeaponModifier c, int baseDamage)
         {
@@ -30,79 +48,64 @@
                     return baseDamage;
             }
         }
+        /*
+        public static int GetBaseDamage(this GunType gun)
+        {
+        }
+        */
     }
 
     #region Item base
     class Item
     {
-        #region Constructors
-        public Item(string name)
-        {
-            Name = name;
-        }
-        #endregion
 
-        #region Object properties
-        public string Name { get; }
-        #endregion
     }
     #endregion
 
     #region Weapons
+    /// <summary>
+    /// Base class for a weapon.
+    /// </summary>
     class Weapon : Item
     {
-        public Weapon(string name, int baseDamage)
-            : this(name, baseDamage, WeaponModifier.Normal) {}
-
-        public Weapon(string name, int baseDamage,
+        public Weapon(WeaponType weapon, int baseDamage,
             WeaponModifier weaponMod = WeaponModifier.Normal)
-            : base(name)
         {
             BaseDamage = baseDamage;
-            Enhancement = weaponMod;
+            Modifier = weaponMod;
         }
-
-        public new string Name => $"{Enhancement} {base.Name}";
+        
         public int BaseDamage { get; }
-        public ushort Damage => (ushort)Enhancement.GetDamage(BaseDamage);
-        public WeaponModifier Enhancement { get; }
-    }
-
-    class Sword : Weapon
-    {
-        #region Construction
-        public Sword(string name, int baseDamage)
-            : base(name, baseDamage)
-        {
-
-        }
-        #endregion
+        public ushort Damage => (ushort)Modifier.GetDamage(BaseDamage);
+        public WeaponType Type { get; }
+        public WeaponModifier Modifier { get; }
+        public string Name => $"{Modifier} {Type}";
     }
     #endregion
 
     #region Armor
     class Armor : Item
     {
-        #region Construstion
-        //TODO: Expand armor to include boots, leggings, etc.
-        public Armor(string name, ushort armorPoints)
-            : base(name)
+        public Armor(ArmorType armor, ushort armorPoints,
+            ArmorModifier mod = ArmorModifier.Normal)
         {
+            Type = armor;
+            Modifier = mod;
             ArmorPoints = armorPoints;
         }
-        #endregion
 
-        #region Properties
+        public ArmorType Type { get; }
+        public ArmorModifier Modifier { get; }
+        //TODO: ap * mod
         public ushort ArmorPoints { get; }
-        #endregion
+        public string Name => $"{Modifier} {Type}";
     }
     #endregion
 
-    #region Drinks
+    #region Nutrition
     class Food : Item
     {
         public Food(string name, int restorePoints)
-            : base(name)
         {
             RestorePoints = restorePoints;
         }

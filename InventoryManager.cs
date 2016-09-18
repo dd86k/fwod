@@ -16,6 +16,13 @@ namespace fwod
         public Armor Armor { get; set; }
         public List<Item> Items { get; }
 
+        // Menu location on screen
+        int _mx, _my;
+        // Menu dimension
+        int _mw, _mh;
+        // Cursor location in the menu
+        int _cx, _cy;
+
         public InventoryManager()
         {
             Items = new List<Item>();
@@ -35,19 +42,27 @@ namespace fwod
 
         unsafe void Draw()
         {
-            int x = (Utils.WindowWidth / 2) - INV_COL;
-            int y = (Utils.WindowHeight / 2) - (INV_ROW * 2);
+            _mx = (Utils.WindowWidth / 2) - INV_COL;
+            _my = (Utils.WindowHeight / 2) - (INV_ROW * 2);
             
-            Utils.GenerateGrill(x, y, INV_COL, INV_ROW);
+            Utils.GenerateGrill(_mx, _my, INV_COL, INV_ROW);
+
+            // Vertical length
+            int vl = (INV_ROW * 2) + 3;
 
             Utils.GenerateCustomBox(
-                x, // x
-                (INV_ROW * 2) + 4, // y
+                _mx, // x
+                vl, // y
                 (INV_COL * 2) + 1, // w
-                3, // h
+                5, // h
                 Borders.Bottom | Borders.Left | Borders.Right,
                 Corners.BottomLeft | Corners.BottomRight
             );
+
+            Console.SetCursorPosition(_mx + 1, vl + 2);
+            Console.Write("W: " + Weapon.Name);
+            Console.SetCursorPosition(_mx + 1, vl + 3);
+            Console.Write("A: " + Armor.Name);
         }
 
         void Update()
