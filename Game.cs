@@ -49,7 +49,7 @@ namespace fwod
         /// </summary>
         public static Player MainPlayer;
 
-        public static FloorManager PeopleList;
+        public static FloorManager People;
 
         /// <summary>
         /// Determine the Player with position
@@ -59,7 +59,7 @@ namespace fwod
         /// <returns>Enemy, null if no found</returns>
         public static Person GetPersonObjectAt(int floor, int x, int y)
         {
-            foreach (Person P in PeopleList[floor])
+            foreach (Person P in People[floor])
             {
                 if (P.X == x && P.Y == y)
                     return P;
@@ -70,7 +70,7 @@ namespace fwod
         
         public static bool IsSomeonePresentAt(int floor, int x, int y)
         {
-            foreach (Person P in PeopleList[floor])
+            foreach (Person P in People[floor])
             {
                 if (P.X == x && P.Y == y)
                     return true;

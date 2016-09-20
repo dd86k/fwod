@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 /*
     Entry point of the program.
@@ -8,6 +7,7 @@ using System.Collections.Generic;
 //TODO: Fatal Error enumeration?
 //TODO: StartMenu
 //TODO: Consider making modifiers a flag (???)
+//TODO: SettingsManager (with scrolling page)
 
 namespace fwod
 {
@@ -32,7 +32,7 @@ namespace fwod
             Console.ResetColor();
 
 #if DEBUG
-            //args = new string[] { "-say", "Hi" };
+            args = new string[] { "-tsay", "what's THIS? owo" };
 #endif
 
             try
@@ -44,11 +44,12 @@ namespace fwod
 
             Game.MainPlayer = new Player(44, 12);
             
-            for (int i = 0; i < args.Length; i++)
+            for (int i = 0; i < args.Length; ++i)
             {
                 switch (args[i])
                 {
                     case "/?":
+                    case "-h":
                     case "--help":
                         ShowHelp();
                         return 0;
@@ -83,14 +84,14 @@ namespace fwod
                         Misc.Wunk(); // :^)
                         return 0;
                         
-                    case "-say":
+                    case "-tsay":
                         if (i + 1 < args.Length)
                         {
                             Console.Clear();
                             new Person(
                                 Console.WindowWidth / 2,
                                 Console.WindowHeight / 2,
-                                c: '@',
+                                c: Game.MainPlayer.Char,
                                 init: true
                             ).Say(args[i + 1], true, false);
                         }
@@ -100,7 +101,7 @@ namespace fwod
 
             // -- Before the game --
             Console.Clear();
-            Console.Title = AssemblyName + " " + ProjectVersion;
+            Console.Title = $"{AssemblyName} {ProjectVersion}";
             MapManager.Map = new char[Utils.WindowHeight, Utils.WindowWidth];
 
             if (PlayIntro)
@@ -134,21 +135,21 @@ namespace fwod
 
             // Initialize
             Game.MainPlayer.Initialize();
-            Game.PeopleList = new FloorManager();
+            Game.People = new FloorManager();
 
 
-            Game.PeopleList[0].Add(new Enemy(47, 13, EnemyType.Rat, 1));
+            Game.People[0].Add(new Enemy(47, 13, EnemyType.Rat, 1));
 
             #region Intro
             if (PlayIntro)
             {
-                Game.PeopleList.CreatePerson(34, 12, 1, 'S', "Stranger");
+                Game.People.CreatePerson(34, 12, 1, 'S', "Stranger");
 
                 Game.Log("Dialog...");
 
                 Game.MainPlayer.Say("Ah! Where am I?");
 
-                Person Stranger = Game.PeopleList["Stranger"];
+                Person Stranger = Game.People["Stranger"];
 
                 Stranger.Say("Oh, you're awake... What's your name?");
 
@@ -247,33 +248,35 @@ namespace fwod
                     Game.MainPlayer.MoveRight();
                     break;
 
+                // Select
+                case ConsoleKey.Enter:
+
+                    break;
+
                 // Menu button
                 case ConsoleKey.Escape:
                     Game.MainMenu.Show();
                     break;
             }
 
-            // Game takes a turn.
+            // People take a turn.
             //Game.TakeTurn();
         }
 
         static void ShowHelp()
         {
+            Console.WriteLine(" Any requested help ");
             Console.WriteLine(" Usage:");
             Console.WriteLine("  fwod [<Options>]");
             Console.WriteLine();
             Console.WriteLine("  -Pc, -playerchar    Sets the player's character.");
             Console.WriteLine("  -Pn, -playername    Sets the player's name.");
             Console.WriteLine("  -S,  -skipintro     Skip intro and use defaults.");
-#if DEBUG
             //Console.WriteLine("  --runtests          Run debugging tests.");
             //Console.WriteLine("  --speedtalktest     Run a speed dialog test.");
-            //Console.WriteLine("  -say                Make the player say something and exit.");
-            Console.WriteLine("  --showmeme          yeah");
-#endif
             Console.WriteLine();
-            Console.WriteLine("  --help, /?      Shows this screen");
-            Console.WriteLine("  --version       Shows version");
+            Console.WriteLine("  --help, /?      Shows this screen and exit.");
+            Console.WriteLine("  --version       Shows version and exit.");
             Console.WriteLine();
             Console.WriteLine("Have fun!");
         }

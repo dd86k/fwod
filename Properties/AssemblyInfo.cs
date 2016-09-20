@@ -17,7 +17,7 @@ using System.Runtime.InteropServices;
 // The form "{Major}.{Minor}.*" will automatically update the build and revision,
 // and "{Major}.{Minor}.{Build}.*" will update just the revision.
 #if DEBUG
-[assembly: AssemblyVersion("0.4.*")]
+[assembly: AssemblyVersion("0.4.0.0")]
 #else
 [assembly: AssemblyVersion("1.0.*")]
 #endif

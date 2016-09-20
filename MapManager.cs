@@ -122,7 +122,7 @@ namespace fwod
             }
 
             // Place the people back on screen.
-            foreach (Person peep in Game.PeopleList[Game.CurrentFloor])
+            foreach (Person peep in Game.People[Game.CurrentFloor])
                 peep.Initialize();
 
             Game.MainPlayer.Initialize();

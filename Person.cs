@@ -5,19 +5,23 @@
     Can be a Player, Enemy, etc.
 */
 
+//TODO: Jump.
 //TODO: Do a player-follow camera system.
 /*
  * Player-follow Camera RFC:
  * 
+ * Specifications:
  * - X and Y of the player depends on the map, not the screen.
+ * - Screen refreshes on each turn.
  * 
  * Pros:
  * - Allows much bigger maps with more variety.
+ * - Allows a much bigger viewport (flexible screen size).
  * Cons:
  * - Have to redraw the map every turn.
- * - Use more memory for the map itself.
+ * - Uses more memory for the map itself.
+ * - Uses more processing power for centering calculations and the such.
  */
-//TODO: Make strength contribute to defensepoints (0.2 ratio)
 
 namespace fwod
 {
@@ -619,7 +623,7 @@ namespace fwod
 
             Game.MainPlayer.Money += Money;
             Game.Statistics.MoneyGained += (uint)Money;
-            Game.PeopleList[Game.CurrentFloor].Remove(this);
+            Game.People[Game.CurrentFloor].Remove(this);
 
             if (this is Enemy)
             {
