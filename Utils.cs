@@ -10,14 +10,16 @@ namespace fwod
     [Flags]
     public enum Borders : byte
     {
-        Top = 1, Right = 2, Bottom = 4, Left = 8,
+        Top = 0, Right = 1, Bottom = 2, Left = 4,
+        // 7
         All = Top | Right | Bottom | Left
     }
 
     [Flags]
     public enum Corners : byte
     {
-        TopLeft = 1, TopRight = 2, BottomRight = 4, BottomLeft = 8,
+        TopLeft = 0, TopRight = 1, BottomRight = 2, BottomLeft = 4,
+        // 7
         All = TopLeft | TopRight | BottomRight | BottomLeft
     }
 
@@ -32,6 +34,8 @@ namespace fwod
         /// Initial window width. ANSI/ISO screen size.
         /// </summary>
         public const int WindowWidth = 80;
+
+        public static Random Random = new Random();
         #endregion
 
         #region Box generation
@@ -44,9 +48,11 @@ namespace fwod
         /// <param name="height">Height.</param>
         public static void GenerateBox(int x, int y, int width, int height)
         {
+            string l = new string('─', width - 2);
+
             // Top wall
             Console.SetCursorPosition(x, y);
-            Console.Write($"┌{new string('─', width - 2)}┐");
+            Console.Write($"┌{l}┐");
 
             // Side walls
             GenerateVerticalLine('│', height - 2, x, y + 1);
@@ -54,7 +60,31 @@ namespace fwod
 
             // Bottom wall
             Console.SetCursorPosition(x, y + (height - 1));
-            Console.Write($"└{new string('─', width - 2)}┘");
+            Console.Write($"└{l}┘");
+        }
+
+        /// <summary>
+        /// Generates a simple, thicker box.
+        /// </summary>
+        /// <param name="x">Left position.</param>
+        /// <param name="y">Top position.</param>
+        /// <param name="width">Width.</param>
+        /// <param name="height">Height.</param>
+        public static void GenerateThickBox(int x, int y, int width, int height)
+        {
+            string l = new string('═', width - 2);
+
+            // Top wall
+            Console.SetCursorPosition(x, y);
+            Console.Write($"╔{l}╗");
+
+            // Side walls
+            GenerateVerticalLine('║', height - 2, x, y + 1);
+            GenerateVerticalLine('║', height - 2, x + (width - 1), y + 1);
+
+            // Bottom wall
+            Console.SetCursorPosition(x, y + (height - 1));
+            Console.Write($"╚{l}╝");
         }
 
         /// <summary>
@@ -69,6 +99,7 @@ namespace fwod
         public static void GenerateCustomBox(int x, int y, int width, int height,
             Borders borders = Borders.All, Corners corners = Corners.All)
         {
+            // Upper wall
             if (corners.HasFlag(Corners.TopLeft))
             {
                 Console.SetCursorPosition(x, y);
@@ -148,14 +179,16 @@ namespace fwod
                 }
             }
 
+            // This determines whenever to start with either the hbuf
+            // or the vbuf, if the Y position is an even number.
             bool b = y % 2 == 0;
 
             int ly = y + h;
             int iy = y;
             Console.SetCursorPosition(x, iy++);
             Console.Write(tbuf);
-            if (b)
-                for (; iy < ly; iy++)
+            if (b) // Even
+                for (; iy < ly; ++iy)
                 {
                     Console.SetCursorPosition(x, iy);
 
@@ -164,8 +197,8 @@ namespace fwod
                     else
                         Console.Write(vbuf);
                 }
-            else
-                for (; iy < ly; iy++)
+            else // Odd
+                for (; iy < ly; ++iy)
                 {
                     Console.SetCursorPosition(x, iy);
 
@@ -179,26 +212,13 @@ namespace fwod
         }
         #endregion
 
-        #region GenH
-        static public void GenerateHorizontalLine(char c, int len)
-        {
-            GenerateHorizontalLine(c, Console.CursorLeft, Console.CursorTop, len);
-        }
-
-        static public void GenerateHorizontalLine(char c, int x, int y, int len)
-        {
-            Console.SetCursorPosition(x, y);
-            Console.Write(new string(c, len));
-        }
-        #endregion
-
         #region GenV
         static public void GenerateVerticalLine(char c, int len, int x, int y)
         {
             int l = y + len;
-            for (int i = y; i < l; i++)
+            for (; y < l; ++y)
             {
-                Console.SetCursorPosition(x, i);
+                Console.SetCursorPosition(x, y);
                 Console.Write(c);
             }
         }

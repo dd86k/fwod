@@ -5,8 +5,6 @@ using System.Collections.Generic;
     Rendering for the multi-layer system.
 */
 
-//TODO: Consider a system where the camera follows the player instead
-
 namespace fwod
 {
     static class MapManager
@@ -15,7 +13,7 @@ namespace fwod
 
         #region Write
         /// <summary>
-        /// Write at current location.
+        /// Write at current location. Cursor position unaffected.
         /// </summary>
         /// <param name="layer">Layer to output.</param>
         /// <param name="c">Character.</param>
@@ -104,6 +102,9 @@ namespace fwod
         #endregion
 
         #region Helpers
+        /// <summary>
+        /// Redraw the map from memory including people.
+        /// </summary>
         public static unsafe void RedrawMap(int x, int y, int width, int height)
         {
             int lx = x + width;
@@ -169,6 +170,11 @@ namespace fwod
             if (clear)
                 Console.Clear();
         }
+        #endregion
+
+        #region Generator
+        //TODO: Random map generator
+
         #endregion
     }
 }

@@ -7,7 +7,7 @@ namespace fwod
     public static class TypeExtensions
     {
         const string SolidObjects =
-            "░▒▓█▄▌▐▀│─┌┐└┘┤┴┬├┼║═╔╗╝╚╣╩╦╠╬╓╖╜╙╢╨╥╟╫╕╛╘╒╡╧╤╞╪";
+            "░▒▓█▄▌▐▀│─┌┐└┘┤┴┬├┼║═╔╗╚╝╣╩╦╠╬╓╖╜╙╢╨╥╟╫╕╛╘╒╡╧╤╞╪";
 
         public static bool IsSolidObject(this char c)
         {

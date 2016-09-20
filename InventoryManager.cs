@@ -139,6 +139,11 @@ namespace fwod
             return true;
         }
 
+        void Select()
+        {
+
+        }
+
         void Clear()
         {
 

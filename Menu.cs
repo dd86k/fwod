@@ -302,7 +302,9 @@ namespace fwod
 
         void Draw()
         {
-            string line = new string('─', MENU_WIDTH - 2);
+            // Item width
+            int iw = MENU_WIDTH - 2;
+            string line = new string('─', iw);
             string fline = $"├{line}┤";
             int c = Items.Count;
 
@@ -318,7 +320,9 @@ namespace fwod
                         Console.Write(fline);
                         break;
                     default:
-                        Console.Write($"│{Items[i].Text.Center(MENU_WIDTH - 2)}│");
+                        // TODO: "Disabled" buttons
+
+                        Console.Write($"│{Items[i].Text.Center(iw)}│");
                         break;
                 }
             }

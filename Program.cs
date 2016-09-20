@@ -33,7 +33,7 @@ namespace fwod
             Console.ResetColor();
 
 #if DEBUG
-            //args = new string[] { "-Pn", "AAAA", "-S" };
+            args = new string[] { "-say", "lol" };
 #endif
 
             try
@@ -84,13 +84,15 @@ namespace fwod
                         Misc.Wunk(); // :^)
                         return 0;
 
+                    //TODO: Fix phantom player with -say
                     case "-say":
+                        Console.Clear();
                         new Person(
                             Console.WindowWidth / 2,
                             Console.WindowHeight / 2,
                             c: '@',
                             init: true
-                        ).Say(args[i + 1]);
+                        ).Say(args[i + 1], true, false);
                         return 0;
                 }
             }
@@ -134,17 +136,12 @@ namespace fwod
             Game.PeopleList = new PeopleManager();
 
 
-            Game.PeopleList[0].Add(
-                new Enemy(Utils.WindowWidth - 5, 5, EnemyType.Rat, 1)
-            );
+            Game.PeopleList[0].Add(new Enemy(47, 13, EnemyType.Rat, 1));
 
             #region Intro
             if (PlayIntro)
             {
-                Game.PeopleList.CreatePerson(
-                    33, 12,
-                    1, 'S', "Stranger"
-                );
+                Game.PeopleList.CreatePerson(34, 12, 1, 'S', "Stranger");
 
                 Game.Log("Dialog...");
 
@@ -172,13 +169,13 @@ namespace fwod
 
                 Game.MainPlayer.Say($"It's {Game.MainPlayer.Name}.");
 
-                Stranger.Say($"Welcome to {AssemblyName}, {Game.MainPlayer.Name}. So...");
+                Stranger.Say($"Ah. Welcome to {AssemblyName}, {Game.MainPlayer.Name}. So...");
 
                 Console.SetCursorPosition(27, 0);
                 Console.Write("|");
                 Game.MainPlayer.HP = 10;
 
-                Stranger.Say("Here's your HP meter.");
+                Stranger.Say("Here's your HP.");
 
                 Game.MainPlayer.Say("My HP?");
 

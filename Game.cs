@@ -4,6 +4,8 @@
     General game mechanics.
 */
 
+//TODO: NewGame() -- Intro scene, etc.
+
 namespace fwod
 {
     class Game

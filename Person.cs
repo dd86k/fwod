@@ -395,9 +395,21 @@ namespace fwod
         /// <param name="y">Left starting position</param>
         /// <param name="width">Bubble width</param>
         /// <param name="height">Bubble height</param>
-        unsafe void ClearBubble(int x, int y, int width, int height)
+        unsafe void ClearBubble(int x, int y, int width, int height,
+            bool map = true)
         {
-            MapManager.RedrawMap(x, y, width, height);
+            if (map)
+                MapManager.RedrawMap(x, y, width, height);
+            else
+            {
+                int yl = y + height;
+                string l = new string(' ', width);
+                for (; y < yl; y++)
+                {
+                    Console.SetCursorPosition(x, y);
+                    Console.Write(l);
+                }
+            }
         }
         #endregion
 
@@ -407,7 +419,9 @@ namespace fwod
         /// </summary>
         /// <param name="text">Dialog</param>
         /// <param name="wait">Wait for keydown</param>
-        public void Say(string text, bool wait = true)
+        /// <param name="redraw">Redraw map.</param>
+        public void Say(string text,
+            bool wait = true, bool redraw = true)
         {
             string[] lines = new string[] { text };
 
@@ -437,7 +451,9 @@ namespace fwod
         /// </summary>
         /// <param name="lines">Lines of dialog</param>
         /// <param name="wait">Wait for keydown</param>
-        public void Say(string[] lines, bool wait = true)
+        /// <param name="redraw">Redraw map.</param>
+        public void Say(string[] lines,
+            bool wait = true, bool redraw = true)
         {
             int arrlen = lines.Length;
             int strlen = arrlen > 1 ?
@@ -481,7 +497,7 @@ namespace fwod
             if (wait)
             {
                 Console.ReadKey(true);
-                ClearBubble(startX, startY, width, height);
+                ClearBubble(startX, startY, width, height, false);
             }
             else
             {
