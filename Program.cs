@@ -5,8 +5,7 @@ using System.Collections.Generic;
     Entry point of the program.
 */
 
-//TODO: Error enumeration?
-//TODO: Consider adding Person to People list automatically at construction time.
+//TODO: Fatal Error enumeration?
 //TODO: StartMenu
 //TODO: Consider making modifiers a flag (???)
 
@@ -33,7 +32,7 @@ namespace fwod
             Console.ResetColor();
 
 #if DEBUG
-            args = new string[] { "-say", "lol" };
+            //args = new string[] { "-say", "Hi" };
 #endif
 
             try
@@ -60,13 +59,13 @@ namespace fwod
 
                     case "-Pc":
                     case "-playerchar":
-                        if (args[i + 1] != null)
+                        if (i + 1 < args.Length)
                             Game.MainPlayer.Char = args[i + 1][0];
                         break;
 
                     case "-Pn":
                     case "-playername":
-                        if (args[i + 1] != null)
+                        if (i + 1 < args.Length)
                             Game.MainPlayer.Name = args[i + 1];
                         break;
 
@@ -83,16 +82,18 @@ namespace fwod
                     case "--showmeme":
                         Misc.Wunk(); // :^)
                         return 0;
-
-                    //TODO: Fix phantom player with -say
+                        
                     case "-say":
-                        Console.Clear();
-                        new Person(
-                            Console.WindowWidth / 2,
-                            Console.WindowHeight / 2,
-                            c: '@',
-                            init: true
-                        ).Say(args[i + 1], true, false);
+                        if (i + 1 < args.Length)
+                        {
+                            Console.Clear();
+                            new Person(
+                                Console.WindowWidth / 2,
+                                Console.WindowHeight / 2,
+                                c: '@',
+                                init: true
+                            ).Say(args[i + 1], true, false);
+                        }
                         return 0;
                 }
             }
@@ -133,7 +134,7 @@ namespace fwod
 
             // Initialize
             Game.MainPlayer.Initialize();
-            Game.PeopleList = new PeopleManager();
+            Game.PeopleList = new FloorManager();
 
 
             Game.PeopleList[0].Add(new Enemy(47, 13, EnemyType.Rat, 1));

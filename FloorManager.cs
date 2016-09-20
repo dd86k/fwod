@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace fwod
 {
-    class PeopleManager
+    class FloorManager
     {
         List<List<Person>> PeopleList { get; }
 
-        public PeopleManager()
+        public FloorManager()
         {
             PeopleList = new List<List<Person>>();
             PeopleList.Add(new List<Person>());

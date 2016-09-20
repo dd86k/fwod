@@ -5,6 +5,18 @@
     Can be a Player, Enemy, etc.
 */
 
+//TODO: Do a player-follow camera system.
+/*
+ * Player-follow Camera RFC:
+ * 
+ * - X and Y of the player depends on the map, not the screen.
+ * 
+ * Pros:
+ * - Allows much bigger maps with more variety.
+ * Cons:
+ * - Have to redraw the map every turn.
+ * - Use more memory for the map itself.
+ */
 //TODO: Make strength contribute to defensepoints (0.2 ratio)
 
 namespace fwod
@@ -419,9 +431,9 @@ namespace fwod
         /// </summary>
         /// <param name="text">Dialog</param>
         /// <param name="wait">Wait for keydown</param>
-        /// <param name="redraw">Redraw map.</param>
+        /// <param name="map">Redraw map.</param>
         public void Say(string text,
-            bool wait = true, bool redraw = true)
+            bool wait = true, bool map = true)
         {
             string[] lines = new string[] { text };
 
@@ -443,7 +455,7 @@ namespace fwod
                 } while (start < text.Length);
             }
             
-            Say(lines, wait);
+            Say(lines, wait, map);
         }
 
         /// <summary>
@@ -451,9 +463,9 @@ namespace fwod
         /// </summary>
         /// <param name="lines">Lines of dialog</param>
         /// <param name="wait">Wait for keydown</param>
-        /// <param name="redraw">Redraw map.</param>
+        /// <param name="map">Redraw map.</param>
         public void Say(string[] lines,
-            bool wait = true, bool redraw = true)
+            bool wait = true, bool map = true)
         {
             int arrlen = lines.Length;
             int strlen = arrlen > 1 ?
@@ -497,7 +509,7 @@ namespace fwod
             if (wait)
             {
                 Console.ReadKey(true);
-                ClearBubble(startX, startY, width, height, false);
+                ClearBubble(startX, startY, width, height, map);
             }
             else
             {

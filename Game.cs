@@ -49,7 +49,7 @@ namespace fwod
         /// </summary>
         public static Player MainPlayer;
 
-        public static PeopleManager PeopleList;
+        public static FloorManager PeopleList;
 
         /// <summary>
         /// Determine the Player with position
@@ -81,19 +81,16 @@ namespace fwod
         #endregion
 
         #region Graphics
-        /// <summary>
-        /// Graphic characters (char[])
-        /// </summary>
         public class Graphics
         {
             public class Objects
             {
                 public const char
                     Grass = '.',
-                    Ladder = 'H',
-                    Chest = 'm',
-                    Terminal = 'T',
-                    ATM = '$';
+                    Chest = '±',
+                    Terminal = '#',
+                    ATM = '$',
+                    Trap = '+';
             }
         }
         #endregion

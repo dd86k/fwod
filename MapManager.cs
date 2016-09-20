@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 
 /*
-    Rendering for the multi-layer system.
+    Map manager
 */
 
 namespace fwod
@@ -13,7 +12,7 @@ namespace fwod
 
         #region Write
         /// <summary>
-        /// Write at current location. Cursor position unaffected.
+        /// Write at current location.
         /// </summary>
         /// <param name="layer">Layer to output.</param>
         /// <param name="c">Character.</param>

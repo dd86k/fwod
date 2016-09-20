@@ -29,6 +29,7 @@ namespace fwod
         const int INV_ROW = 4;
         const int INV_COL = 10;
         const int INV_MAX = INV_COL * INV_ROW;
+        const int INV_WIDTH = 46;
 
         public Weapon Weapon { get; set; }
         public Armor Armor { get; set; }
@@ -46,26 +47,42 @@ namespace fwod
             Items = new List<Item>();
         }
 
+        public bool AddItem(Item item)
+        {
+            bool added = Items.Count + 1 <= INV_MAX;
+
+            if (added)
+                Items.Add(item);
+
+            return added;
+        }
+
+        public bool DropItem(int index)
+        {
+            Items.RemoveAt(index);
+
+            //TODO: Place item on map
+
+            return true;
+        }
+
         public void Show()
         {
+            _mx = (Utils.WindowWidth / 2) - INV_COL;
+            _my = (Utils.WindowHeight / 2) - (INV_ROW * 2);
+
             Draw();
 
             //TODO: Inventory instructions
             //Game.Log("");
-
-            bool c = true;
-            while (c = Entry());
+            
+            while (Entry());
 
             Clear();
         }
 
         unsafe void Draw()
         {
-            _mx = (Utils.WindowWidth / 2) - INV_COL;
-            _my = (Utils.WindowHeight / 2) - (INV_ROW * 2);
-            
-            Utils.GenerateGrill(_mx, _my, INV_COL, INV_ROW);
-
             // Y position of the end of the grill.
             int by = (INV_ROW * 2) + 5;
 
@@ -77,6 +94,8 @@ namespace fwod
                 Borders.Bottom | Borders.Left | Borders.Right,
                 Corners.BottomLeft | Corners.BottomRight
             );
+
+            Utils.GenerateGrill(_mx, _my, INV_COL, INV_ROW);
 
             Console.SetCursorPosition(_mx + 1, by);
             Console.Write("W: " + Weapon.Name);
@@ -93,12 +112,12 @@ namespace fwod
         }
 
         void ClearDescriptionBox()
-        { //TODO: ClearDescriptionBox(void)
+        { //TODO: ClearDescriptionBox()
 
         }
 
         bool Entry()
-        {
+        { //TODO: InventoryManager::Entry()
             ConsoleKeyInfo ck = Console.ReadKey(true);
 
             switch (ck.Key)
@@ -140,13 +159,21 @@ namespace fwod
         }
 
         void Select()
-        {
+        { //TODO: InventoryManager::Select()
 
         }
 
         void Clear()
-        {
+        { //TODO: InventoryManager::Clear()
 
+        }
+
+        public Item this[int index]
+        {
+            get
+            {
+                return Items[index];
+            }
         }
     }
 }
