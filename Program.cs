@@ -8,7 +8,7 @@ using System.Collections.Generic;
 //TODO: Error enumeration?
 //TODO: Consider adding Person to People list automatically at construction time.
 //TODO: StartMenu
-//TODO: Consider making modifiers a flag
+//TODO: Consider making modifiers a flag (???)
 
 namespace fwod
 {
@@ -26,9 +26,6 @@ namespace fwod
         /// <returns>Error.</returns>
         public static int Main(string[] args)
         {
-            Game.MainPlayer =
-                new Player((Utils.WindowWidth / 4) + (Utils.WindowWidth / 2), Utils.WindowHeight / 2);
-
             // Default values
             bool PlayIntro = true;
 
@@ -46,6 +43,8 @@ namespace fwod
             }
             catch { }
 
+            Game.MainPlayer = new Player(44, 12);
+            
             for (int i = 0; i < args.Length; i++)
             {
                 switch (args[i])
@@ -126,7 +125,7 @@ namespace fwod
             }
             
             // Generate the 'main' box
-            MapManager.GenerateBox(1, 1, Utils.WindowWidth - 2, Utils.WindowHeight - 3);
+            MapManager.GenerateBox(30, 10, 20, 5);
 
             // Add stranger
 
@@ -143,7 +142,7 @@ namespace fwod
             if (PlayIntro)
             {
                 Game.PeopleList.CreatePerson(
-                    Utils.WindowWidth / 4, Utils.WindowHeight / 2,
+                    33, 12,
                     1, 'S', "Stranger"
                 );
 
@@ -153,7 +152,7 @@ namespace fwod
 
                 Person Stranger = Game.PeopleList["Stranger"];
 
-                Stranger.Say("Oh, you're awake... What is your name?");
+                Stranger.Say("Oh, you're awake... What's your name?");
 
                 if (Game.MainPlayer.Name == null) // Default name
                 {

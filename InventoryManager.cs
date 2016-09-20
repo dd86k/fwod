@@ -2,20 +2,24 @@
 using System.Collections.Generic;
 
 /*TODO: Inventory mockup
+4x10 spaces, 1 character horizontal padding
 
-+-+-+-+-+----------------+
-|o|m| | | Potion         |
-+-+-+-+-+                |
-| | | | | Mysterious.    |
-+-+-+-+-+                |
-| | | | |                |
-+-+-+-+-+ Heals 4 HP.    |
-| | | | |                |
-+-+-+-+-+----------------+
-| Weapon: Flashy Sword   |
-| Armour: Dented Meat    |
-+------------------------+
- 
+|-------------------46-----------------------|
+|--------21---------|
+                    |---------- 26-----------|
+
++-+-+-+-+-+-+-+-+-+-+------------------------+
+|o|m| | | | | | | | | Potion                 |
++-+-+-+-+-+-+-+-+-+-+                        |
+| | | | | | | | | | | Heals 10 HP.           |
++-+-+-+-+-+-+-+-+-+-+                        |
+| | | | | | | | | | |                        |
++-+-+-+-+-+-+-+-+-+-+                        |
+| | | | | | | | | | |                        |
++-+-+-+-+-+-+-+-+-+-+------------------------+
+| Weapon: Flashy Sword                       |
+| Armour: Dented Meat                        |
++--------------------------------------------+
 */
 
 namespace fwod
@@ -24,11 +28,11 @@ namespace fwod
     {
         const int INV_ROW = 4;
         const int INV_COL = 10;
-        const int MaximumNumberOfItems = INV_COL * INV_ROW;
+        const int INV_MAX = INV_COL * INV_ROW;
 
         public Weapon Weapon { get; set; }
         public Armor Armor { get; set; }
-        public List<Item> Items { get; }
+        List<Item> Items { get; }
 
         // Menu location on screen
         int _mx, _my;
@@ -62,26 +66,34 @@ namespace fwod
             
             Utils.GenerateGrill(_mx, _my, INV_COL, INV_ROW);
 
-            // Vertical length
-            int vl = (INV_ROW * 2) + 3;
+            // Y position of the end of the grill.
+            int by = (INV_ROW * 2) + 5;
 
             Utils.GenerateCustomBox(
                 _mx, // x
-                vl, // y
+                by, // y
                 (INV_COL * 2) + 1, // w
                 5, // h
                 Borders.Bottom | Borders.Left | Borders.Right,
                 Corners.BottomLeft | Corners.BottomRight
             );
 
-            Console.SetCursorPosition(_mx + 1, vl + 2);
+            Console.SetCursorPosition(_mx + 1, by);
             Console.Write("W: " + Weapon.Name);
-            Console.SetCursorPosition(_mx + 1, vl + 3);
+            Console.SetCursorPosition(_mx + 1, by + 1);
             Console.Write("A: " + Armor.Name);
         }
 
         void Update()
-        {
+        { //TODO: Update(void)
+            // 1 Dimensional indexer
+            int d = (INV_ROW * _cy) + _cx;
+
+
+        }
+
+        void ClearDescriptionBox()
+        { //TODO: ClearDescriptionBox(void)
 
         }
 
@@ -91,7 +103,37 @@ namespace fwod
 
             switch (ck.Key)
             {
+                case ConsoleKey.DownArrow:
+                    if (_cy + 1 >= INV_ROW)
+                        _cy = 0;
+                    else
+                        ++_cy;
+                    Update();
+                    break;
+                case ConsoleKey.UpArrow:
+                    if (_cy - 1 < 0)
+                        _cy = INV_ROW - 1;
+                    else
+                        --_cy;
+                    Update();
+                    break;
 
+                case ConsoleKey.RightArrow:
+                    if (_cx + 1 >= INV_COL)
+                        _cx = 0;
+                    else
+                        ++_cx;
+                    Update();
+                    break;
+                case ConsoleKey.LeftArrow:
+                    if (_cx - 1 < 0)
+                        _cx = INV_COL - 1;
+                    else
+                        --_cx;
+                    Update();
+                    break;
+
+                    // ...
             }
 
             return true;

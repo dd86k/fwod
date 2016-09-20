@@ -22,13 +22,45 @@ namespace fwod
         Yes, No, Cancel // "Dialog"-type
     }
 
+    [Flags]
     public enum MenuResponse
     {
-        Yes, No, Cancel
+        Yes = 0, No = 1, Cancel = 2
     }
 
     class Menu
     {
+        /// <summary>
+        /// Shows a dialog with choices.
+        /// </summary>
+        /// <param name="q">Question. Default: None</param>
+        /// <param name="b">The choices available.</param>
+        /// <returns></returns>
+        public static MenuResponse DialogShow(string q = null,
+            MenuResponse b = MenuResponse.Yes | MenuResponse.No)
+        {
+            Menu m = new Menu();
+
+            if (q != null)
+            {
+                m.Items.Add(new MenuItem(q));
+                m.Items.Add(new MenuItem());
+            }
+
+            if (b.HasFlag(MenuResponse.Yes))
+                m.Items.Add(new MenuItem("Yes", MenuItemType.Yes));
+
+            if (b.HasFlag(MenuResponse.No))
+                m.Items.Add(new MenuItem("No", MenuItemType.No));
+
+            if (b.HasFlag(MenuResponse.Cancel))
+                m.Items.Add(new MenuItem("Cancel", MenuItemType.Cancel));
+
+            m.Show();
+
+            return m.Response;
+        }
+
         public static Menu GetMainMenu()
         {
             return new Menu(
@@ -48,21 +80,26 @@ namespace fwod
             );
         }
         
-        const int MENU_WIDTH = 40;
-        const int MENU_TOP = 4;
+        const int MENU_WIDTH = 40, MENU_TOP = 4;
+        
+        int _pastindex = 0, _index = 0, _xpos = 0;
+
         public bool InMenu { get; private set; }
         public MenuResponse Response { get; private set; }
-        List<MenuItem> MenuItemList { get; }
-        
-        int PastMenuIndex = 0, MenuIndex = 0, LeftPosition = 0;
+        public List<MenuItem> Items { get; }
+
+        public Menu() : this(false, null) {}
 
         public Menu(params MenuItem[] items) : this(false, items) {}
 
         public Menu(bool show, params MenuItem[] items)
         {
-            MenuItemList = new List<MenuItem>(items);
+            if (items != null)
+                Items = new List<MenuItem>(items);
+            else
+                Items = new List<MenuItem>();
 
-            LeftPosition = (Utils.WindowWidth / 2) - (MENU_WIDTH / 2);
+            _xpos = (Utils.WindowWidth / 2) - (MENU_WIDTH / 2);
 
             if (show)
                 Show();
@@ -78,16 +115,16 @@ namespace fwod
             Draw();
 
             // Select good starting index
-            MenuIndex = -1;
+            _index = -1;
             bool s = true;
             while (s)
             {
-                MenuIndex++;
+                _index++;
 
-                if (MenuIndex > MenuItemList.Count - 1)
-                    MenuIndex = 0;
+                if (_index > Items.Count - 1)
+                    _index = 0;
 
-                switch (MenuItemList[MenuIndex].Type)
+                switch (Items[_index].Type)
                 {
                     case MenuItemType.Information:
                     case MenuItemType.Seperator: break;
@@ -142,17 +179,17 @@ namespace fwod
         public void NextControl()
         {
             bool s = true;
-            PastMenuIndex = MenuIndex;
+            _pastindex = _index;
 
             // Find a good index
             while (s)
             {
-                MenuIndex++;
+                _index++;
 
-                if (MenuIndex > MenuItemList.Count - 1)
-                    MenuIndex = 0;
+                if (_index > Items.Count - 1)
+                    _index = 0;
 
-                switch (MenuItemList[MenuIndex].Type)
+                switch (Items[_index].Type)
                 {
                     case MenuItemType.Information:
                     case MenuItemType.Seperator: break;
@@ -169,17 +206,17 @@ namespace fwod
         public void PreviousControl()
         {
             bool s = true;
-            PastMenuIndex = MenuIndex;
+            _pastindex = _index;
 
             // Find a good index
             while (s)
             {
-                MenuIndex--;
+                _index--;
 
-                if (MenuIndex < 0)
-                    MenuIndex = MenuItemList.Count - 1;
+                if (_index < 0)
+                    _index = Items.Count - 1;
 
-                switch (MenuItemList[MenuIndex].Type)
+                switch (Items[_index].Type)
                 {
                     case MenuItemType.Information:
                     case MenuItemType.Seperator: break;
@@ -195,7 +232,7 @@ namespace fwod
         /// </summary>
         public void Select()
         {
-            switch (MenuItemList[MenuIndex].Type)
+            switch (Items[_index].Type)
             {
                 case MenuItemType.Yes:
                     
@@ -242,22 +279,22 @@ namespace fwod
         void Update()
         {
             // Get coords
-            int itemY = MENU_TOP + MenuIndex + 1;
-            int pastItemY = MENU_TOP + PastMenuIndex + 1;
-            int textX = LeftPosition + 1;
+            int itemY = MENU_TOP + _index + 1;
+            int pastItemY = MENU_TOP + _pastindex + 1;
+            int textX = _xpos + 1;
 
             // Deselect old item
-            if (MenuIndex != PastMenuIndex)
+            if (_index != _pastindex)
             {
                 Console.SetCursorPosition(textX, pastItemY);
-                Console.Write(Utils.Center(MenuItemList[PastMenuIndex].Text, MENU_WIDTH - 2));
+                Console.Write(Utils.Center(Items[_pastindex].Text, MENU_WIDTH - 2));
             }
 
             // Apply new item's colors
             Console.ForegroundColor = ConsoleColor.Black;
             Console.BackgroundColor = ConsoleColor.White;
             Console.SetCursorPosition(textX, itemY);
-            Console.Write(Utils.Center(MenuItemList[MenuIndex].Text, MENU_WIDTH - 2));
+            Console.Write(Utils.Center(Items[_index].Text, MENU_WIDTH - 2));
 
             // Revert to original colors
             Console.ResetColor();
@@ -267,25 +304,25 @@ namespace fwod
         {
             string line = new string('─', MENU_WIDTH - 2);
             string fline = $"├{line}┤";
-            int c = MenuItemList.Count;
+            int c = Items.Count;
 
-            Console.SetCursorPosition(LeftPosition, MENU_TOP);
+            Console.SetCursorPosition(_xpos, MENU_TOP);
             Console.Write($"┌{line}┐");
             for (int i = 0; i < c; i++)
             {
-                Console.SetCursorPosition(LeftPosition, MENU_TOP + i + 1);
+                Console.SetCursorPosition(_xpos, MENU_TOP + i + 1);
 
-                switch (MenuItemList[i].Type)
+                switch (Items[i].Type)
                 {
                     case MenuItemType.Seperator:
                         Console.Write(fline);
                         break;
                     default:
-                        Console.Write($"│{MenuItemList[i].Text.Center(MENU_WIDTH - 2)}│");
+                        Console.Write($"│{Items[i].Text.Center(MENU_WIDTH - 2)}│");
                         break;
                 }
             }
-            Console.SetCursorPosition(LeftPosition, MENU_TOP + c + 1);
+            Console.SetCursorPosition(_xpos, MENU_TOP + c + 1);
             Console.Write($"└{line}┘");
         }
 
@@ -299,12 +336,12 @@ namespace fwod
                     (Utils.WindowWidth / 2) - (MENU_WIDTH / 2),
                     MENU_TOP,
                     MENU_WIDTH,
-                    MenuItemList.Count + 2
+                    Items.Count + 2
                 );
             else
             {
                 string b = new string(' ', MENU_WIDTH);
-                int ly = MENU_TOP + MenuItemList.Count + 2;
+                int ly = MENU_TOP + Items.Count + 2;
                 int x = (Utils.WindowWidth / 2) - (MENU_WIDTH / 2);
 
                 for (int y = MENU_TOP; y < ly; y++)

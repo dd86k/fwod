@@ -5,7 +5,7 @@ using System.Collections.Generic;
     Rendering for the multi-layer system.
 */
 
-//TODO: Re-do the system where the camera follows the player instead
+//TODO: Consider a system where the camera follows the player instead
 
 namespace fwod
 {
@@ -109,25 +109,21 @@ namespace fwod
             int lx = x + width;
             int ly = y + height;
             int ox = x;
-            string buffer = new string('\0', width);
-
-            fixed (char* p = buffer)
+            char[] p = new char[width];
+            
+            for (; y < ly; y++, x = ox)
             {
-                for (; y < ly; y++, x = ox)
-                {
-                    Console.SetCursorPosition(x, y);
+                Console.SetCursorPosition(x, y);
                     
-                    for (; x < lx; ++x)
-                        p[x] = Map[y, x];
-                    //x = ox;
+                for (int i = 0; x < lx; ++x, ++i)
+                    p[i] = Map[y, x];
 
-                    Console.Write(buffer);
-                }
+                Console.Write(p);
             }
 
             // Place the people back on screen.
-            foreach (Person p in Game.PeopleList[Game.CurrentFloor])
-                p.Initialize();
+            foreach (Person peep in Game.PeopleList[Game.CurrentFloor])
+                peep.Initialize();
 
             Game.MainPlayer.Initialize();
         }

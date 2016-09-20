@@ -317,13 +317,8 @@ namespace fwod
         #endregion
 
         #region Construction
-        public Person(int pX, int pY) : this(pX, pY, 10)
-        {
-
-        }
-
-        public Person(int x, int y, short hp = 10,
-            char c = 'P', bool init = true)
+        public Person(int x, int y,
+            short hp = 10, char c = 'P', bool init = true)
         {
             _maxhp = _hp = hp;
             _x = x;
@@ -444,7 +439,6 @@ namespace fwod
         /// <param name="wait">Wait for keydown</param>
         public void Say(string[] lines, bool wait = true)
         {
-            //TODO: Clean this clutter.
             int arrlen = lines.Length;
             int strlen = arrlen > 1 ?
                 lines.GetLonguestStringLength() : lines[0].Length;
@@ -478,6 +472,12 @@ namespace fwod
                 Console.Write(lines[i]);
             }
 
+            // Fill the rest of the bubble
+            if (lines.Length > 1)
+                Console.Write(
+                    new string(' ', strlen - lines[arrlen - 1].Length)
+                );
+
             if (wait)
             {
                 Console.ReadKey(true);
@@ -504,17 +504,17 @@ namespace fwod
         /// </summary>
         /// <param name="limit">Limit in characters.</param>
         /// <returns>Answer</returns>
-        public string GetAnswer(int limit)
+        public string GetAnswer(int limit = 25)
         {
             Say(new string(' ', limit), false);
 
             // Read input from this Person
-            string Out = Utils.ReadLine(limit);
+            string t = Utils.ReadLine(limit);
 
             // Clear bubble
             ClearBubble(limit);
 
-            return Out;
+            return t;
         }
         #endregion
 
@@ -566,17 +566,17 @@ namespace fwod
                 dam - def :
                 ((Strength * dam) + dam) - (def);
 
-            string atk = $": {person.HP} HP - {ap} = {person.HP -= ap} HP";
+            string atkstr = $": {person.HP} HP - {ap} = {person.HP -= ap} HP";
 
-            if (person.HP <= 0)
-                atk += $" -- Dead! You earn {person.Money}$!";
+            if (person.HP <= 0) // If killed
+                atkstr += $" -- Dead! You earn {person.Money}$!";
 
             Game.Statistics.DamageDealt += (uint)ap;
 
             if (person is Enemy)
-                Game.Log(((Enemy)person).Race + atk);
+                Game.Log(((Enemy)person).Race + atkstr);
             else
-                Game.Log(person.GetType() + atk);
+                Game.Log(person.GetType() + atkstr);
         }
         #endregion
 
