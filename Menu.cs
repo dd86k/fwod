@@ -25,7 +25,8 @@ namespace fwod
     [Flags]
     public enum MenuResponse
     {
-        Yes = 0, No = 1, Cancel = 2
+        Yes, No, Cancel,
+        Quit
     }
 
     class Menu
@@ -83,8 +84,7 @@ namespace fwod
         const int MENU_WIDTH = 40, MENU_TOP = 4;
         
         int _pastindex = 0, _index = 0, _xpos = 0;
-
-        public bool InMenu { get; private set; }
+        
         public MenuResponse Response { get; private set; }
         public List<MenuItem> Items { get; }
 
@@ -110,8 +110,6 @@ namespace fwod
         /// </summary>
         public void Show()
         {
-            InMenu = true;
-
             Draw();
 
             // Select good starting index
@@ -136,10 +134,7 @@ namespace fwod
             Update();
 
             // While in menu, do actions
-            do
-            {
-                Entry();
-            } while (InMenu);
+            while (Entry());
 
             // Clear menu and reprint layer underneath
             ClearMenu();
@@ -148,7 +143,7 @@ namespace fwod
         /// <summary>
         /// Entry point for menu
         /// </summary>
-        public void Entry()
+        public bool Entry()
         {
             ConsoleKeyInfo cki = Console.ReadKey(true);
 
@@ -164,13 +159,13 @@ namespace fwod
 
                 case ConsoleKey.Spacebar:
                 case ConsoleKey.Enter:
-                    Select();
-                    break;
+                    return Select();
 
                 case ConsoleKey.Escape:
-                    InMenu = false;
-                    break;
+                    return false;
             }
+
+            return true;
         }
 
         /// <summary>
@@ -230,16 +225,22 @@ namespace fwod
         /// <summary>
         /// Selects the item in the menu
         /// </summary>
-        public void Select()
+        public bool Select()
         {
             switch (Items[_index].Type)
             {
                 case MenuItemType.Yes:
+                    Response = MenuResponse.Yes;
+                    return false;
+                case MenuItemType.No:
+                    Response = MenuResponse.No;
+                    return false;
+                case MenuItemType.Cancel:
+                    Response = MenuResponse.Cancel;
+                    return false;
                     
-                    break;
                 case MenuItemType.Return:
-                    InMenu = false;
-                    break;
+                    return false;
 
                 case MenuItemType.ShowInventory:
                     ClearMenu(false);
@@ -268,9 +269,11 @@ namespace fwod
                     break;
 
                 case MenuItemType.Quit:
-                    InMenu = Game.IsPlaying = false;
-                    break;
+                    Response = MenuResponse.Quit;
+                    return false;
             }
+
+            return true;
         }
 
         /// <summary>

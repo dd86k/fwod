@@ -11,7 +11,6 @@ namespace fwod
     class Game
     {
         #region Properties
-        public static bool IsPlaying = true;
         public static Menu MainMenu = Menu.GetMainMenu();
         public static byte CurrentFloor = 0;
         #endregion

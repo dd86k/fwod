@@ -68,7 +68,7 @@ namespace fwod
 
         public void Show()
         {
-            _mx = (Utils.WindowWidth / 2) - INV_COL;
+            _mx = (Utils.WindowWidth / 2) - (INV_WIDTH / 2);
             _my = (Utils.WindowHeight / 2) - (INV_ROW * 2);
 
             Draw();

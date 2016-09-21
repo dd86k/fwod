@@ -6,7 +6,7 @@
 
 ![fwod on PuTTY](http://didi.wcantin.ca/pages/fwod/img3.png)
 
-Inspired by [NetHack](https://en.wikipedia.org/wiki/NetHack), fwod is a roguelike, turn-based, dungeon crawling game.
+Inspired by [NetHack](https://en.wikipedia.org/wiki/NetHack), fwod is a roguelike, turn-based, dungeon crawling game with user-friendly controls and randomly-generated floors.
 
 Based around the early 1990s, one day, you wake up in a mysterious bunker.
 

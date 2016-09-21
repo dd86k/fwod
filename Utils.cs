@@ -259,7 +259,7 @@ namespace fwod
         /// <param name="length">Input size/buffer</param>
         /// <param name="pPassword">Is password</param>
         /// <returns>User's input</returns>
-        public static unsafe string ReadLine(int length, bool pPassword = false)
+        public static unsafe string ReadLine(int length)
         {
             StringBuilder o = new StringBuilder();
             int index = 0;
@@ -271,7 +271,7 @@ namespace fwod
 
             while (c)
             {
-                ConsoleKeyInfo k = Console.ReadKey(true);
+                ConsoleKeyInfo k = Console.ReadKey();
 
                 switch (k.Key)
                 {
@@ -324,7 +324,7 @@ namespace fwod
                                 Console.SetCursorPosition(oleft, otop);
                                 Console.Write(new string(' ', length));
                                 Console.SetCursorPosition(oleft, otop);
-                                Console.Write(pPassword ? new string('*', o.Length) : o.ToString());
+                                Console.Write(o.ToString());
                                 Console.SetCursorPosition(oleft + index, otop);
                             }
                             else // Erase one character
@@ -333,7 +333,7 @@ namespace fwod
                                 Console.SetCursorPosition(oleft, otop);
                                 Console.Write(new string(' ', length));
                                 Console.SetCursorPosition(oleft, otop);
-                                Console.Write(pPassword ? new string('*', o.Length) : o.ToString());
+                                Console.Write(o.ToString());
                                 Console.SetCursorPosition(oleft + index, otop);
                             }
                         }
@@ -350,7 +350,7 @@ namespace fwod
                                 Console.SetCursorPosition(oleft, otop);
                                 Console.Write(new string(' ', length));
                                 Console.SetCursorPosition(oleft, otop);
-                                Console.Write(pPassword ? new string('*', o.Length) : o.ToString());
+                                Console.Write(o.ToString());
                                 Console.SetCursorPosition(oleft + index, otop);
                             }
                             else // Erase one character
@@ -359,7 +359,7 @@ namespace fwod
                                 Console.SetCursorPosition(oleft, otop);
                                 Console.Write(new string(' ', length));
                                 Console.SetCursorPosition(oleft, otop);
-                                Console.Write(pPassword ? new string('*', o.Length) : o.ToString());
+                                Console.Write(o.ToString());
                                 Console.SetCursorPosition(oleft + index, otop);
                             }
                         }
@@ -376,7 +376,7 @@ namespace fwod
                                 Console.SetCursorPosition(oleft, otop);
                                 Console.Write(new string(' ', length));
                                 Console.SetCursorPosition(oleft, otop);
-                                Console.Write(pPassword ? new string('*', o.Length) : o.ToString());
+                                Console.Write(o.ToString());
                                 Console.SetCursorPosition(oleft + index, otop);
                             }
                         }

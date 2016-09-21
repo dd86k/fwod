@@ -17,12 +17,7 @@ namespace fwod
             $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}";
         static readonly string AssemblyName =
             $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}";
-
-        /// <summary>
-        /// Entry point.
-        /// </summary>
-        /// <param name="args">Arguments.</param>
-        /// <returns>Error.</returns>
+        
         public static int Main(string[] args)
         {
             // Default values
@@ -32,7 +27,7 @@ namespace fwod
             Console.ResetColor();
 
 #if DEBUG
-            args = new string[] { "-tsay", "what's THIS? owo" };
+            //args = new string[] { "-tsay", "what's THIS? owo" };
 #endif
 
             try
@@ -210,19 +205,15 @@ namespace fwod
             }
             #endregion
 
-            do
-            {
-                Entry();
-            } while (Game.IsPlaying);
-
-            // -- The user is leaving the game --
+            // Player controls the game
+            while (Entry());
 
             Console.Clear();
 
             return 0;
         }
 
-        static void Entry()
+        static bool Entry()
         {
             ConsoleKeyInfo c = Console.ReadKey(true);
 
@@ -250,17 +241,21 @@ namespace fwod
 
                 // Select
                 case ConsoleKey.Enter:
+                case ConsoleKey.Spacebar:
+                    //TODO: Select()
 
                     break;
 
                 // Menu button
                 case ConsoleKey.Escape:
                     Game.MainMenu.Show();
-                    break;
+                    return Game.MainMenu.Response != MenuResponse.Quit;
             }
 
             // People take a turn.
             //Game.TakeTurn();
+
+            return true;
         }
 
         static void ShowHelp()
