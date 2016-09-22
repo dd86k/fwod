@@ -68,6 +68,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbilityManager.cs" />
     <Compile Include="InventoryManager.cs" />
     <Compile Include="FloorManager.cs" />
     <Compile Include="Utils.cs" />

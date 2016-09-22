@@ -13,14 +13,12 @@ using System.Collections.Generic;
 +-+-+-+-+-+-+-+-+-+-+                        | |
 | | | | | | | | | | | Heals 10 HP.           | |
 +-+-+-+-+-+-+-+-+-+-+                        | |
-| | | | | | | | | | |                        | |
-+-+-+-+-+-+-+-+-+-+-+                        | 14
+| | | | | | | | | | |                        | 12
++-+-+-+-+-+-+-+-+-+-+                        | |
 | | | | | | | | | | |                        | |
 +-+-+-+-+-+-+-+-+-+-+------------------------+ |
 | Weapon: Flashy Sword                       | |
 | Armour: Dented Meat                        | |
-+--------------------------------------------+ |
-|                Return                      | |
 +--------------------------------------------+ -
 */
 
@@ -38,12 +36,21 @@ namespace fwod
         public Armor EquippedArmor { get; set; }
         List<Item> Items { get; }
 
+        /*
+            These numbers are saved to avoid re-calculating
+            them every time.
+        */
+
         // Menu location on screen
         int _mx, _my;
         // Cursor location in the menu
         int _cx, _cy;
         // Past cursor location.
         int _ocx, _ocy;
+        // Description inner box width
+        int _dw;
+        // Description inner X
+        int _dx;
 
         public InventoryManager()
         {
@@ -73,6 +80,8 @@ namespace fwod
         {
             _mx = (Utils.WindowWidth / 2) - (INV_WIDTH / 2);
             _my = (Utils.WindowHeight / 2) - (INV_ROW * 2);
+            _dw = INV_WIDTH - (INV_COL * 2) - 2;
+            _dx = _mx + (INV_COL * 2) + 2;
 
             Draw();
             
@@ -92,10 +101,8 @@ namespace fwod
 
             Utils.GenerateGrill(_mx, _my, INV_COL, INV_ROW);
 
-            Console.SetCursorPosition(_mx + (INV_WIDTH - 25), _my + (INV_HEIGHT - 6));
-            Console.Write(new string('─', INV_WIDTH - (INV_COL * 2 ) - 2));
-            Console.SetCursorPosition(_mx + 1, by + 2);
-            Console.Write(new string('─', INV_WIDTH - 2));
+            Console.SetCursorPosition(_mx + (INV_WIDTH - _dw - 1), _my + (INV_HEIGHT - 6));
+            Console.Write(new string('─', _dw));
 
             Console.SetCursorPosition(_mx + 1, by);
             Console.Write("W: " + EquippedWeapon.FullName);
@@ -104,13 +111,16 @@ namespace fwod
 
             if (Items.Count > 0)
             {
-                for (int i = 0; i < Items.Count; i++)
+                for (int i = 0, x = 0, y = 0, ix = 0; i < Items.Count; ++i, x += 2, ++ix)
                 {
-                    int x = i / INV_COL,
-                        y = i % INV_ROW;
-
+                    if (ix + 1 > INV_COL)
+                    {
+                        y += 2;
+                        x = ix = 0;
+                    }
                     Console.SetCursorPosition(_mx + x + 1, _my + y + 1);
                     Console.Write(Items[i].ToString()[0]);
+
                 }
             }
 
@@ -120,20 +130,21 @@ namespace fwod
         void Update()
         {
             // 1 Dimensional indexer
-            int  d = (INV_ROW * _cy) + _cx,
-                od = (INV_ROW * _ocy) + _ocx;
+            int  d = (INV_COL * _cy) + _cx,
+                od = (INV_COL * _ocy) + _ocx;
+
+            ClearDescriptionBox();
 
             // Clear old selected
             Console.SetCursorPosition(_mx + (_ocx * 2) + 1, _my + (_ocy * 2) + 1);
             if (od < Items.Count)
             {
                 Console.Write(Items[od].ToString()[0]);
-                InsertDescription(Items[od]);
+                //InsertDescription(Items[od]);
             }
             else
             {
                 Console.Write(' ');
-                ClearDescriptionBox();
             }
 
             // New selection
@@ -149,7 +160,6 @@ namespace fwod
             else
             {
                 Console.Write(' ');
-                ClearDescriptionBox();
             }
 
             Console.ResetColor();
@@ -161,7 +171,7 @@ namespace fwod
         void InsertDescription(Item item)
         {
             Console.ResetColor();
-            Console.SetCursorPosition(_mx + (INV_COL * 2) + 2, _my + 1);
+            Console.SetCursorPosition(_dx, _my + 1);
 
             if (item is Food)
             {
@@ -178,11 +188,14 @@ namespace fwod
         }
 
         void ClearDescriptionBox()
-        { //TODO: ClearDescriptionBox()
-            // Description box inner width
-            //int dw = INV_WIDTH -
-
-            Console.SetCursorPosition(_mx + (INV_COL * 2) + 2, _my + 1);
+        {
+            string b = new string(' ', _dw);
+            int ym = _my + (INV_ROW * 2);
+            for (int i = _my + 1; i < ym; ++i)
+            {
+                Console.SetCursorPosition(_dx - 1, i);
+                Console.Write(b);
+            }
         }
 
         bool Entry()

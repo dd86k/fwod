@@ -28,15 +28,12 @@ namespace fwod
         #endregion
 
         #region Methods
-        /// <summary>
-        /// Places Player stuff on screen.
-        /// </summary>
-        public static void QuickInitialize()
+        public static void QuickIntro()
         {
             Console.SetCursorPosition(27, 0);
             Console.Write("|");
             MainPlayer.HP = 10;
-            Console.SetCursorPosition(41, 0);
+            Console.SetCursorPosition(43, 0);
             Console.Write("|");
             MainPlayer.Money = 12;
             MainPlayer.Name = "Player";
