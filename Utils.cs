@@ -263,17 +263,17 @@ namespace fwod
         {
             StringBuilder o = new StringBuilder();
             int index = 0;
-            bool c = true;
+            bool b = true;
             int oleft = Console.CursorLeft; // Origninal Left Position
             int otop = Console.CursorTop; // Origninal Top Position
 
             Console.CursorVisible = true;
 
-            while (c)
+            while (b)
             {
-                ConsoleKeyInfo k = Console.ReadKey();
+                ConsoleKeyInfo c = Console.ReadKey();
 
-                switch (k.Key)
+                switch (c.Key)
                 {
                     // Ignore keys
                     case ConsoleKey.Tab:
@@ -283,7 +283,7 @@ namespace fwod
 
                     // Returns the string
                     case ConsoleKey.Enter:
-                        c = false;
+                        b = false;
                         break;
 
                     // Navigation
@@ -318,7 +318,7 @@ namespace fwod
                         if (index < o.Length)
                         {
                             // Erase whole from index
-                            if (k.Modifiers == ConsoleModifiers.Control)
+                            if (c.Modifiers == ConsoleModifiers.Control)
                             {
                                 o = o.Remove(index, o.Length - index);
                                 Console.SetCursorPosition(oleft, otop);
@@ -343,7 +343,7 @@ namespace fwod
                         if (index > 0)
                         {
                             // Erase whole from index
-                            if (k.Modifiers == ConsoleModifiers.Control)
+                            if (c.Modifiers == ConsoleModifiers.Control)
                             {
                                 o = o.Remove(0, index);
                                 index = 0;
@@ -368,7 +368,7 @@ namespace fwod
                     default:
                         if (o.Length < length)
                         {
-                            char h = k.KeyChar;
+                            char h = c.KeyChar;
 
                             if (char.IsLetterOrDigit(h) || char.IsPunctuation(h) || char.IsSymbol(h) || char.IsWhiteSpace(h))
                             {

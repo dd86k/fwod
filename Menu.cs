@@ -245,6 +245,8 @@ namespace fwod
                 case MenuItemType.ShowInventory:
                     ClearMenu(false);
                     Game.MainPlayer.Inventory.Show();
+                    Draw();
+                    Update();
                     break;
 
                 case MenuItemType.ShowStatistics:

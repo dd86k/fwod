@@ -66,7 +66,7 @@ namespace fwod
         {
             switch (w)
             {
-                case WeaponType.Beretta_92_FS:
+                case WeaponType.Pistol:
                     return 3;
 
                 case WeaponType.Cutlass:
@@ -80,7 +80,7 @@ namespace fwod
         {
             switch (a)
             {
-
+                case ArmorType.Body_Armor: return 15;
 
                 default: return 1;
             }
@@ -108,7 +108,7 @@ namespace fwod
         {
             switch (t)
             {
-                case WeaponType.Beretta_92_FS:
+                case WeaponType.Pistol:
                     return true;
 
                 default: return false;

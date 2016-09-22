@@ -9,13 +9,13 @@
     {
         Fist,
         Cutlass,
-        Beretta_92_FS
+        Pistol
     }
 
     public enum ArmorType : byte
     {
         Shirt,
-
+        Body_Armor
     }
 
     public enum FoodType : byte
@@ -38,13 +38,19 @@
             Type = weapon;
             Damage = (int)mod.GetModificationValue(weapon.GetBaseDamage());
             Modifier = mod;
-            Name = $"{Modifier} {Type.GetName()}";
+            Name = Type.GetName();
         }
         
         public int Damage { get; }
         public WeaponType Type { get; }
         public Modifier Modifier { get; }
+        public string FullName => $"{Modifier} {Name}";
         public string Name { get; }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 
     class Armor : Item
@@ -54,13 +60,19 @@
             Type = armor;
             Modifier = mod;
             ArmorPoints = (int)mod.GetModificationValue(armor.GetBaseDefense());
-            Name = $"{Modifier} {Type.GetName()}";
+            Name = Type.GetName();
         }
 
         public ArmorType Type { get; }
         public Modifier Modifier { get; }
         public int ArmorPoints { get; }
+        public string FullName => $"{Modifier} {Name}";
         public string Name { get; }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 
     class Food : Item
@@ -75,5 +87,10 @@
         public FoodType Type { get; }
         public int RestorePoints { get; }
         public string Name { get; }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

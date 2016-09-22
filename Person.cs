@@ -344,8 +344,8 @@ namespace fwod
             Char = c;
             //TODO: Left and right weapon?
             Inventory = new InventoryManager();
-            Inventory.Armor = new Armor(ArmorType.Shirt);
-            Inventory.Weapon = new Weapon(WeaponType.Fist);
+            Inventory.EquippedArmor = new Armor(ArmorType.Shirt);
+            Inventory.EquippedWeapon = new Weapon(WeaponType.Fist);
 
             //Game.PeopleList[Game.CurrentFloor].Add(this);
 
@@ -589,12 +589,12 @@ namespace fwod
         {
             //TODO: Accuracy algorithm
 
-            int dam = Inventory.Weapon.Damage;
-            int def = person.Inventory.Armor.ArmorPoints;
+            int dam = Inventory.EquippedWeapon.Damage;
+            int def = person.Inventory.EquippedArmor.ArmorPoints;
             
             // Attack points
             int ap =
-                Inventory.Weapon.Type.IsGun() ?
+                Inventory.EquippedWeapon.Type.IsGun() ?
                 dam - def :
                 ((Strength * dam) + dam) - (def);
 

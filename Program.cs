@@ -27,7 +27,7 @@ namespace fwod
             Console.ResetColor();
 
 #if DEBUG
-            //args = new string[] { "-tsay", "what's THIS? owo" };
+            args = new string[] { "-S" };
 #endif
 
             try
@@ -203,6 +203,11 @@ namespace fwod
             {
                 Game.QuickInitialize();
             }
+
+#if DEBUG
+            Game.MainPlayer.Inventory.AddItem(new Food(FoodType.Energy_Drink));
+            Game.MainPlayer.Inventory.AddItem(new Armor(ArmorType.Body_Armor));
+#endif
             #endregion
 
             // Player controls the game

@@ -39,6 +39,7 @@ namespace fwod
             Console.SetCursorPosition(41, 0);
             Console.Write("|");
             MainPlayer.Money = 12;
+            MainPlayer.Name = "Player";
         }
         #endregion
 
