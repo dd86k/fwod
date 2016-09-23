@@ -7,14 +7,14 @@
 
     public enum WeaponType : byte
     {
-        Fist,
+        Unarmed,
         Cutlass,
         Pistol
     }
 
     public enum ArmorType : byte
     {
-        Shirt,
+        No_Armor,
         Body_Armor
     }
 
@@ -44,7 +44,9 @@
         public int Damage { get; }
         public WeaponType Type { get; }
         public Modifier Modifier { get; }
-        public string FullName => $"{Modifier} {Name}";
+        public string FullName =>
+            Type == WeaponType.Unarmed ?
+            Name : $"{Modifier} {Name}";
         public string Name { get; }
 
         public override string ToString()

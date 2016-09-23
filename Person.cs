@@ -61,7 +61,6 @@ namespace fwod
         #region Constants
         const int BUBBLE_PADDING_HORIZONTAL = 0;
         const int BUBBLE_TEXT_MAXLEN = 25;
-        const int STAT_MAX = 10;
         #endregion
 
         #region Properties
@@ -224,82 +223,8 @@ namespace fwod
         public char Char { get; set; }
         #endregion
 
-        #region Stats
-        public int Level
-        {
-            get; set;
-        }
-
-        ushort[] _s;
-        /// <summary>
-        /// Strength
-        /// </summary>
-        public ushort Strength
-        {
-            get { return _s[0] ; }
-            // Check overflow.
-            set { _s[0] = value > STAT_MAX ? _s[0] = 0xff : _s[0] = value; }
-        }
-        
-        /// <summary>
-        /// Dexterity
-        /// </summary>
-        public ushort Dexterity
-        {
-            get { return _s[1]; }
-            // Check overflow.
-            set { _s[1] = value > STAT_MAX ? _s[1] = 0xff : _s[1] = value; }
-        }
-        
-        /// <summary>
-        /// Agility
-        /// </summary>
-        public ushort Agility
-        {
-            get { return _s[2]; }
-            // Check overflow.
-            set { _s[2] = value > STAT_MAX ? _s[2] = 0xff : _s[2] = value; }
-        }
-        
-        /// <summary>
-        /// Sight
-        /// </summary>
-        public ushort Sight
-        {
-            get { return _s[3]; }
-            // Check overflow.
-            set { _s[3] = value > STAT_MAX ? _s[3] = 0xff : _s[3] = value; }
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        public ushort S5
-        {
-            get { return _s[4]; }
-            // Check overflow.
-            set { _s[4] = value > STAT_MAX ? _s[4] = 0xff : _s[4] = value; }
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        public ushort S6
-        {
-            get { return _s[5]; }
-            // Check overflow.
-            set { _s[5] = value > STAT_MAX ? _s[5] = 0xff : _s[5] = value; }
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        public ushort S7
-        {
-            get { return _s[6]; }
-            // Check overflow.
-            set { _s[6] = value > STAT_MAX ? _s[6] = 0xff : _s[6] = value; }
-        }
+        #region Abilities
+        AbilityManager Abilities;
         #endregion
 
         #region Money
@@ -339,13 +264,12 @@ namespace fwod
             _maxhp = _hp = hp;
             _x = x;
             _y = y;
-            _s = new ushort[7];
-            for (int i = 0; i < 7; ++_s[i++]);
             Char = c;
             //TODO: Left and right weapon?
             Inventory = new InventoryManager();
-            Inventory.EquippedArmor = new Armor(ArmorType.Shirt);
-            Inventory.EquippedWeapon = new Weapon(WeaponType.Fist);
+            Inventory.EquippedArmor = new Armor(ArmorType.No_Armor);
+            Inventory.EquippedWeapon = new Weapon(WeaponType.Unarmed);
+            Abilities = new AbilityManager();
 
             //Game.PeopleList[Game.CurrentFloor].Add(this);
 
@@ -596,14 +520,18 @@ namespace fwod
             int ap =
                 Inventory.EquippedWeapon.Type.IsGun() ?
                 dam - def :
-                ((Strength * dam) + dam) - (def);
+                ((int)((Abilities.Strength * dam) * 0.2f) + dam) - (def);
 
-            string atkstr = $": {person.HP} HP - {ap} = {person.HP -= ap} HP";
+            string atkstr =
+                $": {person.HP} HP - {ap} = {person.HP -= ap} HP ";
+
+            int xp;
+            Abilities.Experience += (xp = person.MaxHP * 2);
 
             if (person.HP <= 0) // If killed
-                atkstr += $" -- Dead! You earn {person.Money}$!";
+                atkstr += $" | +{person.Money}$ | +{xp} XP";
 
-            Game.Statistics.DamageDealt += (uint)ap;
+            Game.Statistics.DamageDealt += (ulong)ap;
 
             if (person is Enemy)
                 Game.Log(((Enemy)person).Race + atkstr);

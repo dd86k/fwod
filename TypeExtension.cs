@@ -80,6 +80,7 @@ namespace fwod
         {
             switch (a)
             {
+                case ArmorType.No_Armor: return 0;
                 case ArmorType.Body_Armor: return 15;
 
                 default: return 1;
