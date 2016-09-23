@@ -46,7 +46,7 @@ namespace fwod
         /// </summary>
         public static Player MainPlayer;
 
-        public static FloorManager People;
+        public static PeopleManager People;
 
         /// <summary>
         /// Determine the Player with position

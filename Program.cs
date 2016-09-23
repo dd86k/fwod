@@ -134,7 +134,7 @@ namespace fwod
 
             // Initialize
             Game.MainPlayer.Initialize();
-            Game.People = new FloorManager();
+            Game.People = new PeopleManager();
 
 
             Game.People[0].Add(new Enemy(47, 13, EnemyType.Rat, 1));
@@ -199,8 +199,8 @@ namespace fwod
                 Stranger.Say("Time for me to go!");
                 Stranger.Destroy();
 
-                Game.MainPlayer.Say("Where did he go?!");
-                Game.MainPlayer.Say("I guess there's no helping him... Better get moving.");
+                Game.MainPlayer.Say("How the heck did he vanish?");
+                Game.MainPlayer.Say("I guess there's no helping him anyway... Better get moving.");
                 Game.Log("Use the arrow keys to navigate.");
             }
             else
