@@ -225,20 +225,6 @@ namespace fwod
         #endregion
 
         #region Centering
-        public static unsafe string Center(this string text, int width)
-        {
-            if (text.Length > width)
-                text = text.Substring(0, width);
-            
-            int s = (width / 2) - (text.Length / 2);
-            string t = new string(' ', width);
-            fixed (char* pt = t)
-                for (int i = 0; i < text.Length; i++)
-                    pt[s + i] = text[i];
-
-            return t;
-        }
-
         public static void CenterAndWrite(string text)
         {
             Console.SetCursorPosition((WindowWidth / 2) - (text.Length / 2), Console.CursorTop);

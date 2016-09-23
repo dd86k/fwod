@@ -34,6 +34,26 @@ namespace fwod
             return max;
         }
 
+        /// <summary>
+        /// Centers text in padding, guarantees provided length.
+        /// </summary>
+        /// <param name="text">Text to center.</param>
+        /// <param name="width">Length of the new string.</param>
+        /// <returns>Padded string.</returns>
+        public static unsafe string Center(this string text, int width)
+        {
+            if (text.Length > width)
+                text = text.Substring(0, width);
+
+            int s = (width / 2) - (text.Length / 2);
+            string t = new string(' ', width);
+            fixed (char* pt = t)
+                for (int i = 0; i < text.Length; i++)
+                    pt[s + i] = text[i];
+
+            return t;
+        }
+
         public static float GetModificationValue(this Modifier c, int b)
         {
             switch (c)

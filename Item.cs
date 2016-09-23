@@ -68,7 +68,9 @@
         public ArmorType Type { get; }
         public Modifier Modifier { get; }
         public int ArmorPoints { get; }
-        public string FullName => $"{Modifier} {Name}";
+        public string FullName =>
+            Type == ArmorType.No_Armor ?
+            Name : $"{Modifier} {Name}";
         public string Name { get; }
 
         public override string ToString()

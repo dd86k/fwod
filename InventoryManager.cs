@@ -30,7 +30,7 @@ namespace fwod
         const int INV_COL = 10;
         const int INV_MAX = INV_COL * INV_ROW;
         const int INV_WIDTH = 46;
-        const int INV_HEIGHT = 14;
+        const int INV_HEIGHT = 12;
 
         public Weapon EquippedWeapon { get; set; }
         public Armor EquippedArmor { get; set; }
@@ -108,12 +108,15 @@ namespace fwod
             Console.Write(new string('─', _dw));
 
             Console.SetCursorPosition(_mx + 1, by);
-            Console.Write("W: " + EquippedWeapon.FullName);
+            Console.Write("W: " +
+                EquippedWeapon.FullName.PadRight(INV_WIDTH - 5));
             Console.SetCursorPosition(_mx + 1, by + 1);
-            Console.Write("A: " + EquippedArmor.FullName);
+            Console.Write("A: " +
+                EquippedArmor.FullName.PadRight(INV_WIDTH - 5));
 
             if (Items.Count > 0)
             {
+                //TODO: remove ix
                 for (int i = 0, x = 0, y = 0, ix = 0; i < Items.Count; ++i, x += 2, ++ix)
                 {
                     if (ix + 1 > INV_COL)
@@ -202,7 +205,7 @@ namespace fwod
         }
 
         bool Entry()
-        { //TODO: InventoryManager::Entry()
+        {
             ConsoleKeyInfo ck = Console.ReadKey(true);
 
             switch (ck.Key)
@@ -241,6 +244,11 @@ namespace fwod
                     Clear();
                     return false;
 
+                case ConsoleKey.Enter:
+                    Select();
+                    
+                    break;
+
                     // ...
             }
 
@@ -248,8 +256,23 @@ namespace fwod
         }
 
         void Select()
-        { //TODO: InventoryManager::Select()
+        {
+            int d = (INV_COL * _cy) + _cx;
 
+            if (d < Items.Count)
+            {
+                Menu m = new Menu(
+                    true, false,
+                    new MenuItem(Items[d].ToString()),
+                    new MenuItem(),
+                    new MenuItem("Equip"),
+                    new MenuItem("Drop"),
+                    new MenuItem(),
+                    new MenuItem("Cancel", MenuItemType.Return)
+                );
+                Draw();
+                //Update();
+            }
         }
 
         /// <summary>

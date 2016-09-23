@@ -5,7 +5,7 @@ using System.Collections.Generic;
     Menu system
 */
 
-//TODO: DialogResponse
+//TODO: Menu re-write
 
 namespace fwod
 {
@@ -57,7 +57,7 @@ namespace fwod
             if (b.HasFlag(MenuResponse.Cancel))
                 m.Items.Add(new MenuItem("Cancel", MenuItemType.Cancel));
 
-            m.Show();
+            m.Show(false);
 
             return m.Response;
         }
@@ -81,18 +81,18 @@ namespace fwod
             );
         }
         
-        const int MENU_WIDTH = 40, MENU_TOP = 4;
+        const int MENU_WIDTH = 40;
         
-        int _pastindex = 0, _index = 0, _xpos = 0;
+        int _pastindex, _index, _xpos, _ypos;
         
         public MenuResponse Response { get; private set; }
         public List<MenuItem> Items { get; }
 
-        public Menu() : this(false, null) {}
+        public Menu() : this(false, true, null) {}
 
-        public Menu(params MenuItem[] items) : this(false, items) {}
+        public Menu(params MenuItem[] items) : this(false, true, items) {}
 
-        public Menu(bool show, params MenuItem[] items)
+        public Menu(bool show, bool redraw = true, params MenuItem[] items)
         {
             if (items != null)
                 Items = new List<MenuItem>(items);
@@ -100,15 +100,16 @@ namespace fwod
                 Items = new List<MenuItem>();
 
             _xpos = (Utils.WindowWidth / 2) - (MENU_WIDTH / 2);
+            _ypos = (Utils.WindowHeight / 2) - (items.Length / 2) - 2;
 
             if (show)
-                Show();
+                Show(redraw);
         }
 
         /// <summary>
         /// Show menu
         /// </summary>
-        public void Show()
+        public void Show(bool redraw = true)
         {
             Draw();
 
@@ -117,9 +118,7 @@ namespace fwod
             bool s = true;
             while (s)
             {
-                _index++;
-
-                if (_index > Items.Count - 1)
+                if (++_index > Items.Count - 1)
                     _index = 0;
 
                 switch (Items[_index].Type)
@@ -136,8 +135,9 @@ namespace fwod
             // While in menu, do actions
             while (Entry());
 
-            // Clear menu and reprint layer underneath
-            ClearMenu();
+            if (redraw)
+                // Clear menu and reprint layer underneath
+                ClearMenu();
         }
 
         /// <summary>
@@ -251,7 +251,7 @@ namespace fwod
 
                 case MenuItemType.ShowStatistics:
                     ClearMenu(false);
-                    new Menu(true,
+                    new Menu(true, false,
                         new MenuItem($"Steps taken: {Game.Statistics.StepsTaken}"),
                         new MenuItem($"Monsters killed: {Game.Statistics.EnemiesKilled}"),
                         new MenuItem($"Damage dealt {Game.Statistics.EnemiesKilled}"),
@@ -284,22 +284,22 @@ namespace fwod
         void Update()
         {
             // Get coords
-            int itemY = MENU_TOP + _index + 1;
-            int pastItemY = MENU_TOP + _pastindex + 1;
+            int itemY = _ypos + _index + 1;
+            int pastItemY = _ypos + _pastindex + 1;
             int textX = _xpos + 1;
 
             // Deselect old item
             if (_index != _pastindex)
             {
                 Console.SetCursorPosition(textX, pastItemY);
-                Console.Write(Utils.Center(Items[_pastindex].Text, MENU_WIDTH - 2));
+                Console.Write(Items[_pastindex].Text.Center(MENU_WIDTH - 2));
             }
 
             // Apply new item's colors
             Console.ForegroundColor = ConsoleColor.Black;
             Console.BackgroundColor = ConsoleColor.White;
             Console.SetCursorPosition(textX, itemY);
-            Console.Write(Utils.Center(Items[_index].Text, MENU_WIDTH - 2));
+            Console.Write(Items[_index].Text.Center(MENU_WIDTH - 2));
 
             // Revert to original colors
             Console.ResetColor();
@@ -313,11 +313,11 @@ namespace fwod
             string fline = $"├{line}┤";
             int c = Items.Count;
 
-            Console.SetCursorPosition(_xpos, MENU_TOP);
+            Console.SetCursorPosition(_xpos, _ypos);
             Console.Write($"┌{line}┐");
             for (int i = 0; i < c; i++)
             {
-                Console.SetCursorPosition(_xpos, MENU_TOP + i + 1);
+                Console.SetCursorPosition(_xpos, _ypos + i + 1);
 
                 switch (Items[i].Type)
                 {
@@ -331,7 +331,7 @@ namespace fwod
                         break;
                 }
             }
-            Console.SetCursorPosition(_xpos, MENU_TOP + c + 1);
+            Console.SetCursorPosition(_xpos, _ypos + c + 1);
             Console.Write($"└{line}┘");
         }
 
@@ -343,17 +343,17 @@ namespace fwod
             if (redraw)
                 MapManager.RedrawMap(
                     (Utils.WindowWidth / 2) - (MENU_WIDTH / 2),
-                    MENU_TOP,
+                    _ypos,
                     MENU_WIDTH,
                     Items.Count + 2
                 );
             else
             {
                 string b = new string(' ', MENU_WIDTH);
-                int ly = MENU_TOP + Items.Count + 2;
+                int ly = _ypos + Items.Count + 2;
                 int x = (Utils.WindowWidth / 2) - (MENU_WIDTH / 2);
 
-                for (int y = MENU_TOP; y < ly; y++)
+                for (int y = _ypos; y < ly; y++)
                 {
                     Console.SetCursorPosition(x, y);
                     Console.Write(b);
@@ -372,6 +372,9 @@ namespace fwod
 
         public MenuItem(string text)
             : this(text, MenuItemType.Information) {}
+
+        public MenuItem(MenuItemType t)
+            : this(t.ToString(), t) {}
 
         public MenuItem(string text, MenuItemType type)
         {

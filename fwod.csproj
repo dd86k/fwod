@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="AbilityManager.cs" />
     <Compile Include="InventoryManager.cs" />
+    <Compile Include="NewMenu.cs" />
     <Compile Include="PeopleManager.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="MapManager.cs" />
