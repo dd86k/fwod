@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-/*TODO: Inventory mockup
+/*
 4x10 spaces, 1 character horizontal padding
 
 |-------------------46-----------------------|
@@ -101,7 +101,10 @@ namespace fwod
 
             Utils.GenerateGrill(_mx, _my, INV_COL, INV_ROW);
 
-            Console.SetCursorPosition(_mx + (INV_WIDTH - _dw - 1), _my + (INV_HEIGHT - 6));
+            Console.SetCursorPosition(
+                _mx + (INV_WIDTH - _dw - 1),
+                _my + (INV_HEIGHT - 6)
+            );
             Console.Write(new string('─', _dw));
 
             Console.SetCursorPosition(_mx + 1, by);
@@ -118,9 +121,9 @@ namespace fwod
                         y += 2;
                         x = ix = 0;
                     }
+
                     Console.SetCursorPosition(_mx + x + 1, _my + y + 1);
                     Console.Write(Items[i].ToString()[0]);
-
                 }
             }
 

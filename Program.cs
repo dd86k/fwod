@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 
 /*
     Entry point of the program.
@@ -13,11 +14,10 @@ namespace fwod
 {
     class Program
     {
-        static readonly string ProjectVersion =
-            $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}";
-        static readonly string AssemblyName =
-            $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}";
-        
+        static readonly AssemblyName AssemblyInfo =
+            Assembly.GetExecutingAssembly().GetName();
+
+
         public static int Main(string[] args)
         {
             // Default values
@@ -96,12 +96,16 @@ namespace fwod
 
             // -- Before the game --
             Console.Clear();
-            Console.Title = $"{AssemblyName} {ProjectVersion}";
+#if DEBUG
+            Console.Title = $"{AssemblyInfo.Name} {AssemblyInfo.Version}-dev";
+#else
+            Console.Title = $"{AssemblyInfo.Name} {AssemblyInfo.Version}";
+#endif
             MapManager.Map = new char[Utils.WindowHeight, Utils.WindowWidth];
 
             if (PlayIntro)
             {
-                string BannerText = "* Welcome to " + AssemblyName + " *";
+                string BannerText = $"* Welcome to {AssemblyInfo.Name} *";
                 string BannerOutline = new string('*', BannerText.Length);
 
                 Utils.CenterAndWriteLine(BannerOutline);
@@ -135,7 +139,7 @@ namespace fwod
 
             Game.People[0].Add(new Enemy(47, 13, EnemyType.Rat, 1));
 
-            #region Intro
+#region Intro
             if (PlayIntro)
             {
                 Game.People.CreatePerson(34, 12, 1, 'S', "Stranger");
@@ -166,7 +170,7 @@ namespace fwod
 
                 Game.MainPlayer.Say($"It's {Game.MainPlayer.Name}.");
 
-                Stranger.Say($"Ah. Welcome to {AssemblyName}, {Game.MainPlayer.Name}. So...");
+                Stranger.Say($"Ah. Welcome to {AssemblyInfo.Name}, {Game.MainPlayer.Name}. So...");
 
                 Console.SetCursorPosition(27, 0);
                 Console.Write("|");
@@ -193,9 +197,9 @@ namespace fwod
                 Game.MainPlayer.Say("Wait!");
 
                 Stranger.Say("Time for me to go!");
-                Stranger.Say("*POOF*");
                 Stranger.Destroy();
 
+                Game.MainPlayer.Say("Where did he go?!");
                 Game.MainPlayer.Say("I guess there's no helping him... Better get moving.");
                 Game.Log("Use the arrow keys to navigate.");
             }
@@ -221,7 +225,7 @@ namespace fwod
             Game.MainPlayer.Inventory.AddItem(new Armor(ArmorType.Body_Armor));
             Game.MainPlayer.Inventory.AddItem(new Armor(ArmorType.Body_Armor));
 #endif
-            #endregion
+#endregion
 
             // Player controls the game
             while (Entry());
@@ -296,7 +300,11 @@ namespace fwod
 
         static void ShowVersion()
         {
-            Console.WriteLine(AssemblyName + " - " + ProjectVersion);
+#if DEBUG
+            Console.WriteLine($"{AssemblyInfo.Name} - {AssemblyInfo.Version}-dev");
+#else
+            Console.WriteLine($"{AssemblyInfo.Name} - {AssemblyInfo.Version}");
+#endif
             Console.WriteLine("Copyright (c) 2015 DD~!/guitarxhero");
             Console.WriteLine("License: MIT License <http://opensource.org/licenses/MIT>");
             Console.WriteLine("Project page: <https://github.com/guitarxhero/fwod>");
