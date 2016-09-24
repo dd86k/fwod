@@ -128,7 +128,7 @@ namespace fwod
             }
             
             // Generate the 'main' box
-            MapManager.GenerateBox(30, 10, 20, 5);
+            MapManager.GenerateBox(26, 9, 24, 7);
 
             // Add stranger
 
