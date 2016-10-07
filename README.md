@@ -14,7 +14,7 @@ fwod is Mono compatible.
 
 fwod is currently in the **Development Phase**.
 
-Nightly builds are available [here](http://cdn.skildust.com/osp/fwod/nightly/), by the thanks of my girlfriend, @sKiLdUsT.
+Nightly builds are available [here](http://cdn.skildust.com/osp/fwod/nightly/), by the thanks of @sKiLdUsT.
 
 ## Notes
 
