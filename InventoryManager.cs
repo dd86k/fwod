@@ -119,7 +119,7 @@ namespace fwod
                 //TODO: remove ix
                 for (int i = 0, x = 0, y = 0, ix = 0; i < Items.Count; ++i, x += 2, ++ix)
                 {
-                    if (ix + 1 > INV_COL)
+                    if (ix >= INV_COL)
                     {
                         y += 2;
                         x = ix = 0;

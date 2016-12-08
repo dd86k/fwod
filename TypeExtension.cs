@@ -42,16 +42,28 @@ namespace fwod
         /// <returns>Padded string.</returns>
         public static unsafe string Center(this string text, int width)
         {
-            if (text.Length > width)
-                text = text.Substring(0, width);
+            int l = text.Length > width ? width : text.Length;
+            int s = (width / 2) - (l / 2);
 
-            int s = (width / 2) - (text.Length / 2);
-            string t = new string(' ', width);
-            fixed (char* pt = t)
-                for (int i = 0; i < text.Length; i++)
-                    pt[s + i] = text[i];
+            char* t = stackalloc char[width + 1];
+            fixed (char* tptext = text)
+            {
+                char* ptext = tptext, max = tptext + l, // In
+                      pt = t, smax = t + width, m = t + s; // Out
 
-            return t;
+                while (pt < m)
+                    *pt++ = ' ';
+
+                while (*ptext != '\0' && ptext < max)
+                    *pt++ = *ptext++;
+
+                while (pt < smax)
+                    *pt++ = ' ';
+
+                *pt = '\0';
+            }
+
+            return new string(t);
         }
 
         public static float GetModificationValue(this Modifier c, int b)
