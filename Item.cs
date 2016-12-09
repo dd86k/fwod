@@ -1,20 +1,26 @@
-﻿namespace fwod
+﻿/*
+ * Items.
+ */
+
+namespace fwod
 {
-    public enum Modifier : byte
+    /// <summary>
+    /// Item modifier (Weapon and Armor).
+    /// </summary>
+    /// <remarks>Does not apply to Food.</remarks>
+    public enum ItemModifier : byte
     {
         Normal, Broken, Rusty, Sharp, Godly, PleaseNerf
     }
 
     public enum WeaponType : byte
     {
-        Unarmed,
         Cutlass,
         Pistol
     }
 
     public enum ArmorType : byte
     {
-        No_Armor,
         Body_Armor
     }
 
@@ -26,6 +32,18 @@
     class Item
     {
 
+        public char this[int i]
+        {
+            get
+            {
+                return ToString()[i];
+            }
+        }
+
+        public static implicit operator string(Item i)
+        {
+            return i.ToString();
+        }
     }
     
     /// <summary>
@@ -33,50 +51,55 @@
     /// </summary>
     class Weapon : Item
     {
-        public Weapon(WeaponType weapon, Modifier mod = Modifier.Normal)
+        public Weapon(WeaponType weapon, ItemModifier mod = ItemModifier.Normal)
         {
             Type = weapon;
-            Damage = (int)mod.GetModificationValue(weapon.GetBaseDamage());
+            Damage = mod.GetModdedValue(weapon.GetBaseDamage());
             Modifier = mod;
             Name = Type.GetName();
         }
-        
+
         public int Damage { get; }
         public WeaponType Type { get; }
-        public Modifier Modifier { get; }
+        public ItemModifier Modifier { get; }
         public string FullName =>
-            Type == WeaponType.Unarmed ?
-            Name : $"{Modifier} {Name}";
+            Modifier == ItemModifier.Normal ? Name : $"{Modifier} {Name}";
         public string Name { get; }
 
-        public override string ToString()
+        public bool IsRanged
         {
-            return Name;
+            get
+            {
+                switch (Type)
+                {
+                    case WeaponType.Pistol:
+                        return true;
+                    default: return false;
+                }
+            }
         }
+
+        public override string ToString() => Name;
     }
 
     class Armor : Item
     {
-        public Armor(ArmorType armor, Modifier mod = Modifier.Normal)
+        public Armor(ArmorType armor, ItemModifier mod = ItemModifier.Normal)
         {
             Type = armor;
             Modifier = mod;
-            ArmorPoints = (int)mod.GetModificationValue(armor.GetBaseDefense());
+            ArmorPoints = mod.GetModdedValue(armor.GetBaseDefense());
             Name = Type.GetName();
         }
 
         public ArmorType Type { get; }
-        public Modifier Modifier { get; }
+        public ItemModifier Modifier { get; }
         public int ArmorPoints { get; }
         public string FullName =>
-            Type == ArmorType.No_Armor ?
-            Name : $"{Modifier} {Name}";
+            Modifier == ItemModifier.Normal ? Name : $"{Modifier} {Name}";
         public string Name { get; }
 
-        public override string ToString()
-        {
-            return Name;
-        }
+        public override string ToString() => Name;
     }
 
     class Food : Item

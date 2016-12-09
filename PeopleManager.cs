@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+
+/*
+ * Manages people on screen except the player.
+ */
 
 namespace fwod
 {
@@ -20,9 +20,10 @@ namespace fwod
             char c = 'P', string name = null, bool init = true,
             int level = -1)
         {
-            Person p = new Person(x, y, hp, c, init);
-            p.Name = name;
-
+            Person p = new Person(x, y, hp, c, init)
+            {
+                Name = name
+            };
             if (level == -1)
                 PeopleList[Game.CurrentFloor].Add(p);
             else
@@ -34,6 +35,38 @@ namespace fwod
         {
 
         }*/
+
+        public bool IsSomeoneAt(int x, int y)
+        {
+            return IsSomeoneAt(Game.CurrentFloor, x, y);
+        }
+
+        public bool IsSomeoneAt(int floor, int x, int y)
+        {
+            foreach (Person p in PeopleList[floor])
+            {
+                if (p.Y == y && p.X == x)
+                    return true;
+            }
+
+            return false;
+        }
+
+        public Person GetPersonAt(int x, int y)
+        {
+            return GetPersonAt(Game.CurrentFloor, x, y);
+        }
+
+        public Person GetPersonAt(int floor, int x, int y)
+        {
+            foreach (Person P in PeopleList[floor])
+            {
+                if (P.X == x && P.Y == y)
+                    return P;
+            }
+
+            return null;
+        }
 
         public List<Person> this[int index]
         {
@@ -57,19 +90,19 @@ namespace fwod
             }
         }
 
-        public Person this[int level, int index]
+        public Person this[int floor, int index]
         {
             get
             {
-                return PeopleList[level][index];
+                return PeopleList[floor][index];
             }
         }
 
-        public Person this[int level, string name]
+        public Person this[int floor, string name]
         {
             get
             {
-                foreach (Person item in PeopleList[level])
+                foreach (Person item in PeopleList[floor])
                 {
                     if (item.Name == name)
                         return item;

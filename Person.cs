@@ -1,11 +1,10 @@
 ﻿using System;
 
 /*
-    A Person.
-    Can be a Player, Enemy, etc.
-*/
+ * Person.cs
+ * Any game characters : Enemies, Player, NPCs.
+ */
 
-//TODO: Jump.
 //TODO: Do a player-follow camera system.
 /*
  * Player-follow Camera RFC:
@@ -30,7 +29,7 @@ namespace fwod
         Rat, 
     }
 
-    public enum EnemyModifier
+    public enum EnemyModifier : byte
     {
         Weak, Strong
     }
@@ -76,16 +75,17 @@ namespace fwod
             {
                 if (value != _x)
                 {
-                    if (!MapManager.Map[_y, value].IsSolidObject())
+                    char mc = MapManager.Map[_y, value];
+                    if (mc == '\0' || mc == ' ')
                     {
-                        if (Game.IsSomeonePresentAt(Game.CurrentFloor, value, _y))
+                        if (Game.People.IsSomeoneAt(value, _y))
                         {
-                            Person futrPerson =
-                                Game.GetPersonObjectAt(Game.CurrentFloor, value, _y);
+                            Person p =
+                                Game.People.GetPersonAt(value, _y);
 
-                            if (futrPerson != this && futrPerson is Enemy)
+                            if (p != this && p is Enemy)
                             {
-                                Attack(futrPerson);
+                                Attack(p);
                             }
                         }
                         else
@@ -108,16 +108,17 @@ namespace fwod
             {
                 if (value != _y)
                 {
-                    if (!MapManager.Map[value, _x].IsSolidObject())
+                    char mc = MapManager.Map[value, _x];
+                    if (mc == '\0' || mc == ' ')
                     {
-                        if (Game.IsSomeonePresentAt(Game.CurrentFloor, _x, value))
+                        if (Game.People.IsSomeoneAt(_x, value))
                         {
-                            Person futrPerson =
-                                Game.GetPersonObjectAt(Game.CurrentFloor, _x, value);
+                            Person p =
+                                Game.People.GetPersonAt(_x, value);
 
-                            if (futrPerson != this && futrPerson is Enemy)
+                            if (p != this && p is Enemy)
                             {
-                                Attack(futrPerson);
+                                Attack(p);
                             }
                         }
                         else
@@ -267,8 +268,6 @@ namespace fwod
             Char = c;
             //TODO: Left and right weapon?
             Inventory = new InventoryManager();
-            Inventory.EquippedArmor = new Armor(ArmorType.No_Armor);
-            Inventory.EquippedWeapon = new Weapon(WeaponType.Unarmed);
             Abilities = new AbilityManager();
 
             //Game.PeopleList[Game.CurrentFloor].Add(this);
@@ -511,32 +510,45 @@ namespace fwod
         #region Attack
         public void Attack(Person person)
         {
-            //TODO: Accuracy algorithm
+            int ap = 1, def = 1;
 
-            int dam = Inventory.EquippedWeapon.Damage;
-            int def = person.Inventory.EquippedArmor.ArmorPoints;
-            
-            // Attack points
-            int ap =
-                Inventory.EquippedWeapon.Type.IsGun() ?
-                dam - def :
-                ((int)((Abilities.Strength * dam) * 0.2f) + dam) - (def);
+            if (Inventory.HasWeapon)
+            {
+                int wd = Inventory.EquippedWeapon.Damage;
 
-            string atkstr =
-                $": {person.HP} HP - {ap} = {person.HP -= ap} HP ";
+                if (Inventory.EquippedWeapon.IsRanged)
+                {
+                    ap =
+                        Utils.Random.NextDouble() * 10 >= Abilities.Dexterity ?
+                        wd : 0;
+                }
+                else
+                {
+                    ap =
+                        ((int)((Abilities.Strength * wd) * 0.2f) + wd) - (def);
+
+                }
+            }
+
+            if (Inventory.HasArmor)
+            {
+                def = Inventory.EquippedArmor.ArmorPoints;
+            }
+
+            string s = $": {person.HP} HP - {ap} = {person.HP -= ap} HP ";
 
             int xp;
             Abilities.Experience += (xp = person.MaxHP * 2);
 
             if (person.HP <= 0) // If killed
-                atkstr += $" | +{person.Money}$ | +{xp} XP";
+                s += $" | +{person.Money}$ | +{xp} XP";
 
             Game.Statistics.DamageDealt += (ulong)ap;
 
             if (person is Enemy)
-                Game.Log(((Enemy)person).Race + atkstr);
+                Game.Message((person as Enemy).Race + s);
             else
-                Game.Log(person.GetType() + atkstr);
+                Game.Message(person.GetType() + s);
         }
         #endregion
 

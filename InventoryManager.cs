@@ -22,6 +22,10 @@ using System.Collections.Generic;
 +--------------------------------------------+ -
 */
 
+/*
+ * Inventory manager.
+ */
+
 namespace fwod
 {
     class InventoryManager
@@ -35,6 +39,9 @@ namespace fwod
         public Weapon EquippedWeapon { get; set; }
         public Armor EquippedArmor { get; set; }
         List<Item> Items { get; }
+
+        public bool HasWeapon => EquippedWeapon != null;
+        public bool HasArmor => EquippedArmor != null;
 
         /*
             These numbers are saved to avoid re-calculating
@@ -85,7 +92,7 @@ namespace fwod
 
             Draw();
             
-            Game.Log("Press ESC to return.");
+            Game.Message("Press ESC to return.");
             
             while (Entry());
 
@@ -108,15 +115,15 @@ namespace fwod
             Console.Write(new string('─', _dw));
 
             Console.SetCursorPosition(_mx + 1, by);
-            Console.Write("W: " +
-                EquippedWeapon.FullName.PadRight(INV_WIDTH - 5));
+            Console.Write("W: " + (HasWeapon ?
+                EquippedWeapon.FullName.PadRight(INV_WIDTH - 5) : "None"));
+
             Console.SetCursorPosition(_mx + 1, by + 1);
-            Console.Write("A: " +
-                EquippedArmor.FullName.PadRight(INV_WIDTH - 5));
+            Console.Write("A: " + (HasArmor ?
+                EquippedArmor.FullName.PadRight(INV_WIDTH - 5) : "None"));
 
             if (Items.Count > 0)
             {
-                //TODO: remove ix
                 for (int i = 0, x = 0, y = 0, ix = 0; i < Items.Count; ++i, x += 2, ++ix)
                 {
                     if (ix >= INV_COL)
@@ -145,8 +152,7 @@ namespace fwod
             Console.SetCursorPosition(_mx + (_ocx * 2) + 1, _my + (_ocy * 2) + 1);
             if (od < Items.Count)
             {
-                Console.Write(Items[od].ToString()[0]);
-                //InsertDescription(Items[od]);
+                Console.Write(Items[od][0]);
             }
             else
             {
@@ -157,10 +163,9 @@ namespace fwod
             Console.SetCursorPosition(_mx + (_cx * 2) + 1, _my + (_cy * 2) + 1);
             Console.ForegroundColor = ConsoleColor.Black;
             Console.BackgroundColor = ConsoleColor.Gray;
-
             if (d < Items.Count)
             {
-                Console.Write(Items[d].ToString()[0]);
+                Console.Write(Items[d][0]);
                 InsertDescription(Items[d]);
             }
             else
@@ -176,20 +181,29 @@ namespace fwod
 
         void InsertDescription(Item item)
         {
+            int t_y = _my + 1;
             Console.ResetColor();
-            Console.SetCursorPosition(_dx, _my + 1);
-
+            Console.SetCursorPosition(_dx, t_y);
+            Console.Write(item);
+            Console.SetCursorPosition(_dx, t_y += 2);
+            
             if (item is Food)
             {
-                Console.Write(item as Food);
+                Food a = item as Food;
+
+                Console.Write($"Heals {a.RestorePoints} HP.");
             }
             else if (item is Weapon)
             {
-                Console.Write(item as Weapon);
+                Weapon a = item as Weapon;
+                
+                Console.Write($"Deals {a.Damage} AP.");
             }
             else if (item is Armor)
             {
-                Console.Write(item as Armor);
+                Armor a = item as Armor;
+                
+                Console.Write($"Protects for {a.ArmorPoints} AP.");
             }
         }
 
@@ -246,10 +260,7 @@ namespace fwod
 
                 case ConsoleKey.Enter:
                     Select();
-                    
                     break;
-
-                    // ...
             }
 
             return true;
@@ -261,17 +272,45 @@ namespace fwod
 
             if (d < Items.Count)
             {
+                Item item = Items[d];
+                string acstr;
+                Action a;
+                if (item is Food)
+                {
+                    acstr = "Consume";
+                    a = () =>
+                    {
+                        Items.Remove(item);
+                        Game.MainPlayer.HP += (item as Food).RestorePoints;
+                    };
+                }
+                else
+                {
+                    acstr = "Equip";
+                    if (item is Weapon)
+                        a = () =>
+                        {
+                            EquippedWeapon = item as Weapon;
+                            Items.Remove(item);
+                        };
+                    else
+                        a = () =>
+                        {
+                            EquippedArmor = item as Armor;
+                            Items.Remove(item);
+                        };
+                }
+
                 Menu m = new Menu(
                     true, false,
-                    new MenuItem(Items[d].ToString()),
+                    new MenuItem(item),
                     new MenuItem(),
-                    new MenuItem("Equip"),
+                    new MenuItem(acstr, a, MenuItemType.Return), //TODO: Fix inventory exit draw
                     new MenuItem("Drop"),
                     new MenuItem(),
                     new MenuItem("Cancel", MenuItemType.Return)
                 );
                 Draw();
-                //Update();
             }
         }
 
@@ -289,13 +328,7 @@ namespace fwod
             }
         }
 
-        public Item this[int index]
-        {
-            get
-            {
-                return Items[index];
-            }
-        }
+        public Item this[int index] => Items[index];
 
         public int Count => Items.Count;
     }

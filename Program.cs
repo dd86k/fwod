@@ -2,12 +2,12 @@
 using System.Reflection;
 
 /*
-    Entry point of the program.
-*/
+ * Entry point of the program.
+ */
 
+//TODO: Random player name
 //TODO: Fatal Error enumeration?
 //TODO: StartMenu
-//TODO: Consider making modifiers a flag (???)
 //TODO: SettingsManager (with scrolling page)
 
 namespace fwod
@@ -16,8 +16,7 @@ namespace fwod
     {
         static readonly AssemblyName AssemblyInfo =
             Assembly.GetExecutingAssembly().GetName();
-
-
+        
         public static int Main(string[] args)
         {
             // Default values
@@ -28,14 +27,18 @@ namespace fwod
 
 #if DEBUG
             args = new string[] { "-S" };
+            //args = new string[] { "-say", "Hey test" };
 #endif
 
-            try
+            try // Mono
             {
-                // May crash on Mono.
+#if DEBUG
+                Console.Title = $"{AssemblyInfo.Name} {AssemblyInfo.Version}-dev";
+#else
+                Console.Title = $"{AssemblyInfo.Name} {AssemblyInfo.Version}";
+#endif
                 Console.CursorVisible = false;
-            }
-            catch { }
+            } catch { }
 
             Game.MainPlayer = new Player(44, 12);
             
@@ -43,6 +46,20 @@ namespace fwod
             {
                 switch (args[i])
                 {
+                    /*case "-L":
+                    case "-load":
+
+                        break;*/
+
+                    case "-S":
+                    case "-skipintro":
+                        PlayIntro = false;
+                        break;
+
+                    case "--showmeme":
+                        Misc.Wunk(); // :^)
+                        return 0;
+
                     case "/?":
                     case "-h":
                     case "--help":
@@ -52,34 +69,8 @@ namespace fwod
                     case "--version":
                         ShowVersion();
                         return 0;
-
-                    case "-Pc":
-                    case "-playerchar":
-                        if (i + 1 < args.Length)
-                            Game.MainPlayer.Char = args[i + 1][0];
-                        break;
-
-                    case "-Pn":
-                    case "-playername":
-                        if (i + 1 < args.Length)
-                            Game.MainPlayer.Name = args[i + 1];
-                        break;
-
-                    case "-S":
-                    case "-skipintro":
-                        PlayIntro = false;
-                        break;
-
-                    /*case "-L":
-                    case "-load":
-
-                        break;*/
-
-                    case "--showmeme":
-                        Misc.Wunk(); // :^)
-                        return 0;
                         
-                    case "-tsay":
+                    case "-say":
                         if (i + 1 < args.Length)
                         {
                             Console.Clear();
@@ -96,11 +87,7 @@ namespace fwod
 
             // -- Before the game --
             Console.Clear();
-#if DEBUG
-            Console.Title = $"{AssemblyInfo.Name} {AssemblyInfo.Version}-dev";
-#else
-            Console.Title = $"{AssemblyInfo.Name} {AssemblyInfo.Version}";
-#endif
+
             MapManager.Map = new char[Utils.WindowHeight, Utils.WindowWidth];
 
             if (PlayIntro)
@@ -144,7 +131,7 @@ namespace fwod
             {
                 Game.People.CreatePerson(34, 12, 1, 'S', "Stranger");
 
-                Game.Log("Dialog...");
+                Game.Message("Dialog...");
 
                 Game.MainPlayer.Say("Ah! Where am I?");
 
@@ -201,7 +188,7 @@ namespace fwod
 
                 Game.MainPlayer.Say("How the heck did he vanish?");
                 Game.MainPlayer.Say("I guess there's no helping him anyway... Better get moving.");
-                Game.Log("Use the arrow keys to navigate.");
+                Game.Message("Use the arrow keys to navigate.");
             }
             else
             {
@@ -270,8 +257,8 @@ namespace fwod
 
                 // Menu button
                 case ConsoleKey.Escape:
-                    Game.MainMenu.Show();
-                    return Game.MainMenu.Response != MenuResponse.Quit;
+                    Menu.GameMenu.Show();
+                    return Menu.GameMenu.Response != MenuResponse.Quit;
             }
 
             // People take a turn.
@@ -286,8 +273,6 @@ namespace fwod
             Console.WriteLine(" Usage:");
             Console.WriteLine("  fwod [<Options>]");
             Console.WriteLine();
-            Console.WriteLine("  -Pc, -playerchar    Sets the player's character.");
-            Console.WriteLine("  -Pn, -playername    Sets the player's name.");
             Console.WriteLine("  -S,  -skipintro     Skip intro and use defaults.");
             //Console.WriteLine("  --runtests          Run debugging tests.");
             //Console.WriteLine("  --speedtalktest     Run a speed dialog test.");
@@ -307,7 +292,7 @@ namespace fwod
 #endif
             Console.WriteLine("Copyright (c) 2015 DD~!/guitarxhero");
             Console.WriteLine("License: MIT License <http://opensource.org/licenses/MIT>");
-            Console.WriteLine("Project page: <https://github.com/guitarxhero/fwod>");
+            Console.WriteLine("Project page: <https://github.com/d86k/fwod>");
             Console.WriteLine();
             Console.WriteLine(" -- Credits --");
             Console.WriteLine("DD~! (guitarxhero) - Original author");

@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 
 /*
-    Menu system
-*/
-
-//TODO: Menu re-write
+ * Menu system
+ */
 
 namespace fwod
 {
@@ -31,55 +29,23 @@ namespace fwod
 
     class Menu
     {
-        /// <summary>
-        /// Shows a dialog with choices.
-        /// </summary>
-        /// <param name="q">Question. Default: None</param>
-        /// <param name="b">The choices available.</param>
-        /// <returns></returns>
-        public static MenuResponse DialogShow(string q = null,
-            MenuResponse b = MenuResponse.Yes | MenuResponse.No)
-        {
-            Menu m = new Menu();
+        public static Menu GameMenu = new Menu(
+            new MenuItem("Return", MenuItemType.Return),
+            new MenuItem(),
+            new MenuItem("Abilities"),
+            new MenuItem("Inventory", MenuItemType.ShowInventory),
+            new MenuItem(),
+            new MenuItem("Statistics", MenuItemType.ShowStatistics),
+            new MenuItem(),
+            new MenuItem("Load"),// MenuItemType.Load),
+            new MenuItem("Save"),// MenuItemType.Save),
+            new MenuItem(),
+            new MenuItem("Settings"),
+            new MenuItem(),
+            new MenuItem("Quit", MenuItemType.Quit)
+        );
 
-            if (q != null)
-            {
-                m.Items.Add(new MenuItem(q));
-                m.Items.Add(new MenuItem());
-            }
-
-            if (b.HasFlag(MenuResponse.Yes))
-                m.Items.Add(new MenuItem("Yes", MenuItemType.Yes));
-
-            if (b.HasFlag(MenuResponse.No))
-                m.Items.Add(new MenuItem("No", MenuItemType.No));
-
-            if (b.HasFlag(MenuResponse.Cancel))
-                m.Items.Add(new MenuItem("Cancel", MenuItemType.Cancel));
-
-            m.Show(false);
-
-            return m.Response;
-        }
-
-        public static Menu GetMainMenu()
-        {
-            return new Menu(
-                new MenuItem("Return", MenuItemType.Return),
-                new MenuItem(),
-                new MenuItem("Abilities"),
-                new MenuItem("Inventory", MenuItemType.ShowInventory),
-                new MenuItem(),
-                new MenuItem("Statistics", MenuItemType.ShowStatistics),
-                new MenuItem(),
-                new MenuItem("Load"),// MenuItemType.Load),
-                new MenuItem("Save"),// MenuItemType.Save),
-                new MenuItem(),
-                new MenuItem("Settings"),
-                new MenuItem(),
-                new MenuItem("Quit", MenuItemType.Quit)
-            );
-        }
+        //public static Menu StartMenu = new Menu();
         
         const int MENU_WIDTH = 40;
         
@@ -227,7 +193,11 @@ namespace fwod
         /// </summary>
         public bool Select()
         {
-            switch (Items[_index].Type)
+            MenuItem item = Items[_index];
+            
+            item.Action?.Invoke();
+
+            switch (item.Type) // Old system for compatibility.
             {
                 case MenuItemType.Yes:
                     Response = MenuResponse.Yes;
@@ -366,6 +336,10 @@ namespace fwod
     {
         public string Text { get; }
         public MenuItemType Type { get; }
+        /// <summary>
+        /// Custom action.
+        /// </summary>
+        public Action Action { get; }
 
         public MenuItem()
             : this(null, MenuItemType.Seperator) {}
@@ -379,6 +353,19 @@ namespace fwod
         public MenuItem(string text, MenuItemType type)
         {
             Text = text;
+            Type = type;
+        }
+
+        public MenuItem(string text, Action action)
+        {
+            Text = text;
+            Action = action;
+        }
+
+        public MenuItem(string text, Action action, MenuItemType type)
+        {
+            Text = text;
+            Action = action;
             Type = type;
         }
 

@@ -2,8 +2,8 @@
 using System.Text;
 
 /*
-    Various tools for the command prompt and terminal.
-*/
+ * Generic utilities.
+ */
 
 namespace fwod
 {
@@ -236,6 +236,11 @@ namespace fwod
             Console.SetCursorPosition((WindowWidth / 2) - (text.Length / 2), Console.CursorTop);
             Console.WriteLine(text);
         }
+        #endregion
+
+        #region Console colors
+        public static ConsoleColor Invert(this ConsoleColor cc) =>
+            (ConsoleColor)(~(int)cc & 0xF);
         #endregion
 
         #region Read

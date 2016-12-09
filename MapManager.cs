@@ -1,8 +1,8 @@
 ﻿using System;
 
 /*
-    Map manager
-*/
+ * Map manager.
+ */
 
 namespace fwod
 {
@@ -18,8 +18,7 @@ namespace fwod
         /// <param name="c">Character.</param>
         public static void Write(char c)
         {
-            Map[Console.CursorTop, Console.CursorLeft] = c;
-            Console.Write(c);
+            Console.Write(Map[Console.CursorTop, Console.CursorLeft] = c);
         }
 
         /// <summary>
@@ -31,9 +30,8 @@ namespace fwod
         /// <param name="y">Top position.</param>
         public static void Write(char c, int x, int y)
         {
-            Map[y, x] = c;
             Console.SetCursorPosition(x, y);
-            Console.Write(c);
+            Console.Write(Map[y, x] = c);
         }
 
         /// <summary>
@@ -57,7 +55,7 @@ namespace fwod
         {
             fixed (char* pt = text)
             {
-                for (int i = 0; i < text.Length; i++)
+                for (int i = 0; i < text.Length; ++i)
                     Map[y, x + i] = *(pt + i);
             }
 
@@ -102,7 +100,7 @@ namespace fwod
 
         #region Helpers
         /// <summary>
-        /// Redraw the map from memory including people.
+        /// Redraw the map from <see cref="Map"/> including people.
         /// </summary>
         public static unsafe void RedrawMap(int x, int y, int width, int height)
         {
@@ -168,6 +166,8 @@ namespace fwod
 
             if (clear)
                 Console.Clear();
+
+            GC.Collect();
         }
         #endregion
 

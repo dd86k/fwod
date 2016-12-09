@@ -1,16 +1,13 @@
 ﻿using System;
 
 /*
-    Unrelated of the game, for amusement.
-*/
+ * Unrelated to the game, for pure amusement.
+ */
 
 namespace fwod
 {
     static class Misc
     {
-        /// <summary>
-        /// thank you Wunkolo for existing 👌👀
-        /// </summary>
         public static void Wunk()
         { // Tip: good shit
             Console.Clear();

@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+/*
+ * Abilities, skills.
+ */
 
 namespace fwod
 {
     class AbilityManager
     {
-        ushort STAT_MAX = 0xff;
+        ushort STAT_MAX = 10;
         ushort LEVEL_MAX = 99;
 
         public AbilityManager()
@@ -18,7 +17,7 @@ namespace fwod
             _level = 1;
         }
 
-        ushort _level, _unspentPoints;
+        ushort _level;
         public ushort Level
         {
             get { return _level; }

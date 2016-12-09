@@ -1,24 +1,16 @@
 ﻿/*
-    Type extensions
-*/
+ * Type extensions, except some console utilities.
+ */
 
 namespace fwod
 {
     public static class TypeExtensions
     {
-        const string SolidObjects =
-            "░▒▓█▄▌▐▀│─┌┐└┘┤┴┬├┼║═╔╗╚╝╣╩╦╠╬╓╖╜╙╢╨╥╟╫╕╛╘╒╡╧╤╞╪";
-
-        public static bool IsSolidObject(this char c)
-        {
-            return SolidObjects.Contains(c.ToString());
-        }
-        
         /// <summary>
         /// Returns the longuest string in a string array.
         /// </summary>
         /// <param name="a">String array.</param>
-        /// <returns>Longuest string.</returns>
+        /// <returns>Longuest string length.</returns>
         static public int GetLonguestStringLength(this string[] a)
         {
             int max = 0;
@@ -66,23 +58,23 @@ namespace fwod
             return new string(t);
         }
 
-        public static float GetModificationValue(this Modifier c, int b)
+        public static int GetModdedValue(this ItemModifier c, int b)
         {
             switch (c)
             {
-                case Modifier.Broken:
-                    return b * 0.5f;
+                case ItemModifier.Broken:
+                    return (int)(b * 0.5f);
 
-                case Modifier.Rusty:
-                    return b * 0.7f;
+                case ItemModifier.Rusty:
+                    return (int)(b * 0.7f);
 
-                case Modifier.Sharp:
-                    return b * 1.2f;
+                case ItemModifier.Sharp:
+                    return (int)(b * 1.2f);
 
-                case Modifier.Godly:
-                    return b * 2.5f;
+                case ItemModifier.Godly:
+                    return (int)(b * 2.5f);
 
-                case Modifier.PleaseNerf:
+                case ItemModifier.PleaseNerf:
                     return b * 10;
 
                 default: // Normal
@@ -112,10 +104,9 @@ namespace fwod
         {
             switch (a)
             {
-                case ArmorType.No_Armor: return 0;
                 case ArmorType.Body_Armor: return 15;
 
-                default: return 1;
+                default: return 0;
             }
         }
 
@@ -136,16 +127,5 @@ namespace fwod
             => t.ToString().Replace('_', ' ');
         public static string GetName(this FoodType t)
             => t.ToString().Replace('_', ' ');
-
-        public static bool IsGun(this WeaponType t)
-        {
-            switch (t)
-            {
-                case WeaponType.Pistol:
-                    return true;
-
-                default: return false;
-            }
-        }
     }
 }

@@ -1,17 +1,16 @@
 ﻿using System;
 
 /*
-    General game mechanics.
-*/
+ * Game mechanics.
+ */
 
-//TODO: NewGame() -- Intro scene, etc.
+//TODO: PlayIntro() -- Intro scene, etc.
 
 namespace fwod
 {
     class Game
     {
         #region Properties
-        public static Menu MainMenu = Menu.GetMainMenu();
         public static byte CurrentFloor = 0;
         #endregion
 
@@ -47,34 +46,6 @@ namespace fwod
         public static Player MainPlayer;
 
         public static PeopleManager People;
-
-        /// <summary>
-        /// Determine the Player with position
-        /// </summary>
-        /// <param name="x">Future left position</param>
-        /// <param name="y">Future top position</param>
-        /// <returns>Enemy, null if no found</returns>
-        public static Person GetPersonObjectAt(int floor, int x, int y)
-        {
-            foreach (Person P in People[floor])
-            {
-                if (P.X == x && P.Y == y)
-                    return P;
-            }
-
-            return null;
-        }
-        
-        public static bool IsSomeonePresentAt(int floor, int x, int y)
-        {
-            foreach (Person P in People[floor])
-            {
-                if (P.X == x && P.Y == y)
-                    return true;
-            }
-
-            return false;
-        }
         #endregion
 
         #region Graphics
@@ -103,48 +74,54 @@ namespace fwod
         }
         */
 
+        public static void ClearMessage()
+        {
+            Console.SetCursorPosition(1, Utils.WindowHeight - 1);
+            Console.Write(new string(' ', Utils.WindowWidth - 2));
+        }
+
         /// <summary>
         /// Display what's going on.
         /// </summary>
         /// <param name="text">Event entry.</param>
-        public static void Log(string text)
+        public static void Message(string text)
         {
             //TODO: Clean this clutter.
             // Idea: Remove the array and use the substrings directly.
-            string[] Lines = new string[] { text };
-            int MaxLength = Utils.WindowWidth - 2;
-            string MoreText = " -- More --";
 
-            if (text.Length > MaxLength)
+            string[] lines = new string[] { text };
+            int length = Utils.WindowWidth - 2;
+            const string MoreText = " -- More --";
+
+            if (text.Length > length)
             {
                 int ci = 0;
                 int start = 0;
-                Lines = new string[text.Length / (MaxLength - MoreText.Length) + 1];
+                lines = new string[text.Length / (length - MoreText.Length) + 1];
 
                 do
                 {
-                    if (start + MaxLength > text.Length)
+                    if (start + length > text.Length)
                     {
-                        Lines[ci] = text.Substring(start, text.Length - start);
-                        start += MaxLength;
+                        lines[ci] = text.Substring(start, text.Length - start);
+                        start += length;
                     }
                     else
                     {
-                        Lines[ci] = text.Substring(start, MaxLength - MoreText.Length) + MoreText;
-                        start += MaxLength - MoreText.Length;
+                        lines[ci] = text.Substring(start, length - MoreText.Length) + MoreText;
+                        start += length - MoreText.Length;
                     }
                     ci++;
                 } while (start < text.Length);
             }
 
-            for (int i = 0; i < Lines.Length; i++)
+            for (int i = 0; i < lines.Length; i++)
             {
-                Console.SetCursorPosition(1, Utils.WindowHeight - 2);
-                Console.Write(new string(' ', MaxLength));
-                Console.SetCursorPosition(1, Utils.WindowHeight - 2);
-                Console.Write(Lines[i]);
+                ClearMessage();
+                Console.SetCursorPosition(1, Utils.WindowHeight - 1);
+                Console.Write(lines[i]);
 
-                if (i < Lines.Length - 1)
+                if (i < lines.Length - 1)
                     Console.ReadKey(true);
             }
         }
