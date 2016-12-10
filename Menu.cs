@@ -109,7 +109,7 @@ namespace fwod
         /// <summary>
         /// Entry point for menu
         /// </summary>
-        public bool Entry()
+        bool Entry()
         {
             ConsoleKeyInfo cki = Console.ReadKey(true);
 
@@ -137,7 +137,7 @@ namespace fwod
         /// <summary>
         /// Goes to the next control
         /// </summary>
-        public void NextControl()
+        void NextControl()
         {
             bool s = true;
             _pastindex = _index;
@@ -164,7 +164,7 @@ namespace fwod
         /// <summary>
         /// Goes to the previous control
         /// </summary>
-        public void PreviousControl()
+        void PreviousControl()
         {
             bool s = true;
             _pastindex = _index;
@@ -191,13 +191,13 @@ namespace fwod
         /// <summary>
         /// Selects the item in the menu
         /// </summary>
-        public bool Select()
+        bool Select()
         {
             MenuItem item = Items[_index];
             
             item.Action?.Invoke();
 
-            switch (item.Type) // Old system for compatibility.
+            switch (item.Type) // Old "system" for compatibility.
             {
                 case MenuItemType.Yes:
                     Response = MenuResponse.Yes;

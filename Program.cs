@@ -194,25 +194,13 @@ namespace fwod
             {
                 Game.QuickIntro();
             }
+#endregion
 
 #if DEBUG
             Game.MainPlayer.Inventory.AddItem(new Food(FoodType.Energy_Drink));
             Game.MainPlayer.Inventory.AddItem(new Armor(ArmorType.Body_Armor));
-            Game.MainPlayer.Inventory.AddItem(new Armor(ArmorType.Body_Armor));
-            Game.MainPlayer.Inventory.AddItem(new Armor(ArmorType.Body_Armor));
-            Game.MainPlayer.Inventory.AddItem(new Armor(ArmorType.Body_Armor));
-            Game.MainPlayer.Inventory.AddItem(new Armor(ArmorType.Body_Armor));
-            Game.MainPlayer.Inventory.AddItem(new Armor(ArmorType.Body_Armor));
-            Game.MainPlayer.Inventory.AddItem(new Armor(ArmorType.Body_Armor));
-            Game.MainPlayer.Inventory.AddItem(new Armor(ArmorType.Body_Armor));
-            Game.MainPlayer.Inventory.AddItem(new Armor(ArmorType.Body_Armor));
-            Game.MainPlayer.Inventory.AddItem(new Armor(ArmorType.Body_Armor));
-            Game.MainPlayer.Inventory.AddItem(new Armor(ArmorType.Body_Armor));
-            Game.MainPlayer.Inventory.AddItem(new Armor(ArmorType.Body_Armor));
-            Game.MainPlayer.Inventory.AddItem(new Armor(ArmorType.Body_Armor));
-            Game.MainPlayer.Inventory.AddItem(new Armor(ArmorType.Body_Armor));
+            Game.MainPlayer.Inventory.AddItem(new Weapon(WeaponType.Cutlass));
 #endif
-#endregion
 
             // Player controls the game
             while (Entry());

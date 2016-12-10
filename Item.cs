@@ -15,8 +15,12 @@ namespace fwod
 
     public enum WeaponType : byte
     {
+        // Ranged
+        Pistol,
+
+        // Swords
         Cutlass,
-        Pistol
+        Katana
     }
 
     public enum ArmorType : byte

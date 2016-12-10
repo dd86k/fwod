@@ -92,9 +92,11 @@ namespace fwod
 
             Draw();
             
-            Game.Message("Press ESC to return.");
+            Game.Message("ESC: Return | W: Unequip Weapon | A: Unequip Armor");
             
             while (Entry());
+
+            Game.ClearMessage();
 
             Clear();
         }
@@ -110,21 +112,25 @@ namespace fwod
 
             Console.SetCursorPosition(
                 _mx + (INV_WIDTH - _dw - 1),
-                _my + (INV_HEIGHT - 6)
+                _my + (INV_HEIGHT - 4)
             );
             Console.Write(new string('─', _dw));
 
+            Func<string, string> pr = (string s) =>
+                s.PadRight(INV_WIDTH - 5);
+
             Console.SetCursorPosition(_mx + 1, by);
             Console.Write("W: " + (HasWeapon ?
-                EquippedWeapon.FullName.PadRight(INV_WIDTH - 5) : "None"));
+                pr(EquippedWeapon.FullName) : pr("None")));
 
             Console.SetCursorPosition(_mx + 1, by + 1);
             Console.Write("A: " + (HasArmor ?
-                EquippedArmor.FullName.PadRight(INV_WIDTH - 5) : "None"));
+                pr(EquippedArmor.FullName) : pr("None")));
 
             if (Items.Count > 0)
             {
-                for (int i = 0, x = 0, y = 0, ix = 0; i < Items.Count; ++i, x += 2, ++ix)
+                for (int i = 0, x = 0, y = 0, ix = 0;
+                    i < Items.Count; ++i, x += 2, ++ix)
                 {
                     if (ix >= INV_COL)
                     {
@@ -132,8 +138,11 @@ namespace fwod
                         x = ix = 0;
                     }
 
-                    Console.SetCursorPosition(_mx + x + 1, _my + y + 1);
-                    Console.Write(Items[i].ToString()[0]);
+                    if (Items[i] != null)
+                    {
+                        Console.SetCursorPosition(_mx + x + 1, _my + y + 1);
+                        Console.Write(Items[i].ToString()[0]);
+                    }
                 }
             }
 
@@ -146,7 +155,7 @@ namespace fwod
             int  d = (INV_COL * _cy) + _cx,
                 od = (INV_COL * _ocy) + _ocx;
 
-            ClearDescriptionBox();
+            ClearDescription();
 
             // Clear old selected
             Console.SetCursorPosition(_mx + (_ocx * 2) + 1, _my + (_ocy * 2) + 1);
@@ -207,7 +216,7 @@ namespace fwod
             }
         }
 
-        void ClearDescriptionBox()
+        void ClearDescription()
         {
             string b = new string(' ', _dw);
             int ym = _my + (INV_ROW * 2);
@@ -288,24 +297,48 @@ namespace fwod
                 {
                     acstr = "Equip";
                     if (item is Weapon)
+                    {
                         a = () =>
                         {
-                            EquippedWeapon = item as Weapon;
-                            Items.Remove(item);
+                            if (HasWeapon)
+                            {
+                                Items.Add(EquippedWeapon);
+                                EquippedWeapon = item as Weapon;
+                                Items.Remove(item);
+                            }
+                            else
+                            {
+                                EquippedWeapon = item as Weapon;
+                                Items.Remove(item);
+                            }
                         };
+                    }
                     else
+                    {
                         a = () =>
                         {
-                            EquippedArmor = item as Armor;
-                            Items.Remove(item);
+                            if (HasArmor)
+                            {
+                                Items.Add(EquippedArmor);
+                                EquippedArmor = item as Armor;
+                                Items.Remove(item);
+                            }
+                            else
+                            {
+                                EquippedArmor = item as Armor;
+                                Items.Remove(item);
+                            }
                         };
+                    }
                 }
+
+                a += () => { Draw(); };
 
                 Menu m = new Menu(
                     true, false,
                     new MenuItem(item),
                     new MenuItem(),
-                    new MenuItem(acstr, a, MenuItemType.Return), //TODO: Fix inventory exit draw
+                    new MenuItem(acstr, a, MenuItemType.Return),
                     new MenuItem("Drop"),
                     new MenuItem(),
                     new MenuItem("Cancel", MenuItemType.Return)

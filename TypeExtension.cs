@@ -91,9 +91,11 @@ namespace fwod
             switch (w)
             {
                 case WeaponType.Pistol:
-                    return 3;
+                    return 2;
 
                 case WeaponType.Cutlass:
+                    return 3;
+                case WeaponType.Katana:
                     return 6;
 
                 default: return 1;
