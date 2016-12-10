@@ -226,7 +226,7 @@ namespace fwod
                         new MenuItem($"Monsters killed: {Game.Statistics.EnemiesKilled}"),
                         new MenuItem($"Damage dealt {Game.Statistics.EnemiesKilled}"),
                         new MenuItem($"Damage received {Game.Statistics.EnemiesKilled}"),
-                        new MenuItem($"Money gain: {Game.Statistics.MoneyGained}$"),
+                        new MenuItem($"Money earned: {Game.Statistics.MoneyGained}$"),
                         new MenuItem(),
                         new MenuItem("Return", MenuItemType.Return)
                     );
@@ -306,8 +306,9 @@ namespace fwod
         }
 
         /// <summary>
-        /// Clears the menu and redraw map.
+        /// Clear menu.
         /// </summary>
+        /// <param name="redraw">Redraw map.</param>
         public void ClearMenu(bool redraw = true)
         {
             if (redraw)

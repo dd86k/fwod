@@ -1,27 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-
-/*
-4x10 spaces, 1 character horizontal padding
-
-|-------------------46-----------------------|
-|--------21---------|
-                    |---------- 26-----------|
-
-+-+-+-+-+-+-+-+-+-+-+------------------------+ -
-|o|m| | | | | | | | | Potion                 | |
-+-+-+-+-+-+-+-+-+-+-+                        | |
-| | | | | | | | | | | Heals 10 HP.           | |
-+-+-+-+-+-+-+-+-+-+-+                        | |
-| | | | | | | | | | |                        | 12
-+-+-+-+-+-+-+-+-+-+-+                        | |
-| | | | | | | | | | |                        | |
-+-+-+-+-+-+-+-+-+-+-+------------------------+ |
-| Weapon: Flashy Sword                       | |
-| Armour: Dented Meat                        | |
-+--------------------------------------------+ -
-*/
-
 /*
  * Inventory manager.
  */
@@ -261,6 +239,24 @@ namespace fwod
                     else
                         --_cx;
                     Update();
+                    break;
+
+                case ConsoleKey.A:
+                    if (HasArmor)
+                    {
+                        Items.Add(EquippedArmor);
+                        EquippedArmor = null;
+                        Draw();
+                    }
+                    break;
+
+                case ConsoleKey.W:
+                    if (HasWeapon)
+                    {
+                        Items.Add(EquippedWeapon);
+                        EquippedWeapon = null;
+                        Draw();
+                    }
                     break;
 
                 case ConsoleKey.Escape:

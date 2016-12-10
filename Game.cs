@@ -17,7 +17,7 @@ namespace fwod
         #region Statistics
         public class Statistics
         {
-            public static ulong
+            public static decimal
                 EnemiesKilled = 0,
                 StepsTaken = 0,
                 MoneyGained = 0,

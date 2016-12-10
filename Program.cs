@@ -199,6 +199,7 @@ namespace fwod
 #if DEBUG
             Game.MainPlayer.Inventory.AddItem(new Food(FoodType.Energy_Drink));
             Game.MainPlayer.Inventory.AddItem(new Armor(ArmorType.Body_Armor));
+            Game.MainPlayer.Inventory.AddItem(new Weapon(WeaponType.Katana));
             Game.MainPlayer.Inventory.AddItem(new Weapon(WeaponType.Cutlass));
 #endif
 

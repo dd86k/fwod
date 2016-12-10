@@ -518,9 +518,9 @@ namespace fwod
 
                 if (Inventory.EquippedWeapon.IsRanged)
                 {
-                    ap =
-                        Utils.Random.NextDouble() * 10 >= Abilities.Dexterity ?
-                        wd : 0;
+                    ap = 2; // Ranged gun's butt/stock.
+                    /*Utils.Random.NextDouble() * 10 >= Abilities.Dexterity ?
+                    wd : 0;*/
                 }
                 else
                 {
@@ -537,13 +537,13 @@ namespace fwod
 
             string s = $": {person.HP} HP - {ap} = {person.HP -= ap} HP ";
 
-            int xp;
-            Abilities.Experience += (xp = person.MaxHP * 2);
+            int xp = person.MaxHP * 2;
+            Abilities.Experience += xp;
 
             if (person.HP <= 0) // If killed
                 s += $" | +{person.Money}$ | +{xp} XP";
 
-            Game.Statistics.DamageDealt += (ulong)ap;
+            Game.Statistics.DamageDealt += ap;
 
             if (person is Enemy)
                 Game.Message((person as Enemy).Race + s);
