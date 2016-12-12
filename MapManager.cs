@@ -1,4 +1,5 @@
 ﻿using System;
+using RLIST = System.Collections.Generic.List<fwod.MapManager.Room>;
 
 /*
  * Map manager.
@@ -172,8 +173,60 @@ namespace fwod
         #endregion
 
         #region Generator
-        //TODO: Random map generator
+        public class Room
+        {
+            public Room(int x, int y, int w, int h)
+            {
+                X = x;
+                Y = x;
+                Width = w;
+                Height = h;
+            }
+            public int X, Y, Width, Height;
+        }
 
+        class Path
+        {
+
+        }
+
+        /// <summary>
+        /// Generate a random floor.
+        /// </summary>
+        /// <remarks>
+        /// 1. Makes rooms and check positions/sizes.
+        /// 2. Trace paths and place those.
+        /// 3. Check crosspaths and room entrances.
+        /// </remarks>
+        public static void GenerateRandom()
+        { //TODO: GenerateRandom(void) (WIP)
+            const int MIN_ROOMS = 1, MAX_ROOMS = 6;
+            const int MIN_WIDTH = 3, MIN_HEIGHT = 6;
+            const int MAX_WIDTH = 3, MAX_HEIGHT = 6;
+            //const int MAX_TRIES = 10;
+
+            Random ran = Utils.Random; // Reference, less typing.
+            int maxr = ran.Next(MIN_ROOMS, MAX_ROOMS);
+            RLIST rl = new RLIST(maxr);
+            int w = Utils.WindowWidth, h = Utils.WindowHeight;
+
+            for (int cri = 0; cri < maxr;)
+            {
+                int crx = ran.Next(w);
+                int cry = ran.Next(h);
+                int crw = ran.Next(MIN_WIDTH, MAX_WIDTH);
+                int crh = ran.Next(MIN_HEIGHT, MAX_HEIGHT);
+
+                // Check if it can fit in.
+                foreach (Room r in rl)
+                {
+
+                }
+
+            }
+
+            // Write data to Map
+        }
         #endregion
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 /*
  * Inventory manager.
  */
@@ -8,23 +9,21 @@ namespace fwod
 {
     class InventoryManager
     {
-        const int INV_ROW = 4;
-        const int INV_COL = 10;
+        const int INV_ROW = 4, INV_COL = 10;
         const int INV_MAX = INV_COL * INV_ROW;
-        const int INV_WIDTH = 46;
-        const int INV_HEIGHT = 12;
+        const int INV_WIDTH = 46, INV_HEIGHT = 12;
 
-        public Weapon EquippedWeapon { get; set; }
-        public Armor EquippedArmor { get; set; }
+        public Weapon EquippedWeapon { get; private set; }
+        public Armor EquippedArmor { get; private set; }
         List<Item> Items { get; }
 
         public bool HasWeapon => EquippedWeapon != null;
         public bool HasArmor => EquippedArmor != null;
 
         /*
-            These numbers are saved to avoid re-calculating
-            them every time.
-        */
+         * These numbers are saved to avoid re-calculating
+         * them every time.
+         */
 
         // Menu location on screen
         int _mx, _my;
@@ -94,8 +93,7 @@ namespace fwod
             );
             Console.Write(new string('─', _dw));
 
-            Func<string, string> pr = (string s) =>
-                s.PadRight(INV_WIDTH - 5);
+            Func<string, string> pr = (string s) => s.PadRight(INV_WIDTH - 5);
 
             Console.SetCursorPosition(_mx + 1, by);
             Console.Write("W: " + (HasWeapon ?
@@ -136,7 +134,10 @@ namespace fwod
             ClearDescription();
 
             // Clear old selected
-            Console.SetCursorPosition(_mx + (_ocx * 2) + 1, _my + (_ocy * 2) + 1);
+            Console.SetCursorPosition(
+                _mx + (_ocx * 2) + 1,
+                _my + (_ocy * 2) + 1
+            );
             if (od < Items.Count)
             {
                 Console.Write(Items[od][0]);
@@ -162,8 +163,7 @@ namespace fwod
 
             Console.ResetColor();
 
-            _ocx = _cx;
-            _ocy = _cy;
+            _ocx = _cx; _ocy = _cy;
         }
 
         void InsertDescription(Item item)
@@ -192,6 +192,11 @@ namespace fwod
                 
                 Console.Write($"Protects for {a.ArmorPoints} AP.");
             }
+        }
+
+        void Drop(Item item)
+        { //TODO: Drop(Item)
+
         }
 
         void ClearDescription()
