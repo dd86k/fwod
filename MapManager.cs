@@ -223,9 +223,11 @@ namespace fwod
 
                 }
 
+
             }
 
             // Write data to Map
+            ClearMap();
         }
         #endregion
     }
